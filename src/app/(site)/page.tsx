@@ -1,0 +1,42 @@
+"use client"
+import AccessoriesSection from "@/components/accessories-section";
+import AllMotorcyclesSection from "@/components/all-motorcycles-section";
+import BrandsSection from "@/components/brands-section";
+import CategoriesSection from "@/components/categories-section";
+import Features from "@/components/features";
+import Footer from "@/components/footer";
+import HeroSection from "@/components/hero";
+import Products from "@/components/products";
+import { useHandleSessionAuth } from "@/hooks/useAuth";
+import { ExtendedSession } from "@/types/auth";
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
+
+
+export default function Home() {
+  const { data: session, status } = useSession();
+  const handleSessionAuth = useHandleSessionAuth();
+
+  useEffect(() => {
+    if (status === "authenticated" && session) {
+      handleSessionAuth(session as ExtendedSession);
+    }
+  }, [session, status, handleSessionAuth]);
+
+  return (
+    <div className="flex flex-col gap-20 mb-20">
+      <HeroSection />
+      <CategoriesSection />
+      {/* <FeaturedListings /> */}
+      <Products />
+      <AccessoriesSection />
+      <BrandsSection />
+      <AllMotorcyclesSection />
+      {/* <WhyChooseUs /> */}
+      {/* <FeaturedProducts />
+      <RecentlyViewed /> */}
+      <Features />
+      <Footer />
+    </div>
+  );
+}
