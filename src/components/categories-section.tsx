@@ -7,6 +7,7 @@ import Link from "next/link";
 import SkeletonLoader from "@/common/skeleton-loader";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Category } from "@/types/filters";
 
 const CategoriesSection = () => {
     const { data = [], isLoading } = useGetCategories();
@@ -55,7 +56,7 @@ const CategoriesSection = () => {
 
                 {!isLoading && data && (
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 justify-center">
-                        {visibleCategories.map((category: any) => (
+                        {visibleCategories.map((category: Category) => (
                             <Link
                                 href={`/ads/${category.id}`}
                                 key={category.id}

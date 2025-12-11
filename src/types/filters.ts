@@ -28,11 +28,17 @@ export interface ProductFilters {
   min_price?: string
   max_price?: string
 }
-
 export interface Category {
   id: number
   title: string
+  image: string
+  child?: {
+    id: number
+    title: string
+    image?: string
+  }[]
 }
+
 
 export interface Brand {
   id: number

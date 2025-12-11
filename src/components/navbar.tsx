@@ -50,7 +50,7 @@ const Navbar = () => {
           {totalCount >= 1 && <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">{totalCount}</span>}
         </Link>
       )} */}
-      <Link href="/notifications" className="relative cursor-pointer hover:opacity-80 transition-opacity">
+      <Link href="#" className="relative cursor-pointer hover:opacity-80 transition-opacity">
         <Bell className={cn("w-5 h-5", textColor)} />
         <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">3</span>
       </Link>
@@ -141,7 +141,7 @@ const Navbar = () => {
                 <Heart className={cn("w-4.5 h-4.5", textColor)} />
               </Link>
 
-              <Link href="/notifications" className="relative hover:opacity-80 transition-opacity">
+              <Link href="#" className="relative hover:opacity-80 transition-opacity">
                 <Bell className={cn("w-4.5 h-4.5", textColor)} />
                 <span className="absolute -top-1.5 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center">
                   3

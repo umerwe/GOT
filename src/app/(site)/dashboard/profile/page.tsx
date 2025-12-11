@@ -148,7 +148,7 @@ export default function ProfilePage() {
                                         </div>
                                         <div className="space-y-4">
                                             <h3 className="text-lg font-bold text-gray-900">Newsletters</h3>
-                                            <p className="text-gray-600">You don't subscribe to our newsletter.</p>
+                                            <p className="text-gray-600">You don&apos;t subscribe to our newsletter.</p>
                                         </div>
                                     </CardContent>
                                 </Card>

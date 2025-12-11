@@ -1,6 +1,4 @@
 import React from "react";
-import Link from "next/link";
-import Image from "next/image";
 import AuthGuard from "@/common/auth-guard";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";

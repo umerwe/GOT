@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import Providers from "@/providers/query-provider";
 
 import "./globals.css";
-import NotificationProvider from "@/components/notificationProvider";
 import { SessionProvider } from "next-auth/react";
 import ChatListener from "@/components/chat-listner";
 
@@ -31,7 +30,7 @@ export default function RootLayout({
         <SessionProvider >
           <Providers>
             <ChatListener />
-            <NotificationProvider />
+            {/* <NotificationProvider /> */}
             {children}
           </Providers>
         </SessionProvider>
