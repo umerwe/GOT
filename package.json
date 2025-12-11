@@ -31,7 +31,7 @@
     "framer-motion": "^12.23.25",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.536.0",
-    "next": "15.4.6",
+    "next": "^16.0.8",
     "next-auth": "^5.0.0-beta.29",
     "pusher-js": "^8.4.0",
     "react": "19.1.0",
