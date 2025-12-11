@@ -24,7 +24,7 @@ export default function Home() {
   }, [session, status, handleSessionAuth]);
 
   return (
-    <div className="flex flex-col gap-20 mb-20">
+    <div className="flex flex-col gap-20">
       <HeroSection />
       <CategoriesSection />
       {/* <FeaturedListings /> */}
