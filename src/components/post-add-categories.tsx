@@ -15,7 +15,7 @@ const PostAddCategories = () => {
     return (
         <div>
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">Post Your Ad</h1>
+                <h1 className="text-3xl font-bold text-[#000000] mb-2">Post Your Ad</h1>
                 <p className="text-gray-600">Choose a Category</p>
             </div>
             <div className="hidden md:flex items-center space-x-8">

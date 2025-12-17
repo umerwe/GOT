@@ -1,6 +1,7 @@
 "use client"
 
 import { Skeleton } from "@/components/ui/skeleton"
+import Breadcrumb from "../ui/breadcrumb"
 
 interface PageHeaderProps {
   categoryTitle: string
@@ -10,7 +11,6 @@ interface PageHeaderProps {
 
 export default function PageHeader({
   categoryTitle,
-  resultCount,
   isLoading = false,
 }: PageHeaderProps) {
   if (isLoading) {
@@ -18,16 +18,20 @@ export default function PageHeader({
       <div className="mb-6 space-y-2">
         <Skeleton className="h-4 w-40" />
         <Skeleton className="h-6 w-64" />
-        <Skeleton className="h-4 w-24" />
       </div>
     )
   }
 
   return (
     <div className="">
-      <p className="text-sm text-gray-600 mb-2">Home / {categoryTitle}</p>
-      <h1 className="text-2xl font-bold mb-1">{categoryTitle}</h1>
-      <p className="text-gray-500">{resultCount} results</p>
+      <Breadcrumb
+        items={[
+          { title: "Home", href: "/" },
+          { title: categoryTitle }
+        ]}
+      />
+      <h1 className="text-xl font-bold mb-1">{categoryTitle}</h1>
+      {/* <p className="text-gray-500">{resultCount} results</p> */}
     </div>
   )
 }

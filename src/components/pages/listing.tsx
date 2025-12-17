@@ -69,13 +69,13 @@ export default function Listing({ product }: ProductDetailsProps) {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
+    <div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* --- LEFT COLUMN: Images & Description --- */}
         <div className="lg:col-span-2 space-y-8">
 
           {/* Main Image Gallery */}
-          <div className="bg-gray-50 rounded-xl overflow-hidden relative group">
+          <div className="bg-gray-50 rounded-none overflow-hidden relative group">
             <div className="relative w-full aspect-[4/3] lg:aspect-[16/10]">
               <Image
                 src={activeImage || "/placeholder.svg"}
@@ -105,7 +105,7 @@ export default function Listing({ product }: ProductDetailsProps) {
           </div>
 
           {/* Specs Grid (Replicating the bottom grid in image) */}
-          <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
+          <div className="border-2 border-gray-200 rounded-none p-6 bg-white">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-y-6 gap-x-4">
               <SpecBox label="Usage" value={product.usage ? capitalizeWords(product.usage) : "-"} />
               <SpecBox label="Condition" value={product.condition} />
@@ -123,7 +123,7 @@ export default function Listing({ product }: ProductDetailsProps) {
 
           {/* Description */}
           <div className="space-y-2">
-            <h1 className="text-xl font-bold">Overview</h1>
+            <h1 className="text-lg font-bold">Overview</h1>
             <div className="text-gray-600 text-sm">
               {product.description}
             </div>
@@ -144,7 +144,7 @@ export default function Listing({ product }: ProductDetailsProps) {
               </span>
             </div> */}
 
-            <h3 className="text-2xl font-bold text-gray-900 leading-tight">
+            <h3 className="text-2xl font-bold text-[#000000] leading-tight">
               {capitalizeWords(product.title)}
             </h3>
 
@@ -162,7 +162,7 @@ export default function Listing({ product }: ProductDetailsProps) {
 
           {/* Price */}
           <div className="border-t py-4">
-            <h1 className="text-lg font-bold text-gray-900">
+            <h1 className="text-lg font-bold text-[#000000]">
               AED {product.price.toLocaleString()}
             </h1>
           </div>
@@ -170,8 +170,8 @@ export default function Listing({ product }: ProductDetailsProps) {
           {/* Seller Info */}
           <div className="flex items-center justify-between -mt-4">
             <div className="text-sm">
-              <span className="text-gray-900 font-semibold">Seller</span>
-              <span className="ml-1 text-gray-900 underline cursor-pointer hover:text-solid">
+              <span className="text-[#000000] font-semibold">Seller</span>
+              <span className="ml-1 text-[#000000] underline cursor-pointer hover:text-solid">
                 @{product.user?.name}
               </span>
             </div>
@@ -247,7 +247,7 @@ function SpecBox({ label, value }: { label: string; value?: string | number | nu
       <span className="text-xs text-gray-500 tracking-wide">
         {label}
       </span>
-      <h1 className="text-sm font-bold text-gray-900 truncate">
+      <h1 className="text-sm font-bold text-[#000000] truncate">
         {value || "-"}
       </h1>
     </div>

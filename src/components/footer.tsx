@@ -11,7 +11,7 @@ export default function Footer() {
   const configData = useAppSelector((state) => state.config.data)
 
   const FooterColumn = ({ title, links }: { title: string; links: { label: string; href: string }[] }) => (
-    <div className="flex flex-col space-y-4">
+    <div className={`flex flex-col space-y-4`}>
       <h3 className="text-white text-sm font-bold uppercase tracking-widest">{title}</h3>
       <ul className="space-y-2">
         {links.map((link) => (
@@ -44,26 +44,26 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-[#111111] text-[#999999] pt-20 pb-10 font-sans px-2 sm:px-4 md:px-6 lg:px-8 xl:px-10">
+    <footer className="bg-[#111111] text-[#999999] pt-10 md:pt-20 pb-10 font-sans px-4 md:px-8 lg:px-12">
       <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col lg:flex-row justify-between items-start gap-10 lg:gap-20 mb-10 md:mb-20">
 
-        <div className="flex flex-col lg:flex-row justify-between items-start gap-12 mb-28">
-
-          <div className="w-full lg:w-auto flex-shrink-0 mb-8 lg:mb-0">
+          {/* Logo Section */}
+          <div className="w-full lg:w-auto flex-shrink-0">
             <Link href="/" className="inline-block">
               <Image
                 src={configData?.site_logo as string}
                 alt="Get Out There Logo"
                 width={110}
                 height={110}
-                className="object-contain -rotate-12"
+                className="object-contain -rotate-12 w-[174px] h-[162px]"
                 priority
               />
             </Link>
           </div>
 
-          <div className="max-w-4xl mx-auto lg:flex-1 grid grid-cols-1 sm:grid-cols-3 lg:px-12 xl:px-24">
-
+          {/* Links Section */}
+          <div className="w-full lg:w-auto grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-12 xl:gap-14 lg:mr-auto">
             <FooterColumn
               title="SECTIONS"
               links={section}
@@ -80,6 +80,7 @@ export default function Footer() {
             />
           </div>
 
+          {/* Social Icons Section */}
           <div className="w-full lg:w-auto flex justify-start lg:justify-end">
             <div className="flex items-center gap-3">
               <SocialIcon href="https://web.facebook.com/people/Get-Out-There-UAE/100086864606365/" icon={<Facebook className="w-5 h-5" />} />
@@ -88,7 +89,8 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center text-[15px] gap-6 md:gap-0">
+        {/* Bottom Section: Copyright & Legal */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center text-[15px] gap-6 md:gap-0 border-t border-[#222] pt-8">
 
           <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8">
             <div className="flex items-center gap-2 text-white">
@@ -101,7 +103,7 @@ export default function Footer() {
           </div>
 
           {/* Right Side: Legal Links */}
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-6 sm:gap-8">
             <Link href="/terms-and-conditions" className="hover:text-white transition-colors">
               Terms of Use
             </Link>

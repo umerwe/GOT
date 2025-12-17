@@ -4,8 +4,7 @@ import api from "@/lib/axios";
 export const getProducts = async (filters: ProductFilters = {}) => {
   const { data } = await api.get("/products", {
     params: {
-      ...filters,
-      per_page: 12
+      ...filters
     }
   })
   return data

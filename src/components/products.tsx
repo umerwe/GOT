@@ -25,36 +25,34 @@ const TrendingBikes = () => {
   };
 
   return (
-    <div id="trending-section" className="px-2 sm:px-4 md:px-6 lg:px-8 xl:px-10 scroll-smooth">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-5">
-          <h2 className="text-2xl font-semibold text-gray-900">Featured Products</h2>
-          <div className="flex items-center gap-2">
+    <div className="scroll-smooth border-b-3 border-[#EBEBEB] pb-4">
+      <div className="flex items-center justify-between mb-[10px]">
+        <h2 className="text-2xl font-semibold text-[#000000]">Featured Products</h2>
+        <div className="flex items-center gap-2">
 
-            <Button
-              variant="outline"
-              size="icon"
-              className="rounded-full"
-              onClick={() => handlePaginate(-1)}
-              disabled={page <= 1 || isLoading}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            className="rounded-full"
+            onClick={() => handlePaginate(-1)}
+            disabled={page <= 1 || isLoading}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
 
-            <Button
-              variant="outline"
-              size="icon"
-              className="rounded-full"
-              onClick={() => handlePaginate(1)}
-              disabled={!pagination || page >= pagination.totalPages || isLoading}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
+          <Button
+            variant="outline"
+            size="icon"
+            className="rounded-full"
+            onClick={() => handlePaginate(1)}
+            disabled={!pagination || page >= pagination.totalPages || isLoading}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
-
-        <ProductCard products={products} isLoading={isLoading} />
       </div>
+
+      <ProductCard products={products} isLoading={isLoading} />
     </div>
   );
 };

@@ -75,7 +75,7 @@ export default function ProfilePage() {
     <AuthGuard>
       <div className="bg-gray-50">
         <div className="max-w-5xl mx-auto px-4 py-10">
-          <h3 className="text-lg font-semibold text-gray-900">Manage Your Profile</h3>
+          <h3 className="text-lg font-semibold text-[#000000]">Manage Your Profile</h3>
           <p className="text-gray-600 mb-4">Edit your profile information and manage your ads.</p>
 
           {/* Profile Section */}
@@ -94,7 +94,7 @@ export default function ProfilePage() {
                   />
                 </div>
                 <div className="text-center sm:text-left mb-2">
-                  <h2 className="text-xl font-semibold text-gray-900">{capitalizeWords(data?.name)}</h2>
+                  <h2 className="text-xl font-semibold text-[#000000]">{capitalizeWords(data?.name)}</h2>
                   <p className="text-gray-600">{data?.email}</p>
 
                   <Button
@@ -127,7 +127,7 @@ export default function ProfilePage() {
                 onClick={() => setSelectedStatus(status as "pending" | "approved" | "rejected" | "expired")}
                 className={`pb-2 text-sm font-medium ${selectedStatus === status
                   ? "border-b-2 border-solid text-solid"
-                  : "text-gray-600 hover:text-gray-900"
+                  : "text-gray-600 hover:text-[#000000]"
                   }`}
               >
                 {status.charAt(0).toUpperCase() + status.slice(1)}

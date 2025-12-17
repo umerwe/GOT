@@ -17,7 +17,7 @@ const RecentlyViewed = () => {
         <section className="py-8 px-4 sm:px-6 lg:px-8 bg-white">
             <div className="max-w-7xl mx-auto">
                 <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-bold text-gray-900">Recently Viewed</h2>
+                    <h2 className="text-2xl font-bold text-[#000000]">Recently Viewed</h2>
                     <Link href="#" className="flex items-center text-sm font-medium text-[#CA8A04] hover:text-dark">
                         View All <ChevronRight className="ml-1 h-4 w-4" />
                     </Link>
@@ -36,7 +36,7 @@ const RecentlyViewed = () => {
                                     />
                                 </div>
                                 <div className='p-3'>
-                                    <h3 className="text-sm font-medium text-gray-900 line-clamp-1">{item.name}</h3>
+                                    <h3 className="text-sm font-medium text-[#000000] line-clamp-1">{item.name}</h3>
                                     <p className="text-sm font-semibold text-[#CA8A04]">{item.price}</p>
                                 </div>
                             </CardContent>

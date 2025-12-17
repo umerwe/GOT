@@ -171,7 +171,7 @@ export default function AdsTable({ selectedStatus }: { selectedStatus?: string }
                     />
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-sm font-bold text-gray-900 line-clamp-1">
+                    <h3 className="text-sm font-bold text-[#000000] line-clamp-1">
                       {capitalizeWords(ad.title)}
                     </h3>
                     <p className="text-xs text-gray-500 mt-0.5">
@@ -182,7 +182,7 @@ export default function AdsTable({ selectedStatus }: { selectedStatus?: string }
 
                 {/* 2. Category Column */}
                 <div className="col-span-1 sm:col-span-3 pl-16 sm:pl-0 -mt-2 sm:mt-0">
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm font-medium text-[#000000]">
                     {ad.category?.title || "Classifieds"}
                   </p>
                   <p className="text-xs text-gray-500 line-clamp-1">

@@ -79,7 +79,7 @@ export default function MyListing() {
 
         {/* Title + Desc */}
         <section className="space-y-2">
-          <h1 className="text-2xl md:text-3xl font-semibold text-gray-900">
+          <h1 className="text-2xl md:text-3xl font-semibold text-[#000000]">
             {product_data.title}
           </h1>
           <p className="text-gray-600 leading-relaxed">
@@ -101,7 +101,7 @@ export default function MyListing() {
                     className="grid grid-cols-2 gap-3 py-3 text-sm"
                   >
                     <dt className="text-gray-500">{s.k}</dt>
-                    <dd className="text-gray-900">{s.v}</dd>
+                    <dd className="text-[#000000]">{s.v}</dd>
                   </div>
                 ))}
               </dl>
@@ -114,7 +114,7 @@ export default function MyListing() {
           <h2 className="text-sm font-semibold text-gray-800 uppercase tracking-wide">
             Price
           </h2>
-          <div className="text-3xl font-bold text-gray-900">
+          <div className="text-3xl font-bold text-[#000000]">
             د.إ {product_data.price}
           </div>
         </section>
@@ -132,17 +132,17 @@ export default function MyListing() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <div>
                   <div className="text-gray-500">Contact Name</div>
-                  <div className="text-gray-900">{capitalizeWords(product_data.user.name)}</div>
+                  <div className="text-[#000000]">{capitalizeWords(product_data.user.name)}</div>
                 </div>
                 <div>
                   <div className="text-gray-500">Phone</div>
-                  <div className="text-gray-900">
+                  <div className="text-[#000000]">
                     {product_data.user.phoneNumber}
                   </div>
                 </div>
                 <div>
                   <div className="text-gray-500">Email</div>
-                  <div className="text-gray-900">{product_data.user.email}</div>
+                  <div className="text-[#000000]">{product_data.user.email}</div>
                 </div>
               </div>
             </CardContent>

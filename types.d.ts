@@ -80,6 +80,7 @@ interface ProductFilters {
   min_price?: string;
   max_price?: string;
   page ?: number
+  per_page ?: number
 }
 
 interface FilterOption {

@@ -20,7 +20,7 @@ const Navbar = () => {
 
   const isHome = pathname === "/";
   const textColor = isHome ? "text-white" : "text-black";
-  const getLinkColor = (isMobile: boolean) => isMobile ? "text-gray-900" : textColor;
+  const getLinkColor = (isMobile: boolean) => isMobile ? "text-[#000000]" : textColor;
 
   const linkClasses = (path: string, isMobile: boolean, exact = true) =>
     cn(
@@ -32,12 +32,12 @@ const Navbar = () => {
     );
 
   const NavLinks = ({ isMobile = false }: { isMobile?: boolean }) => (
-    <div className={`${isMobile ? "flex flex-col gap-4" : "hidden sm:flex items-center gap-6 ml-8 text-sm font-medium"}`}>
+    <div className={`${isMobile ? "flex flex-col gap-4" : "hidden sm:flex items-center gap-6 text-sm font-medium"}`}>
       <Link href="/" className={linkClasses("/", isMobile)} onClick={() => isMobile && setIsMenuOpen(false)}>
         Home
       </Link>
       <Link href="/ads/all" className={linkClasses("/ads", isMobile, false)} onClick={() => isMobile && setIsMenuOpen(false)}>
-        Ads
+        Categories
       </Link>
     </div>
   );
@@ -68,32 +68,41 @@ const Navbar = () => {
         </>
       ) : (
         <Link href="/auth/login" className="w-full sm:w-auto">
-          <Button variant="outline" className={cn("w-full sm:flex-1 bg-transparent text-black border-gray-200")}>Log In / Sign Up</Button>
+          <Button variant="outline" className={cn("w-full sm:flex-1 bg-transparent text-black border-gray-200")}>Sign In</Button>
         </Link>
       )}
     </div>
   );
 
   return (
-    <nav className={cn("w-full top-0 py-3 px-4 sm:px-6 lg:px-8 border-b-2 z-50 transition-colors duration-300", isHome ? "bg-transparent border-transparent absolute" : "bg-white border-gray-100 sticky")}>
-      <div className="flex items-center justify-between gap-5">
+    <nav className={cn("w-full top-0 pr-4 sm:px-6 lg:px-8 border-b-2 z-50 transition-colors duration-300", isHome ? "bg-transparent border-transparent absolute" : "bg-white border-gray-100 sticky")}>
+      <div className="flex items-start justify-between gap-5">
 
         {/* Logo Section */}
         <div className="flex items-center gap-3 text-base sm:text-xl font-semibold flex-shrink-0">
           <div className="relative flex items-center justify-center">
             {configData?.site_logo ? (
-              <Image src={configData.site_logo} width={256} height={256} alt="logo-img" className="object-contain -rotate-17 w-[35px] h-[35px] sm:w-[70px] sm:h-[70px]" />
+              <Image
+                src={configData.site_logo}
+                width={256} height={256}
+                alt="logo-img"
+                className="object-contain
+                 -rotate-17 w-[93px] h-[87px]"
+              />
             ) : (
-              <div className="flex items-center justify-center bg-solid text-black font-bold rounded-full w-[35px] h-[35px] sm:w-[45px] sm:h-[45px]">G</div>
+              <div className="w-[87px] h-[87px] bg-gray-200 animate-pulse rounded -rotate-17" />
             )}
           </div>
+        </div>
+
+        <div className="my-auto">
           {
             !isHome &&
             <NavLinks />
           }
         </div>
 
-        <div className="hidden lg:flex flex-col items-end gap-1">
+        <div className="hidden sm:flex flex-col items-end gap-3 mt-2">
           <div className={cn("flex items-center gap-3 text-xs tracking-wide", textColor)}>
             {
               isAuth &&
@@ -162,7 +171,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className="flex lg:hidden items-center gap-4">
+        <div className="flex sm:hidden items-center gap-4 my-auto">
           {isAuth && <MobileIcons />}
           <button onClick={toggleMenu} className="cursor-pointer">
             {isMenuOpen ? <X className={cn("w-6 h-6", textColor)} /> : <Menu className={cn("w-6 h-6", textColor)} />}
@@ -172,7 +181,7 @@ const Navbar = () => {
       </div>
 
       {isMenuOpen && (
-        <div className="block lg:hidden mt-3 bg-white border-t border-gray-200 animate-in slide-in-from-top-2 duration-200">
+        <div className="block sm:hidden mt-3 bg-white border-t border-gray-200 animate-in slide-in-from-top-2 duration-200">
           <div className="flex flex-col gap-4 py-4 px-4">
             <NavLinks isMobile={true} />
             <MobileButtons />

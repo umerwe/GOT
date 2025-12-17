@@ -26,10 +26,9 @@ const AllMotorcyclesSection = () => {
     };
 
     return (
-        <div id="motorcycles-section" className="px-2 sm:px-4 md:px-6 lg:px-8 xl:px-10 scroll-smooth">
-            <div className="max-w-7xl mx-auto">
-                <div className="flex items-center justify-between mb-5">
-                    <h2 className="text-2xl font-semibold text-gray-900">All Motorcycles</h2>
+        <div className="scroll-smooth">
+                <div className="flex items-center justify-between mb-[10px]">
+                    <h2 className="text-2xl font-semibold text-[#000000]">All Motorcycles</h2>
 
                     <div className="flex items-center gap-2">
                         <Button
@@ -54,7 +53,6 @@ const AllMotorcyclesSection = () => {
                 </div>
 
                 <ProductCard products={motorcyclesData} isLoading={isLoading} />
-            </div>
         </div>
     )
 }

@@ -22,7 +22,7 @@ export default function WhyChooseUs() {
     return (
         <section className="px-4 bg-white">
             <div className="max-w-4xl mx-auto">
-                <h1 className="text-3xl font-bold text-center text-gray-900 mb-2">
+                <h1 className="text-3xl font-bold text-center text-[#000000] mb-2">
                     Why Choose Get Out There?
                 </h1>
 
@@ -35,7 +35,7 @@ export default function WhyChooseUs() {
                             <div className="mb-4 w-19 h-19 rounded-full bg-[#FEF9C3] flex items-center justify-center">
                                 {feature.icon}
                             </div>
-                            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                            <h3 className="text-xl font-semibold text-[#000000] mb-2">
                                 {feature.title}
                             </h3>
                             <p className="text-gray-600 leading-relaxed">

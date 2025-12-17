@@ -4,6 +4,8 @@ import { useGetProduct } from "@/hooks/useProduct"
 import SkeletonLoader from "@/common/skeleton-loader"
 import NotFoundWrapper from "@/common/not-found"
 import Listing from "@/components/pages/listing"
+import Breadcrumb from "@/components/ui/breadcrumb"
+import Container from "@/components/container"
 
 export default function ListingById() {
   const { id } = useParams()
@@ -13,8 +15,21 @@ export default function ListingById() {
   if (!product) return <NotFoundWrapper itemName="Product" />
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <Listing product={product} />
+    <div>
+      <Container className="max-w-[1400px] mx-auto px-3 mt-4">
+        <Breadcrumb
+          items={[
+            { title: "Home", href: "/" },
+            { title: product.category?.title || "", href: `/category/${product.category?.slug}` },
+            { title: product.title }
+          ]}
+        />
+      </Container>
+      <Container className="pt-10 pb-16">
+        <Listing
+          product={product}
+        />
+      </Container>
     </div>
   )
 }

@@ -77,7 +77,7 @@ export const UserMenu = () => {
               />
             )}
             <div>
-              <p className="text-sm font-semibold text-gray-900">
+              <p className="text-sm font-semibold text-[#000000]">
                 {capitalizeWords(data?.name) || "User"}
               </p>
               <p className="text-xs text-gray-500 truncate">

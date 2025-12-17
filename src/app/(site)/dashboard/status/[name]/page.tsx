@@ -12,7 +12,7 @@ const StatusPage = () => {
     return (
         <div className="space-y-6 max-w-5xl mx-auto px-2">
             <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-gray-900 capitalize tracking-tight">
+                <h2 className="text-2xl font-bold text-[#000000] capitalize tracking-tight">
                     {displayTitle}
                 </h2>
             </div>

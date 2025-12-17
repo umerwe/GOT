@@ -35,7 +35,7 @@ const FeaturedProducts = () => {
         <div className="bg-white py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
-                <h2 className="text-3xl font-bold text-gray-900 mb-8">Featured Products</h2>
+                <h2 className="text-3xl font-bold text-[#000000] mb-8">Featured Products</h2>
 
                 {/* Products Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -66,12 +66,12 @@ const FeaturedProducts = () => {
                                     </div>
                                 </div>
 
-                                <h3 className="text-xl font-semibold text-gray-900 mb-2">{product.title}</h3>
+                                <h3 className="text-xl font-semibold text-[#000000] mb-2">{product.title}</h3>
 
                                 <p className="text-gray-600 mb-4">{product.description}</p>
 
                                 <div className="flex items-center justify-between">
-                                    <span className="text-2xl font-bold text-gray-900">{product.price}</span>
+                                    <span className="text-2xl font-bold text-[#000000]">{product.price}</span>
                                     <Button 
                                         variant="default" 
                                         className="text-black"

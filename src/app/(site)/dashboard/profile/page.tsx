@@ -98,7 +98,7 @@ export default function ProfilePage() {
                             <>
                                 {/* --- Profile Image Section --- */}
                                 <div className="flex flex-col items-start space-y-4">
-                                    <h2 className="text-2xl font-bold text-gray-900 capitalize tracking-tight">Profile Image</h2>
+                                    <h2 className="text-2xl font-bold text-[#000000] capitalize tracking-tight">Profile Image</h2>
                                     <div className="space-y-3">
                                         <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-white shadow-sm">
                                             <Image
@@ -131,9 +131,9 @@ export default function ProfilePage() {
                                 <Card className="bg-white shadow-sm border-gray-200">
                                     <CardContent className="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
                                         <div className="space-y-4">
-                                            <h3 className="text-lg font-bold text-gray-900">Contact Information</h3>
+                                            <h3 className="text-lg font-bold text-[#000000]">Contact Information</h3>
                                             <div className="text-gray-600 space-y-1">
-                                                <p className="text-gray-900 font-medium">{capitalizeWords(data?.name)}</p>
+                                                <p className="text-[#000000] font-medium">{capitalizeWords(data?.name)}</p>
                                                 <p>{data?.email}</p>
                                                 <p>{data?.phoneNumber}</p>
                                             </div>
@@ -147,7 +147,7 @@ export default function ProfilePage() {
                                             </div>
                                         </div>
                                         <div className="space-y-4">
-                                            <h3 className="text-lg font-bold text-gray-900">Newsletters</h3>
+                                            <h3 className="text-lg font-bold text-[#000000]">Newsletters</h3>
                                             <p className="text-gray-600">You don&apos;t subscribe to our newsletter.</p>
                                         </div>
                                     </CardContent>
@@ -157,14 +157,14 @@ export default function ProfilePage() {
                                 <Card className="bg-white shadow-sm border-gray-200">
                                     <CardContent className="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
                                         <div className="space-y-4">
-                                            <h3 className="text-lg font-bold text-gray-900">Default Billing Address</h3>
+                                            <h3 className="text-lg font-bold text-[#000000]">Default Billing Address</h3>
                                             <p className="text-gray-600">House #24, Street 5, Islamabad.</p>
                                             <button className="text-sm font-semibold text-solid hover:text-hover">
                                                 Edit Address
                                             </button>
                                         </div>
                                         <div className="space-y-4">
-                                            <h3 className="text-lg font-bold text-gray-900">Default Shipping Address</h3>
+                                            <h3 className="text-lg font-bold text-[#000000]">Default Shipping Address</h3>
                                             <p className="text-gray-600">221-B, Block L, Islamabad.</p>
                                             <button className="text-sm font-semibold text-solid hover:text-hover">
                                                 Edit Address

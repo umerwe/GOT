@@ -25,10 +25,10 @@ const CategoriesSection = () => {
     };
 
     return (
-        <section className="px-2 sm:px-4 md:px-6 lg:px-8 xl:px-10 bg-white">
+        <section className="bg-white">
             <div className="max-w-7xl mx-auto">
-                <div className="flex items-center justify-between mb-5 px-2">
-                    <h2 className="text-2xl font-light">Popular Categories</h2>
+                <div className="flex items-center justify-between mb-[10px]">
+                    <h2 className="text-2xl text-[#000000]">Popular Categories</h2>
 
                     <div className="flex items-center gap-2">
                         <Button
@@ -77,7 +77,7 @@ const CategoriesSection = () => {
                                 </div>
 
                                 <div className="mt-2 px-1">
-                                    <h1 className="text-gray-900 font-semibold text-sm sm:text-base leading-tight truncate">
+                                    <h1 className="text-[#000000] font-semibold text-sm sm:text-base leading-tight truncate">
                                         {category.title}
                                     </h1>
                                 </div>

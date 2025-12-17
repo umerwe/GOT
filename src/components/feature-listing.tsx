@@ -32,7 +32,7 @@ const FeaturedListings = () => {
     <div className="bg-gray-100 px-2 sm:px-4 md:px-6 lg:px-8 xl:px-10 py-6 mb-20">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-        <h1 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-4 sm:mb-0">
+        <h1 className="text-2xl md:text-3xl font-semibold text-[#000000] mb-4 sm:mb-0">
           Featured Listings
         </h1>
         <div className="flex items-center gap-3">

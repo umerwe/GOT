@@ -1,7 +1,8 @@
 export interface FilterOption {
   id?: string
   value?: string
-  label: string
+  label?: string
+  image ?: string
 }
 
 export interface FilterState {
@@ -44,4 +45,19 @@ export interface Brand {
   id: number
   title: string
   image : string
+}
+
+export interface FilterSidebarProps {
+  filterOptions: {
+    category: FilterOption[]
+    brand: FilterOption[]
+    sellerType: FilterOption[]
+    condition: FilterOption[]
+  }
+  selectedFilters: FilterState
+  displayLabels: DisplayLabels
+  onFilterChange: (filterType: keyof FilterState, value: string | number) => void
+  onPriceRangeChange: (minPrice: number, maxPrice: number) => void
+  onClearFilters: () => void
+  onApplyFilters: (newCategory: string) => void
 }

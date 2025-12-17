@@ -7,7 +7,7 @@ export default function ThankYouPage() {
    <AuthGuard>
      <div className="bg-gray-50 py-8 flex items-center justify-center min-h-screen">
       <div className="max-w-4xl mx-auto px-4 text-center">
-        <h1 className="text-3xl font-semibold text-gray-900 mb-4">
+        <h1 className="text-3xl font-semibold text-[#000000] mb-4">
           Your ad has been posted!
         </h1>
         <p className="text-lg text-gray-600">

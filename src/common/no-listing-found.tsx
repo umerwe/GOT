@@ -19,7 +19,7 @@ export default function NoListingsFound({ isFilterPage = true }: { isFilterPage?
 
                 {/* Text */}
                 <div className="space-y-2">
-                    <h2 className="text-xl font-semibold text-gray-900">
+                    <h2 className="text-xl font-semibold text-[#000000]">
                         No Listings Found
                     </h2>
                     <p className="text-sm text-gray-600">
@@ -46,7 +46,7 @@ export default function NoListingsFound({ isFilterPage = true }: { isFilterPage?
                 {/* Back to Home */}
                 <Link
                     href="/"
-                    className="text-sm text-gray-600 hover:text-gray-900"
+                    className="text-sm text-gray-600 hover:text-[#000000]"
                 >
                     ← Back to Home
                 </Link>

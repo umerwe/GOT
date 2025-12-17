@@ -20,7 +20,7 @@ export default function PostAd() {
         <div className="max-w-5xl mx-auto px-4">
           <div className="lg:col-span-3">
             <div className="mb-6">
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">Post New Ad</h1>
+              <h1 className="text-2xl font-bold text-[#000000] mb-2">Post New Ad</h1>
               <p className="text-gray-600">Community users can post up to 2 ads</p>
             </div>
             <AdForm

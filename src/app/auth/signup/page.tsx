@@ -46,7 +46,7 @@ export default function SignUpForm() {
     <div className="w-full max-w-[450px] mx-auto bg-white p-4 sm:p-8">
       {/* Header Section */}
       <div className="mb-8">
-        <h2 className="text-xl font-bold text-gray-900">User Sign Up</h2>
+        <h2 className="text-xl font-bold text-[#000000]">User Sign Up</h2>
         <p className="text-gray-600 text-sm">
           Create an account to get started
         </p>
@@ -154,11 +154,11 @@ export default function SignUpForm() {
             />
             <label htmlFor="terms" className="text-sm text-gray-600 leading-snug">
               I agree to the{" "}
-              <Link href="/terms-and-conditions" className="text-gray-900 font-semibold hover:underline">
+              <Link href="/terms-and-conditions" className="text-[#000000] font-semibold hover:underline">
                 Terms & Conditions
               </Link>{" "}
               and{" "}
-              <Link href="/privacy-policy" className="text-gray-900 font-semibold hover:underline">
+              <Link href="/privacy-policy" className="text-[#000000] font-semibold hover:underline">
                 Privacy Policy
               </Link>
             </label>
@@ -204,7 +204,7 @@ export default function SignUpForm() {
         <div className="text-center mt-6">
           <p className="text-sm text-gray-600">
             Already have an account?{" "}
-            <Link href="/auth/login" className="text-gray-900 font-bold underline hover:no-underline">
+            <Link href="/auth/login" className="text-[#000000] font-bold underline hover:no-underline">
               Sign In
             </Link>
           </p>

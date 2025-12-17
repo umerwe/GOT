@@ -43,7 +43,7 @@ const ChatList = ({
   return (
     <div className={`flex flex-col ${className}`}>
       <div className="flex items-center px-4 py-3 border-b border-gray-200">
-        <button onClick={() => router.push(type === "chatId" ? "/chat" : "/")} className="flex items-center text-gray-700 hover:text-gray-900">
+        <button onClick={() => router.push(type === "chatId" ? "/chat" : "/")} className="flex items-center text-gray-700 hover:text-[#000000]">
           <ArrowLeft className="w-5 h-5 mr-2" />
           <span className="font-medium">{type === "chatId" ? "Chat" : "Home"}</span>
         </button>

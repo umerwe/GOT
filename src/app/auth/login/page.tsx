@@ -39,7 +39,7 @@ export default function LoginForm() {
     <div className="w-full max-w-[450px] mx-auto bg-white p-4 sm:p-8 border">
       {/* Header Section */}
       <div className="mb-8">
-        <h2 className="text-xl font-bold text-gray-900">User Login</h2>
+        <h2 className="text-xl font-bold text-[#000000]">User Login</h2>
         <p className="text-gray-600 text-sm">
           Welcome back. Enter your credentials to access your account
         </p>
@@ -66,7 +66,7 @@ export default function LoginForm() {
             <label className="block text-sm font-medium text-gray-700">Password</label>
             <Link
               href="/auth/forgot-password"
-              className="text-xs font-medium text-gray-900 hover:underline"
+              className="text-xs font-medium text-[#000000] hover:underline"
             >
               Forgot Password
             </Link>
@@ -141,7 +141,7 @@ export default function LoginForm() {
         <div className="text-center mt-6">
           <p className="text-sm text-gray-600">
             Don&apos;t have an Account? &apos;
-            <Link href="/auth/signup" className="text-gray-900 font-bold underline hover:no-underline">
+            <Link href="/auth/signup" className="text-[#000000] font-bold underline hover:no-underline">
               Sign up here
             </Link>
           </p>

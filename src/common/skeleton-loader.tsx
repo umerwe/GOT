@@ -60,44 +60,111 @@ const SkeletonLoader = ({ type, count = 4 }: SkeletonLoaderProps) => {
                 </div>
             );
 
-      case "list":
-    return (
-        <div className="w-full space-y-6">
-            {Array.from({ length: count }).map((_, i) => (
-                <div
-                    key={i}
-                    className="grid grid-cols-12 gap-4 items-center"
-                >
-                    {/* 1. Ads Column (Image + Title/Price) - Span 4 */}
-                    <div className="col-span-4 flex items-center gap-4">
-                        <Skeleton className="w-12 h-12 rounded-md flex-shrink-0" />
-                        <div className="space-y-2 w-full max-w-[180px]">
-                            <Skeleton className="h-4 w-3/4" /> {/* Title */}
-                            <Skeleton className="h-3 w-1/3" /> {/* Price */}
+        case "product2":
+            return (
+                <div className="max-w-7xl mx-auto px-2 border border-gray-200 sm:px-4 lg:px-0 flex flex-col">
+                    {Array.from({ length: count }).map((_, index) => (
+                        <div
+                            key={index}
+                            className="w-full bg-white p-2 border border-gray-200 animate-pulse"
+                        >
+                            <div className="flex flex-col lg:flex-row gap-4">
+
+                                {/* Image Section Skeleton */}
+                                <div className="w-full lg:w-[189px] flex-shrink-0">
+                                    <div className="relative h-48 lg:h-[123px] w-full bg-gray-200 rounded-sm" />
+                                </div>
+
+                                {/* Content Section Skeleton */}
+                                <div className="flex-1 flex flex-col space-y-1 min-w-0 justify-between">
+                                    <div className="space-y-2">
+                                        {/* Title Line */}
+                                        <div className="h-6 bg-gray-200 rounded w-3/4" />
+
+                                        {/* Description Lines */}
+                                        <div className="space-y-1 mt-2">
+                                            <div className="h-4 bg-gray-200 rounded w-full" />
+                                            <div className="h-4 bg-gray-200 rounded w-5/6" />
+                                        </div>
+                                    </div>
+
+                                    {/* Price Line */}
+                                    <div className="mt-2">
+                                        <div className="h-5 bg-gray-200 rounded w-1/4" />
+                                    </div>
+                                </div>
+
+                                {/* Right Detail Section Skeleton */}
+                                <div className="w-full lg:w-[270px] flex-shrink-0 border-t lg:border-t-0 lg:border-l border-gray-100 pt-4 lg:pt-0 lg:pl-5 flex flex-col justify-center gap-1">
+                                    {/* Row 1 */}
+                                    <div className="flex justify-between py-1 px-2">
+                                        <div className="h-3 bg-gray-200 rounded w-12" />
+                                        <div className="h-3 bg-gray-200 rounded w-16" />
+                                    </div>
+
+                                    {/* Row 2 (Simulating the bg-[#FFF6E5] row spacing) */}
+                                    <div className="flex justify-between py-1 px-2 rounded">
+                                        <div className="h-3 bg-gray-200 rounded w-16" />
+                                        <div className="h-3 bg-gray-200 rounded w-8" />
+                                    </div>
+
+                                    {/* Row 3 */}
+                                    <div className="flex justify-between py-1 px-2">
+                                        <div className="h-3 bg-gray-200 rounded w-14" />
+                                        <div className="h-3 bg-gray-200 rounded w-12" />
+                                    </div>
+
+                                    {/* Row 4 */}
+                                    <div className="flex justify-between py-1 px-2 rounded">
+                                        <div className="h-3 bg-gray-200 rounded w-10" />
+                                        <div className="h-3 bg-gray-200 rounded w-12" />
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
-                    </div>
-
-                    {/* 2. Category Column - Span 2 */}
-                    <div className="col-span-2 space-y-2">
-                        <Skeleton className="h-4 w-24" /> {/* Category */}
-                        <Skeleton className="h-3 w-16" /> {/* Subcategory */}
-                    </div>
-
-                    {/* 3. Status Column - Span 3 */}
-                    <div className="col-span-3 flex items-center gap-2">
-                        <Skeleton className="w-2 h-2 rounded-full" /> {/* Dot */}
-                        <Skeleton className="h-4 w-16" /> {/* Status Text */}
-                    </div>
-
-                    {/* 4. Actions Column - Span 3 */}
-                    <div className="col-span-3 flex items-center justify-end gap-2">
-                        <Skeleton className="h-8 w-24 rounded-md" /> {/* Edit Button */}
-                        <Skeleton className="h-8 w-8 rounded-md" />  {/* Kebab Menu */}
-                    </div>
+                    ))}
                 </div>
-            ))}
-        </div>
-    );
+            )
+        case "list":
+            return (
+                <div className="w-full space-y-6">
+                    {Array.from({ length: count }).map((_, i) => (
+                        <div
+                            key={i}
+                            className="grid grid-cols-12 gap-4 items-center"
+                        >
+                            {/* 1. Ads Column (Image + Title/Price) - Span 4 */}
+                            <div className="col-span-4 flex items-center gap-4">
+                                <Skeleton className="w-12 h-12 rounded-md flex-shrink-0" />
+                                <div className="space-y-2 w-full max-w-[180px]">
+                                    <Skeleton className="h-4 w-3/4" /> {/* Title */}
+                                    <Skeleton className="h-3 w-1/3" /> {/* Price */}
+                                </div>
+                            </div>
+
+                            {/* 2. Category Column - Span 2 */}
+                            <div className="col-span-2 space-y-2">
+                                <Skeleton className="h-4 w-24" /> {/* Category */}
+                                <Skeleton className="h-3 w-16" /> {/* Subcategory */}
+                            </div>
+
+                            {/* 3. Status Column - Span 3 */}
+                            <div className="col-span-3 flex items-center gap-2">
+                                <Skeleton className="w-2 h-2 rounded-full" /> {/* Dot */}
+                                <Skeleton className="h-4 w-16" /> {/* Status Text */}
+                            </div>
+
+                            {/* 4. Actions Column - Span 3 */}
+                            <div className="col-span-3 flex items-center justify-end gap-2">
+                                <Skeleton className="h-8 w-24 rounded-md" /> {/* Edit Button */}
+                                <Skeleton className="h-8 w-8 rounded-md" />  {/* Kebab Menu */}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            );
+
         case "profile":
             return (
                 <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -152,88 +219,100 @@ const SkeletonLoader = ({ type, count = 4 }: SkeletonLoaderProps) => {
 
         case "alllisting":
             return (
-                <div className="container mx-auto px-4 py-8 max-w-7xl">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        {/* --- LEFT COLUMN: Images & Description --- */}
-                        <div className="lg:col-span-2 space-y-8">
+                <div className="w-full">
+                    {/* Breadcrumb Placeholder (matches ListingById container) */}
+                    <div className="max-w-[1400px] mx-auto px-3 mt-4">
+                        <Skeleton className="h-4 w-64 rounded-sm" />
+                    </div>
 
-                            {/* Main Image Gallery */}
-                            <div className="rounded-xl overflow-hidden">
-                                <Skeleton className="w-full aspect-[4/3] lg:aspect-[16/10] bg-gray-200" />
-                            </div>
+                    {/* Main Content Container (matches ListingById container) */}
+                    <div className="max-w-7xl mx-auto px-3 pt-10 pb-16">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-                            {/* Specs Grid (Matches your border/grid layout) */}
-                            <div className="border border-gray-200 rounded-lg p-6 bg-white">
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-y-6 gap-x-4">
-                                    {/* Generates 8 skeleton spec boxes */}
-                                    {[...Array(8)].map((_, i) => (
-                                        <div key={i} className="flex flex-col gap-2">
-                                            <Skeleton className="h-3 w-12" /> {/* Label */}
-                                            <Skeleton className="h-5 w-20" /> {/* Value */}
-                                        </div>
-                                    ))}
+                            {/* --- LEFT COLUMN: Images & Description --- */}
+                            <div className="lg:col-span-2 space-y-8">
+
+                                {/* Main Image Gallery - rounded-none to match actual image */}
+                                <div className="bg-gray-50 rounded-none overflow-hidden relative">
+                                    <Skeleton className="w-full aspect-[4/3] lg:aspect-[16/10] rounded-none bg-gray-200" />
                                 </div>
-                            </div>
 
-                            {/* Description */}
-                            <div className="space-y-4">
-                                <Skeleton className="h-7 w-32" /> {/* "Overview" Title */}
+                                {/* Specs Grid - border-2 and rounded-none to match actual specs */}
+                                <div className="border-2 border-gray-200 rounded-none p-6 bg-white">
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-y-6 gap-x-4">
+                                        {[...Array(8)].map((_, i) => (
+                                            <div key={i} className="flex flex-col gap-1">
+                                                <Skeleton className="h-3 w-16 mb-1" /> {/* Label */}
+                                                <Skeleton className="h-4 w-24" />      {/* Value */}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Description */}
                                 <div className="space-y-2">
-                                    <Skeleton className="h-4 w-full" />
-                                    <Skeleton className="h-4 w-full" />
-                                    <Skeleton className="h-4 w-3/4" />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* --- RIGHT COLUMN: Details & Actions --- */}
-                        <div className="lg:col-span-1 space-y-6">
-
-                            {/* Title Header */}
-                            <div className="space-y-3">
-                                <Skeleton className="h-8 w-3/4" /> {/* Product Title */}
-
-                                {/* Brand/Category tags */}
-                                <div className="flex gap-2">
-                                    <Skeleton className="h-4 w-16" />
-                                    <Skeleton className="h-4 w-16" />
-                                </div>
-
-                                {/* Location */}
-                                <div className="flex gap-2 items-center pt-1">
-                                    <Skeleton className="w-5 h-5 rounded-full" />
-                                    <Skeleton className="h-4 w-1/2" />
+                                    <Skeleton className="h-6 w-32 mb-2" /> {/* Title "Overview" */}
+                                    <div className="space-y-1.5">
+                                        <Skeleton className="h-4 w-full" />
+                                        <Skeleton className="h-4 w-full" />
+                                        <Skeleton className="h-4 w-11/12" />
+                                        <Skeleton className="h-4 w-4/5" />
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* Price */}
-                            <div className="border-t py-4">
-                                <Skeleton className="h-9 w-1/2" />
-                            </div>
+                            {/* --- RIGHT COLUMN: Details & Actions --- */}
+                            <div className="lg:col-span-1 space-y-4">
 
-                            {/* Seller Info */}
-                            <div className="flex items-center justify-between -mt-2">
+                                {/* Title Header */}
                                 <div className="space-y-2">
-                                    <Skeleton className="h-3 w-10" />
-                                    <Skeleton className="h-4 w-24" />
+                                    {/* Product Title */}
+                                    <Skeleton className="h-8 w-11/12" />
+                                    <Skeleton className="h-8 w-3/4" />
+
+                                    {/* Brand/Category tags */}
+                                    <div className="flex gap-2 pt-1">
+                                        <Skeleton className="h-4 w-20" />
+                                        <Skeleton className="h-4 w-20" />
+                                    </div>
+
+                                    {/* Location */}
+                                    <div className="flex gap-2 items-center pt-1">
+                                        <Skeleton className="w-5 h-5 rounded-full" />
+                                        <Skeleton className="h-4 w-40" />
+                                    </div>
                                 </div>
-                                <Skeleton className="w-10 h-10 rounded-full" />
-                            </div>
 
-                            {/* Action Buttons (Chat & Phone) */}
-                            <div className="grid grid-cols-2 gap-3">
-                                <Skeleton className="h-12 rounded-md" />
-                                <Skeleton className="h-12 rounded-md" />
-                            </div>
+                                {/* Price */}
+                                <div className="border-t py-4">
+                                    <Skeleton className="h-7 w-48" />
+                                </div>
 
-                            {/* Safety Note */}
-                            <div className="flex items-center gap-2">
-                                <Skeleton className="h-4 w-4 rounded-full" />
-                                <Skeleton className="h-3 w-3/4" />
-                            </div>
+                                {/* Seller Info */}
+                                <div className="flex items-center justify-between -mt-4">
+                                    <div className="flex gap-2 items-center">
+                                        <Skeleton className="h-4 w-12" /> {/* "Seller" */}
+                                        <Skeleton className="h-4 w-24" /> {/* Name */}
+                                    </div>
+                                    {/* Image is commented out in your original code, but if needed: */}
+                                    {/* <Skeleton className="w-10 h-10 rounded-full" /> */}
+                                </div>
 
-                            {/* Wishlist Button */}
-                            <Skeleton className="h-12 w-full rounded-md" />
+                                {/* Action Buttons - rounded-md to match your buttons */}
+                                <div className="grid grid-cols-2 gap-3">
+                                    <Skeleton className="h-12 rounded-md bg-gray-200" />
+                                    <Skeleton className="h-12 rounded-md bg-gray-200" />
+                                </div>
+
+                                {/* Safety Note */}
+                                <div className="flex items-center gap-2 mt-2">
+                                    <Skeleton className="h-4 w-4 rounded-full" />
+                                    <Skeleton className="h-3 w-56" />
+                                </div>
+
+                                {/* Wishlist Button */}
+                                <Skeleton className="h-12 w-full rounded-md mt-2" />
+                            </div>
 
                         </div>
                     </div>

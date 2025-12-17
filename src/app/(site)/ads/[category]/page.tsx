@@ -16,8 +16,9 @@ import type {
 import NoListingsFound from "@/common/no-listing-found"
 import FilterSidebar from "@/components/ads/filter-sidebar"
 import PageHeader from "@/components/ads/page-header"
-import SearchAndSort from "@/components/ads/search-and-sort"
 import ProductCard from "@/components/ads/product-card"
+import ProductCard2 from "@/components/ads/product-card2"
+import { Grip, AlignJustify, ChevronLeft, SlidersHorizontal, ChevronDownIcon } from "lucide-react"
 
 export default function CategoryLayout() {
   const { category } = useParams()
@@ -25,13 +26,19 @@ export default function CategoryLayout() {
   const categoryId = (category as string) || "all"
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(12)
+
+  // View Mode State
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
+
   const { data: categories } = useGetCategories()
   const { data: brands } = useGetBrands()
-  
+
   const [selectedFilters, setSelectedFilters] = useState<FilterState>({
     category: categoryId,
     brand: "all",
@@ -39,7 +46,7 @@ export default function CategoryLayout() {
     min_price: 0,
     max_price: 100000,
   })
-  // Update category filter when categoryId changes
+
   useEffect(() => {
     setSelectedFilters((prev) => ({
       ...prev,
@@ -56,31 +63,33 @@ export default function CategoryLayout() {
     if (selectedFilters.max_price < 100000) f.max_price = selectedFilters.max_price.toString()
     return f
   }, [selectedFilters])
-  // Fetch products
+
   const { data: productsResponse, isLoading: isProductsLoading } = useGetProducts({
     ...appliedFilters,
     page: currentPage,
+    per_page: itemsPerPage
   })
+
   const products = useMemo(() => productsResponse?.data ?? [], [productsResponse])
   const totalPages = productsResponse?.pagination?.totalPages ?? 1
+  const totalItems = productsResponse?.pagination?.total_items || 0
+
+  const startItem = totalItems === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1
+  const endItem = Math.min(currentPage * itemsPerPage, totalItems)
 
   const filterOptions = useMemo(() => {
-    const baseOptions = {
+    return {
+      category: categories?.map((cat: Category) => ({ id: String(cat.id), label: cat.title })) ?? [],
+      brand: brands?.map((brand: Brand) => ({ id: String(brand.id), label: brand.title, image: brand.image })) ?? [],
       sellerType: [
         { id: "owner", label: "Owner" },
         { id: "dealer", label: "Dealer" },
         { id: "certified", label: "Dealership/Certified Pre-Owned" },
       ],
-      condition: Array.from({ length: 10 }, (_, i) => ({ id: String(i + 1), label: String(i + 1) })),
-    }
-    return {
-      ...baseOptions,
-      category: categories?.map((cat: Category) => ({ id: String(cat.id), label: cat.title })) ?? [],
-      brand: brands?.map((brand: Brand) => ({ id: String(brand.id), label: brand.title })) ?? [],
+      condition: [],
     }
   }, [categories, brands])
 
-  // Define getFilterLabel
   const getFilterLabel = useCallback((filterType: keyof FilterState, value: string | number): string => {
     if (value === "all") {
       if (filterType === "category") return "All Categories"
@@ -91,9 +100,8 @@ export default function CategoryLayout() {
         (item: FilterOption) => item.id === value.toString(),
       )
     return option?.label ?? `All ${filterType}`
-  }, [filterOptions]);
+  }, [filterOptions])
 
-  // Display labels
   const [displayLabels, setDisplayLabels] = useState<DisplayLabels>({
     category: getFilterLabel("category", categoryId),
     brand: "All Brands",
@@ -111,9 +119,9 @@ export default function CategoryLayout() {
     setDisplayLabels(newDisplayLabels)
   }, [selectedFilters, filterOptions, getFilterLabel])
 
-  // Search + Sort
   const [searchTerm, setSearchTerm] = useState("")
   const [sortBy, setSortBy] = useState("newest")
+
   const filteredProducts = useMemo(() => {
     if (!products) return []
     let filtered = products
@@ -129,7 +137,7 @@ export default function CategoryLayout() {
     }
     return filtered
   }, [products, searchTerm, sortBy])
-  // Handlers
+
   const handleFilterChange = (filterType: keyof FilterState, value: string | number) => {
     setSelectedFilters((prev) => ({ ...prev, [filterType]: value }))
   }
@@ -147,25 +155,23 @@ export default function CategoryLayout() {
     setSelectedFilters(reset)
     setSearchTerm("")
     router.replace("/ads/all")
-    setIsMobileFilterOpen(false) // Close sidebar on clear
+    setIsMobileFilterOpen(false)
   }
   const applyFilters = (newCategory: string) => {
     router.push(`/ads/${newCategory === "all" ? "all" : newCategory}`)
-    setIsMobileFilterOpen(false) // Close sidebar on apply
+    setIsMobileFilterOpen(false)
   }
-  // Check if no products found
+
   const isNotFound = !isProductsLoading && products.length === 0
-  // Close mobile filter when clicking outside
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement
-      // Only close if clicking outside the sidebar and not on the filter toggle button or within Select/Slider components
       if (
         isMobileFilterOpen &&
         !target.closest('.mobile-filter-sidebar') &&
         !target.closest('.filter-toggle-btn') &&
-        !target.closest('.select__content') && // Avoid closing when clicking Select dropdown
-        !target.closest('.slider') // Avoid closing when clicking Slider
+        !target.closest('.select__content')
       ) {
         setIsMobileFilterOpen(false)
       }
@@ -182,26 +188,175 @@ export default function CategoryLayout() {
     }
   }, [isMobileFilterOpen])
 
+  const RightControls = () => (
+    <div className="flex items-center gap-4 text-[13px] text-gray-500">
+      {/* Sort By */}
+      <div className="flex items-center gap-2">
+        <span>Sort By:</span>
+
+        <div className="relative">
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="appearance-none border-none bg-transparent focus:ring-0 cursor-pointer pr-5 p-0 text-[13px]"
+          >
+            <option value="priceLowHigh">Price</option>
+          </select>
+
+          {/* Chevron Icon */}
+          <ChevronDownIcon
+            className="pointer-events-none absolute right-0 top-1 h-3.5 w-3.5 text-gray-500"
+          />
+        </div>
+      </div>
+
+      {/* Show Per Page */}
+      <div className="hidden sm:flex items-center gap-2">
+        <span>Show:</span>
+
+        <div className="relative">
+          <select
+            value={itemsPerPage}
+            onChange={(e) => setItemsPerPage(Number(e.target.value))}
+            className="appearance-none border-none bg-transparent font-semibold text-black focus:ring-0 cursor-pointer pr-5 p-0 text-[13px]"
+          >
+            <option value={8}>8 per page</option>
+            <option value={12}>12 per page</option>
+            <option value={24}>24 per page</option>
+          </select>
+
+          {/* Chevron Icon */}
+          <ChevronDownIcon
+            className="pointer-events-none absolute right-0 top-1 h-3.5 w-3.5 text-black"
+          />
+        </div>
+      </div>
+
+      {/* View Toggles */}
+      <div className="flex items-center gap-3 pl-2 border-l border-gray-300 ml-2">
+        <button
+          onClick={() => setViewMode('grid')}
+          className={`transition-colors ${viewMode === 'grid' ? 'text-black' : 'text-gray-400 hover:text-black'}`}
+          title="Grid View"
+        >
+          <Grip size={22} fill={viewMode === 'grid' ? "currentColor" : "none"} />
+        </button>
+        <button
+          onClick={() => setViewMode('list')}
+          className={`transition-colors ${viewMode === 'list' ? 'text-black' : 'text-gray-400 hover:text-black'}`}
+          title="List View"
+        >
+          <AlignJustify size={22} />
+        </button>
+      </div>
+    </div>
+  )
+
+  const BackButton = () => (
+    <button onClick={() => router.back()} className="flex items-center gap-1 hover:text-gray-600 font-bold text-black transition-colors text-[13px]">
+      <ChevronLeft size={14} strokeWidth={3} /> <span>Back</span>
+    </button>
+  )
+
   return (
     <div className="2xl:max-w-7xl mx-auto px-7 py-6">
-      <div className="flex gap-6">
-        {/* Desktop Sidebar */}
-        <div className="hidden lg:block">
-          <div className="fixed top-[72px] left-0 h-[calc(100vh-80px)] w-[290px] overflow-y-auto border-r bg-white px-6">
-            <FilterSidebar
-              filterOptions={filterOptions}
-              selectedFilters={selectedFilters}
-              displayLabels={displayLabels}
-              onFilterChange={handleFilterChange}
-              onPriceRangeChange={handlePriceRangeChange}
-              onClearFilters={clearAllFilters}
-              onApplyFilters={applyFilters}
-            />
-          </div>
+      <PageHeader
+        categoryTitle={displayLabels.category}
+        resultCount={filteredProducts?.length ?? 0}
+        isLoading={isProductsLoading}
+      />
+
+      <div className="lg:hidden mt-6 mb-6 flex flex-col gap-4">
+        <div className="flex justify-between items-center">
+          <BackButton />
+          <button
+            onClick={() => setIsMobileFilterOpen(true)}
+            className="p-2 text-black hover:bg-gray-100 rounded border border-gray-200"
+          >
+            <SlidersHorizontal size={20} />
+          </button>
         </div>
-        {/* Mobile Filter Overlay */}
+
+        <div className="flex flex-wrap justify-between items-center gap-y-3 pb-4 border-b border-gray-200">
+          {!isProductsLoading && (
+            <span className="text-[13px] text-gray-400">
+              Items {startItem}-{endItem} of {totalItems}
+            </span>
+          )}
+          <RightControls />
+        </div>
+      </div>
+
+
+      {/* =======================
+          DESKTOP MAIN LAYOUT
+          ======================= */}
+      <div className="flex gap-4 relative items-start mt-8">
+
+        {/* LEFT COLUMN: Sidebar */}
+        <aside className="hidden lg:flex flex-col w-[280px] flex-shrink-0 sticky top-24 self-start gap-4">
+          {/* Back Button Centered Above Sidebar */}
+          <div className="flex justify-center w-full">
+            <BackButton />
+          </div>
+
+          <FilterSidebar
+            filterOptions={filterOptions}
+            selectedFilters={selectedFilters}
+            displayLabels={displayLabels}
+            onFilterChange={handleFilterChange}
+            onPriceRangeChange={handlePriceRangeChange}
+            onClearFilters={clearAllFilters}
+            onApplyFilters={applyFilters}
+          />
+        </aside>
+
+        {/* RIGHT COLUMN: Products */}
+        <main className="flex-1 min-w-0">
+
+          {/* DESKTOP HEADER (Hidden on Mobile) */}
+          <div className="hidden lg:flex items-center justify-between mb-4">
+            {/* Left: Items Count */}
+            {!isProductsLoading ? (
+              <span className="text-[13px] text-gray-400">
+                Items {startItem}-{endItem} of {totalItems}
+              </span>
+            ) : <span></span>}
+
+            <RightControls />
+          </div>
+
+          {!isNotFound ? (
+            <>
+              {viewMode === 'grid' ? (
+                <ProductCard
+                  products={filteredProducts}
+                  isHome={false}
+                  isLoading={isProductsLoading}
+                  count={itemsPerPage}
+                />
+              ) : (
+                <ProductCard2
+                  products={filteredProducts}
+                  isLoading={isProductsLoading}
+                />
+              )}
+
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+                filteredProducts={filteredProducts}
+              />
+            </>
+          ) : (
+            <NoListingsFound />
+          )}
+        </main>
+
+        {/* Mobile Filter Sidebar Overlay */}
         {isMobileFilterOpen && (
-          <div className="fixed inset-0 bg-black/50 z-40 lg:hidden">
+          <div className="fixed inset-0 bg-black/50 z-50 lg:hidden">
             <div className="mobile-filter-sidebar fixed left-0 top-0 h-full w-80 max-w-[85vw] bg-white shadow-xl z-50 overflow-y-auto">
               <div className="flex items-center justify-between p-4 border-b">
                 <h2 className="text-lg font-semibold">Filters</h2>
@@ -229,58 +384,6 @@ export default function CategoryLayout() {
             </div>
           </div>
         )}
-        {/* Product area */}
-        <div className="flex-1 lg:ml-[270px]">
-          {!isNotFound ? (
-            <div>
-              <div className="flex sm:flex-row items-center justify-between gap-4 mb-6">
-                <PageHeader
-                  categoryTitle={displayLabels.category}
-                  resultCount={filteredProducts?.length ?? 0}
-                  isLoading={isProductsLoading}
-                />
-                {
-                  !isProductsLoading &&
-                  <div className="lg:hidden">
-                    <button
-                      onClick={() => setIsMobileFilterOpen(true)}
-                      className="filter-toggle-btn flex items-center justify-center gap-2 px-4 py-2 bg-solid text-white rounded-md hover:bg-solid/70 transition-colors duration-200 shadow-sm"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
-                      </svg>
-                      Filter
-                    </button>
-                  </div>
-                }
-
-              </div>
-              <div className="mb-6">
-                <SearchAndSort
-                  searchTerm={searchTerm}
-                  sortBy={sortBy}
-                  onSearchChange={setSearchTerm}
-                  onSortChange={setSortBy}
-                  isLoading={isProductsLoading}
-                />
-              </div>
-              <ProductCard
-                products={filteredProducts}
-                isHome={false}
-                isLoading={isProductsLoading}
-                count={8}
-              />
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-                filteredProducts={filteredProducts}
-              />
-            </div>
-          ) : (
-            <NoListingsFound />
-          )}
-        </div>
       </div>
     </div>
   )
