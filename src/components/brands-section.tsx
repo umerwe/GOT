@@ -31,8 +31,7 @@ const BrandsSection = () => {
           {brands.map((brand: Brand, index: number) => (
             <div
               key={`${brand.id || index}`} 
-              // w-full ensures the item fills its grid column, h-16 sets the height
-              className="relative h-16 w-full grayscale hover:grayscale-0 cursor-pointer"
+              className="relative h-16 w-full cursor-pointer"
             >
               <Image
                 src={brand.image}
