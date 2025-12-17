@@ -80,7 +80,9 @@ const Navbar = () => {
 
         {/* Logo Section */}
         <div className="flex items-center gap-3 text-base sm:text-xl font-semibold flex-shrink-0">
-          <div className="relative flex items-center justify-center">
+          <Link
+            href="/"
+            className="relative flex items-center justify-center">
             {configData?.site_logo ? (
               <Image
                 src={configData.site_logo}
@@ -92,7 +94,7 @@ const Navbar = () => {
             ) : (
               <div className="w-[87px] h-[87px] bg-gray-200 animate-pulse rounded -rotate-17" />
             )}
-          </div>
+          </Link>
         </div>
 
         <div className="my-auto">
