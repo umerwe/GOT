@@ -76,7 +76,7 @@ const SkeletonLoader = ({ type, count = 4 }: SkeletonLoaderProps) => {
                                 </div>
 
                                 {/* Content Section Skeleton */}
-                                <div className="flex-1 flex flex-col space-y-1 min-w-0 justify-between">
+                                <div className="flex-1 flex flex-col space-y-1 min-w-0 justify-between mt-2">
                                     <div className="space-y-2">
                                         {/* Title Line */}
                                         <div className="h-6 bg-gray-200 rounded w-3/4" />
@@ -95,7 +95,7 @@ const SkeletonLoader = ({ type, count = 4 }: SkeletonLoaderProps) => {
                                 </div>
 
                                 {/* Right Detail Section Skeleton */}
-                                <div className="w-full lg:w-[270px] flex-shrink-0 border-t lg:border-t-0 lg:border-l border-gray-100 pt-4 lg:pt-0 lg:pl-5 flex flex-col justify-center gap-1">
+                                <div className="w-full lg:w-[270px] flex-shrink-0 border-t lg:border-t-0  pt-4 lg:pl-5 flex flex-col justify-center gap-1">
                                     {/* Row 1 */}
                                     <div className="flex justify-between py-1 px-2">
                                         <div className="h-3 bg-gray-200 rounded w-12" />

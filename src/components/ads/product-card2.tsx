@@ -75,7 +75,7 @@ export default function ProductCard2({
                         </div>
 
                         {/* Content Section */}
-                        <div className="flex-1 flex flex-col space-y-1 min-w-0">
+                        <div className="flex-1 flex flex-col space-y-1 min-w-0 mt-2">
                             <div className="space-y-2">
                                 <Link
                                     href={`/listing/${product.id}`}
@@ -102,7 +102,7 @@ export default function ProductCard2({
                         </div>
 
                         {/* Right Detail Section */}
-                        <div className="w-full lg:w-[270px] flex-shrink-0 border-t lg:border-t-0 pt-4 lg:pt-0 lg:pl-5 flex flex-col">
+                        <div className="w-full lg:w-[270px] flex-shrink-0 border-t lg:border-t-0 pt-4 lg:pt-2 lg:pl-5 flex flex-col">
                             <div className="space-y-1 text-xs">
                                 <div className="flex justify-between py-1 px-2">
                                     <span className="text-[#000000]">Mileage</span>

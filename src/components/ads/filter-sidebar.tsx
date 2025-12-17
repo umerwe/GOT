@@ -211,7 +211,7 @@ export default function FilterSidebar({
       </div>
 
       {/* Brands Section */}
-      <div className="mb-13 mt-2.5 pt-4 bg-[#F6F6F6]">
+      <div className="mb-[30px] mt-2.5 pt-4 bg-[#F6F6F6]">
         <div className="px-4">
           <h4 className="font-semibold text-base mb-3 text-center">Brands</h4>
 

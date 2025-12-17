@@ -259,7 +259,7 @@ export default function CategoryLayout() {
   )
 
   return (
-    <div className="2xl:max-w-7xl mx-auto px-7 py-6">
+    <div className="max-w-7xl mx-auto px-3 py-6">
       <PageHeader
         categoryTitle={displayLabels.category}
         resultCount={filteredProducts?.length ?? 0}
