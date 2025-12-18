@@ -119,12 +119,13 @@ export default function AdsTable({ selectedStatus }: { selectedStatus?: string }
         {/* --- Table Body --- */}
         <div className="divide-y divide-gray-100">
           {isLoading ? (
-            <div className="p-6">
+            <div className="p-3 sm:p-6">
               <SkeletonLoader type="list" count={3} />
             </div>
           ) : products.length > 0 ? (
             products.map((ad: Product) => (
               <div
+                onClick={() => router.push(`/listing/${ad.id}`)}
                 key={ad.id}
                 className="grid grid-cols-1 sm:grid-cols-12 gap-4 p-4 hover:bg-gray-50 transition-colors items-center"
               >
@@ -170,10 +171,15 @@ export default function AdsTable({ selectedStatus }: { selectedStatus?: string }
                 </div>
 
                 {/* 4. Actions Column */}
-                <div className="col-span-1 sm:col-span-3 flex items-center justify-end gap-2">
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  className="col-span-1 sm:col-span-3 flex items-center justify-end gap-2">
                   <Button
                     className="h-8 px-3 text-xs font-semibold bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
-                    onClick={() => editAd(ad.id as number, ad)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      editAd(ad.id as number, ad);
+                    }}
                   >
                     Edit Post
                   </Button>

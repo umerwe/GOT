@@ -31,7 +31,7 @@ export default function ProductCard({
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-4 gap-3 md:gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-4 gap-6">
       {products.map((product) => (
         <Link key={product.id} href={`/listing/${product.id}`}>
           <Card className="overflow-hidden rounded-none shadow-none border-none cursor-pointer h-full">
