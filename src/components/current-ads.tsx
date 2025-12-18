@@ -6,15 +6,12 @@ import { Button } from "@/components/ui/button"
 import { MoreVertical, Trash2, Eye } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useGetUserProducts, useDeleteUserProducts, useUpdateUserProduct } from "@/hooks/useProduct"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form"
 import { capitalizeWords } from "@/utils/capitalizeWords"
 import SkeletonLoader from "@/common/skeleton-loader"
@@ -38,8 +35,6 @@ export default function AdsTable({ selectedStatus }: { selectedStatus?: string }
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
 
   const {
-    register: registerProduct,
-    handleSubmit: handleProductSubmit,
     reset: resetProduct,
   } = useForm<EditProductForm>({
     defaultValues: {
