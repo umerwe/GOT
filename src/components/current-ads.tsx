@@ -69,7 +69,6 @@ export default function AdsTable({ selectedStatus }: { selectedStatus?: string }
     setIsDeleteOpen(true)
   }
 
-
   const onProductSubmit = async (values: EditProductForm) => {
     if (!editProductId) return
     const formData = new FormData()
