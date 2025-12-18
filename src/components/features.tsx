@@ -19,7 +19,7 @@ export default function Features() {
     const featuresData = data?.data || [];
 
     const processedProducts = useMemo(() => {
-        let result = [...featuresData];
+        const result = [...featuresData];
 
         result.sort((a, b) => {
             if (sortBy === "newest") {
