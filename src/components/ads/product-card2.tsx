@@ -32,7 +32,7 @@ export default function ProductCard2({
     if (isLoading) {
         return (
             <div className="space-y-4">
-                <SkeletonLoader type="product2" />
+                <SkeletonLoader type="product2" count={count} />
             </div>
         )
     }

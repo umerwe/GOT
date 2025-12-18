@@ -109,3 +109,9 @@ interface Brand {
   id: number
   title: string
 }
+
+interface EditProductForm {
+  title: string
+  price: string
+  product_image: FileList | null
+}

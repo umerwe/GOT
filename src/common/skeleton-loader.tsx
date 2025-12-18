@@ -128,37 +128,43 @@ const SkeletonLoader = ({ type, count = 4 }: SkeletonLoaderProps) => {
             )
         case "list":
             return (
-                <div className="w-full space-y-6">
+                <div className="w-full space-y-4 md:space-y-6">
                     {Array.from({ length: count }).map((_, i) => (
                         <div
                             key={i}
-                            className="grid grid-cols-12 gap-4 items-center"
+                            className="flex flex-col gap-4 p-4 border rounded-xl bg-white 
+                     md:grid md:grid-cols-12 md:gap-4 md:items-center md:p-0 md:border-none md:bg-transparent"
                         >
-                            {/* 1. Ads Column (Image + Title/Price) - Span 4 */}
-                            <div className="col-span-4 flex items-center gap-4">
-                                <Skeleton className="w-12 h-12 rounded-md flex-shrink-0" />
-                                <div className="space-y-2 w-full max-w-[180px]">
-                                    <Skeleton className="h-4 w-3/4" /> {/* Title */}
-                                    <Skeleton className="h-3 w-1/3" /> {/* Price */}
+                            {/* 1. Ads Column (Image + Title/Price) */}
+                            <div className="flex items-center gap-4 col-span-12 md:col-span-4">
+                                <Skeleton className="w-16 h-16 md:w-12 md:h-12 rounded-lg flex-shrink-0" />
+                                <div className="space-y-2 w-full">
+                                    <Skeleton className="h-4 w-3/4 md:w-full" /> {/* Title */}
+                                    <Skeleton className="h-3 w-1/4 md:w-1/3" /> {/* Price */}
                                 </div>
                             </div>
 
-                            {/* 2. Category Column - Span 2 */}
-                            <div className="col-span-2 space-y-2">
-                                <Skeleton className="h-4 w-24" /> {/* Category */}
-                                <Skeleton className="h-3 w-16" /> {/* Subcategory */}
+                            {/* Mobile Divider (Optional, only shows on small screens) */}
+                            <div className="h-px bg-gray-100 w-full md:hidden" />
+
+                            <div className="grid grid-cols-2 md:contents">
+                                {/* 2. Category Column */}
+                                <div className="col-span-1 md:col-span-2 space-y-2">
+                                    <Skeleton className="h-4 w-20 md:w-24" /> {/* Category */}
+                                    <Skeleton className="h-3 w-12 md:w-16" /> {/* Subcategory */}
+                                </div>
+
+                                {/* 3. Status Column */}
+                                <div className="col-span-1 md:col-span-3 flex items-center gap-2 md:justify-start justify-end">
+                                    <Skeleton className="w-2 h-2 rounded-full" /> {/* Dot */}
+                                    <Skeleton className="h-4 w-16" /> {/* Status Text */}
+                                </div>
                             </div>
 
-                            {/* 3. Status Column - Span 3 */}
-                            <div className="col-span-3 flex items-center gap-2">
-                                <Skeleton className="w-2 h-2 rounded-full" /> {/* Dot */}
-                                <Skeleton className="h-4 w-16" /> {/* Status Text */}
-                            </div>
-
-                            {/* 4. Actions Column - Span 3 */}
-                            <div className="col-span-3 flex items-center justify-end gap-2">
-                                <Skeleton className="h-8 w-24 rounded-md" /> {/* Edit Button */}
-                                <Skeleton className="h-8 w-8 rounded-md" />  {/* Kebab Menu */}
+                            {/* 4. Actions Column */}
+                            <div className="col-span-12 md:col-span-3 flex items-center justify-between md:justify-end gap-2 pt-2 md:pt-0">
+                                <Skeleton className="h-9 w-full md:w-24 rounded-md" /> {/* Edit Button (Full width on mobile) */}
+                                <Skeleton className="h-9 w-9 rounded-md flex-shrink-0" /> {/* Kebab Menu */}
                             </div>
                         </div>
                     ))}

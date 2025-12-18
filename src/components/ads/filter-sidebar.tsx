@@ -83,7 +83,6 @@ export default function FilterSidebar({
         </div>
 
         <div className="space-y-6 px-4">
-          {/* Category Filter Section */}
           {filterConfig.map(({ type, label }) => {
             const isOpen = openSections[type] ?? true
 
@@ -102,7 +101,7 @@ export default function FilterSidebar({
                 </div>
 
                 {isOpen && (
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <div className="flex items-center space-x-2">
                       <input
                         type="radio"
@@ -167,7 +166,7 @@ export default function FilterSidebar({
 
             {openSections['price'] && (
               <div className="space-y-3">
-                <div className="flex flex-col space-y-2">
+                <div className="flex flex-col space-y-3">
                   {PRICE_RANGES.map((range, index) => {
                     const valueKey = `${range.min}-${range.max}`
                     const isChecked =
@@ -235,7 +234,7 @@ export default function FilterSidebar({
                 key={value}
                 className={`
                   flex items-center justify-center p-4 cursor-pointer bg-white h-20
-                  ${isSelected ? 'ring-2 ring-inset ring-red-500' : 'hover:bg-gray-50'}
+                  ${isSelected ? 'ring-2 ring-inset ring-solid' : 'hover:bg-gray-50'}
                 `}
                 onClick={() => setTempFilters((prev) => ({ ...prev, brand: value }))}
               >

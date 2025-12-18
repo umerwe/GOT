@@ -6,11 +6,12 @@ import NotFoundWrapper from "@/common/not-found"
 import Listing from "@/components/pages/listing"
 import Breadcrumb from "@/components/ui/breadcrumb"
 import Container from "@/components/container"
+import Footer from "@/components/footer"
 
 export default function ListingById() {
   const { id } = useParams()
   const { data: product, isLoading } = useGetProduct(id as string)
-
+  
   if (isLoading) return <SkeletonLoader type="alllisting" />
   if (!product) return <NotFoundWrapper itemName="Product" />
 
@@ -20,7 +21,7 @@ export default function ListingById() {
         <Breadcrumb
           items={[
             { title: "Home", href: "/" },
-            { title: product.category?.title || "", href: `/category/${product.category?.slug}` },
+            { title: product.category?.title || "", href: `/ads/${product.category?.id}` },
             { title: product.title }
           ]}
         />
@@ -30,6 +31,8 @@ export default function ListingById() {
           product={product}
         />
       </Container>
+
+      <Footer />
     </div>
   )
 }

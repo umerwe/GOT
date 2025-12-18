@@ -18,7 +18,10 @@ import FilterSidebar from "@/components/ads/filter-sidebar"
 import PageHeader from "@/components/ads/page-header"
 import ProductCard from "@/components/ads/product-card"
 import ProductCard2 from "@/components/ads/product-card2"
-import { Grip, AlignJustify, ChevronLeft, SlidersHorizontal, ChevronDownIcon } from "lucide-react"
+import { ChevronLeft, SlidersHorizontal, ChevronDownIcon } from "lucide-react"
+import { BiSolidGrid } from "react-icons/bi";
+import { BsFilterLeft } from "react-icons/bs";
+import { sellerData } from "@/constants/category"
 
 export default function CategoryLayout() {
   const { category } = useParams()
@@ -28,7 +31,6 @@ export default function CategoryLayout() {
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(12)
 
-  // View Mode State
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
   const handlePageChange = (page: number) => {
@@ -81,11 +83,7 @@ export default function CategoryLayout() {
     return {
       category: categories?.map((cat: Category) => ({ id: String(cat.id), label: cat.title })) ?? [],
       brand: brands?.map((brand: Brand) => ({ id: String(brand.id), label: brand.title, image: brand.image })) ?? [],
-      sellerType: [
-        { id: "owner", label: "Owner" },
-        { id: "dealer", label: "Dealer" },
-        { id: "certified", label: "Dealership/Certified Pre-Owned" },
-      ],
+      sellerType: sellerData,
       condition: [],
     }
   }, [categories, brands])
@@ -233,29 +231,32 @@ export default function CategoryLayout() {
       </div>
 
       {/* View Toggles */}
-      <div className="flex items-center gap-3 pl-2 border-l border-gray-300 ml-2">
+      <div className="flex items-center gap-2 pl-2 border-l border-gray-300 ml-2">
         <button
-          onClick={() => setViewMode('grid')}
-          className={`transition-colors ${viewMode === 'grid' ? 'text-black' : 'text-gray-400 hover:text-black'}`}
+          onClick={() => setViewMode("grid")}
+          className={`transition-colors ${viewMode === "grid"
+            ? "text-black"
+            : "text-gray-400 hover:text-black"
+            }`}
           title="Grid View"
         >
-          <Grip size={22} fill={viewMode === 'grid' ? "currentColor" : "none"} />
+          <BiSolidGrid size={22} />
         </button>
+
         <button
-          onClick={() => setViewMode('list')}
-          className={`transition-colors ${viewMode === 'list' ? 'text-black' : 'text-gray-400 hover:text-black'}`}
+          onClick={() => setViewMode("list")}
+          className={`transition-colors ${viewMode === "list" ? "text-black" : "text-gray-400 hover:text-black"
+            }`}
           title="List View"
         >
-          <AlignJustify size={22} />
+          <BsFilterLeft
+            size={24}
+            strokeWidth={0.5}
+          />
         </button>
+
       </div>
     </div>
-  )
-
-  const BackButton = () => (
-    <button onClick={() => router.back()} className="flex items-center gap-1 hover:text-gray-600 font-bold text-black transition-colors text-[13px]">
-      <ChevronLeft size={14} strokeWidth={3} /> <span>Back</span>
-    </button>
   )
 
   return (
@@ -268,7 +269,9 @@ export default function CategoryLayout() {
 
       <div className="lg:hidden mt-6 mb-6 flex flex-col gap-4">
         <div className="flex justify-between items-center">
-          <BackButton />
+          <button onClick={() => router.back()} className="flex items-center gap-1 hover:text-gray-600 font-bold text-black transition-colors text-[13px]">
+            <ChevronLeft size={14} strokeWidth={3} /> <span>Back</span>
+          </button>
           <button
             onClick={() => setIsMobileFilterOpen(true)}
             className="p-2 text-black hover:bg-gray-100 rounded border border-gray-200"
@@ -287,17 +290,13 @@ export default function CategoryLayout() {
         </div>
       </div>
 
-
-      {/* =======================
-          DESKTOP MAIN LAYOUT
-          ======================= */}
       <div className="flex gap-4 relative items-start mt-8">
-
         {/* LEFT COLUMN: Sidebar */}
         <aside className="hidden lg:flex flex-col w-[280px] flex-shrink-0 sticky top-24 self-start gap-4">
-          {/* Back Button Centered Above Sidebar */}
           <div className="flex justify-center w-full">
-            <BackButton />
+            <button onClick={() => router.back()} className="flex items-center gap-1 hover:text-gray-600 font-bold text-black transition-colors text-[13px]">
+              <ChevronLeft size={14} strokeWidth={3} /> <span>Back</span>
+            </button>
           </div>
 
           <FilterSidebar
@@ -311,12 +310,8 @@ export default function CategoryLayout() {
           />
         </aside>
 
-        {/* RIGHT COLUMN: Products */}
         <main className="flex-1 min-w-0">
-
-          {/* DESKTOP HEADER (Hidden on Mobile) */}
           <div className="hidden lg:flex items-center justify-between mb-4">
-            {/* Left: Items Count */}
             {!isProductsLoading ? (
               <span className="text-[13px] text-gray-400">
                 Items {startItem}-{endItem} of {totalItems}
@@ -339,6 +334,7 @@ export default function CategoryLayout() {
                 <ProductCard2
                   products={filteredProducts}
                   isLoading={isProductsLoading}
+                  count={itemsPerPage}
                 />
               )}
 
@@ -354,7 +350,6 @@ export default function CategoryLayout() {
           )}
         </main>
 
-        {/* Mobile Filter Sidebar Overlay */}
         {isMobileFilterOpen && (
           <div className="fixed inset-0 bg-black/50 z-50 lg:hidden">
             <div className="mobile-filter-sidebar fixed left-0 top-0 h-full w-80 max-w-[85vw] bg-white shadow-xl z-50 overflow-y-auto">

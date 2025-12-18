@@ -4,8 +4,7 @@ import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-
-const LOCATIONS = ["Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah", "Umm Al Quwain", "Fujairah"]
+import { LOCATIONS } from "@/constants/locations"
 
 const SearchBar = () => {
   const [activeLocation, setActiveLocation] = useState("Dubai")

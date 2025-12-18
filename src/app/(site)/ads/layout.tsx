@@ -1,3 +1,4 @@
+import Footer from "@/components/footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,6 +13,7 @@ export default function AdsLayout({
     return (
         <> 
             {children}
+            <Footer />
         </>
     );
 }

@@ -1,4 +1,5 @@
 "use client"
+import { capitalizeWords } from "@/utils/capitalizeWords"
 import { ChevronRight } from "lucide-react"
 import Link from "next/link"
 import React from "react"
@@ -23,11 +24,11 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
           return (
             <li key={index} className={isLast ? "text-solid" : ""}>
               {isLast ? (
-                <span>{item.title}</span>
+                <span>{capitalizeWords(item.title)}</span>
               ) : (
                 <div className="flex items-center">
                   <Link href={item.href || "#"} className="text-gray-900 hover:underline">
-                    {item.title}
+                    {capitalizeWords(item?.title)}
                   </Link>
                   <ChevronRight className="mx-2 text-[#0156FF] w-3 h-3" />
                 </div>

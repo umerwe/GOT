@@ -3,7 +3,7 @@ import type React from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { MoreVertical, Edit, Trash2, Eye } from "lucide-react"
+import { MoreVertical, Trash2, Eye } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useGetUserProducts, useDeleteUserProducts, useUpdateUserProduct } from "@/hooks/useProduct"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
@@ -19,12 +19,9 @@ import { useForm } from "react-hook-form"
 import { capitalizeWords } from "@/utils/capitalizeWords"
 import SkeletonLoader from "@/common/skeleton-loader"
 import Pagination from "@/components/ui/pagination"
-
-interface EditProductForm {
-  title: string
-  price: string
-  product_image: FileList | null
-}
+import { getStatusColor } from "@/utils/getStatusColor"
+import { DeleteProductDialog } from "./dialogs/delete-product"
+import { EditProductDialog } from "./dialogs/edit-product"
 
 export default function AdsTable({ selectedStatus }: { selectedStatus?: string }) {
   const router = useRouter()
@@ -37,7 +34,8 @@ export default function AdsTable({ selectedStatus }: { selectedStatus?: string }
   const [isEditProductOpen, setIsEditProductOpen] = useState(false)
   const [editProductId, setEditProductId] = useState<number | null>(null)
   const [deleteId, setDeleteId] = useState<number | null>(null)
-  const [selectedProductImage, setSelectedProductImage] = useState<File | null>(null)
+  const [selectedProductImage, setSelectedProductImage] = useState<File | null>(null);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null)
 
   const {
     register: registerProduct,
@@ -54,21 +52,21 @@ export default function AdsTable({ selectedStatus }: { selectedStatus?: string }
   const products = productsResponse?.data || []
   const totalPages = productsResponse?.pagination?.totalPages ?? 1
 
-  // --- Logic Functions ---
-
   const viewAd = (id: number) => {
     router.push(`/listing/${id}`)
   }
 
   const editAd = (id: number, ad: Product) => {
     setEditProductId(id)
-    resetProduct({
-      title: ad.title,
-      price: ad.price.toString(),
-      product_image: null,
-    })
-    setSelectedProductImage(null)
+    setEditingProduct(ad)
     setIsEditProductOpen(true)
+  }
+
+  const handleDelete = () => {
+    if (!deleteId) return
+    deleteProduct.mutate(deleteId, {
+      onSuccess: () => setIsDeleteOpen(false),
+    })
   }
 
   const confirmDelete = (id: number) => {
@@ -76,15 +74,6 @@ export default function AdsTable({ selectedStatus }: { selectedStatus?: string }
     setIsDeleteOpen(true)
   }
 
-  const handleDelete = () => {
-    if (!deleteId) return
-    deleteProduct.mutate(deleteId, {
-      onSuccess: () => {
-        setIsDeleteOpen(false)
-        setDeleteId(null)
-      },
-    })
-  }
 
   const onProductSubmit = async (values: EditProductForm) => {
     if (!editProductId) return
@@ -106,11 +95,6 @@ export default function AdsTable({ selectedStatus }: { selectedStatus?: string }
     )
   }
 
-  const handleProductImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) setSelectedProductImage(file)
-  }
-
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
   }
@@ -119,20 +103,6 @@ export default function AdsTable({ selectedStatus }: { selectedStatus?: string }
     setCurrentPage(1)
   }, [selectedStatus])
 
-  // --- Helper for Status Color ---
-  const getStatusColor = (status?: string) => {
-    switch (status?.toLowerCase()) {
-      case "live":
-      case "approved":
-        return "bg-green-500"
-      case "pending":
-        return "bg-orange-500"
-      case "rejected":
-        return "bg-red-500"
-      default:
-        return "bg-gray-400"
-    }
-  }
 
   return (
     <div className="w-full">
@@ -159,7 +129,6 @@ export default function AdsTable({ selectedStatus }: { selectedStatus?: string }
                 className="grid grid-cols-1 sm:grid-cols-12 gap-4 p-4 hover:bg-gray-50 transition-colors items-center"
               >
 
-                {/* 1. Ads Column (Image + Title) */}
                 <div className="col-span-1 sm:col-span-4 flex items-start sm:items-center gap-3">
                   <div className="w-12 h-12 bg-gray-100 rounded-md relative overflow-hidden flex-shrink-0 border border-gray-200">
                     <Image
@@ -212,7 +181,7 @@ export default function AdsTable({ selectedStatus }: { selectedStatus?: string }
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
-                        variant="ghost" 
+                        variant="ghost"
                         className="h-8 w-8 p-0 text-gray-600 hover:text-gray-600 bg-white hover:bg-gray-100"
                       >
                         <MoreVertical className="w-4 h-4" />
@@ -250,60 +219,20 @@ export default function AdsTable({ selectedStatus }: { selectedStatus?: string }
         )}
       </div>
 
-      {/* --- Dialogs (Delete & Edit) --- */}
+      <DeleteProductDialog
+        isOpen={isDeleteOpen}
+        onOpenChange={setIsDeleteOpen}
+        onConfirm={handleDelete}
+        isPending={deleteProduct.isPending}
+      />
 
-      {/* Delete Confirmation */}
-      <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Are you sure?</DialogTitle>
-          </DialogHeader>
-          <p className="text-sm text-gray-600">This action cannot be undone.</p>
-          <DialogFooter className="flex flex-col sm:flex-row gap-2">
-            <Button variant="outline" className="w-20" onClick={() => setIsDeleteOpen(false)}>Cancel</Button>
-            <Button variant="destructive" onClick={handleDelete} disabled={deleteProduct.isPending}>
-              {deleteProduct.isPending ? "Deleting..." : "Confirm"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Edit Product Form */}
-      <Dialog open={isEditProductOpen} onOpenChange={setIsEditProductOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Edit Product</DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleProductSubmit(onProductSubmit)} className="space-y-4">
-            <div className="space-y-2">
-              <Label>Title</Label>
-              <Input {...registerProduct("title")} />
-            </div>
-            <div className="space-y-2">
-              <Label>Price (AED)</Label>
-              <Input type="number" step="0.01" {...registerProduct("price")} />
-            </div>
-            <div className="space-y-2">
-              <Label>Product Image</Label>
-              <Input
-                type="file"
-                accept="image/*"
-                {...registerProduct("product_image")}
-                onChange={handleProductImageChange}
-              />
-              {selectedProductImage && (
-                <p className="text-sm text-gray-600 mt-1">Selected: {selectedProductImage.name}</p>
-              )}
-            </div>
-            <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setIsEditProductOpen(false)}>Cancel</Button>
-              <Button type="submit" disabled={updateProduct.isPending}>
-                {updateProduct.isPending ? "Saving..." : "Save Changes"}
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+      <EditProductDialog
+        isOpen={isEditProductOpen}
+        onOpenChange={setIsEditProductOpen}
+        product={editingProduct}
+        onSubmit={onProductSubmit}
+        isPending={updateProduct.isPending}
+      />
     </div>
   )
 }
