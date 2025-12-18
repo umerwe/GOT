@@ -27,7 +27,7 @@ const CategoriesSection = () => {
     return (
         <section className="bg-white">
             <div className="max-w-7xl mx-auto">
-                <div className="flex items-center justify-between mb-[10px]">
+                <div className="flex items-center justify-between mt-10 sm:mt-0 mb-[10px]">
                     <h2 className="text-2xl text-[#000000]">Popular Categories</h2>
 
                     <div className="flex items-center gap-2">

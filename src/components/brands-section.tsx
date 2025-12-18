@@ -18,7 +18,7 @@ const BrandsSection = () => {
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-4 md:grid-cols-8 gap-6">
+        <div className="grid grid-cols-8 gap-6 ">
           {[...Array(8)].map((_, index) => (
             <div
               key={`skeleton-${index}`}
