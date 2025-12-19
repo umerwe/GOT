@@ -5,15 +5,17 @@ import { Bell, Menu, X, Heart } from "lucide-react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { useAppSelector } from "@/store/hooks";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { UserMenu } from "./user-menu";
 import { cn } from "@/lib/utils";
 import Logo from "./logo";
+import LoginDialog from "@/utils/loginDialog";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
-  
+  const router = useRouter();
+  const [showLoginDialog, setShowLoginDialog] = useState(false)
   const isAuth = useAppSelector((state) => state.auth.token);
   const configData = useAppSelector((state) => state.config.data);
 
@@ -29,20 +31,24 @@ const Navbar = () => {
     );
   };
 
+  function handleClick() {
+    return isAuth ? router.push("post-ad") : setShowLoginDialog(true)
+  }
+
   const NavLinks = ({ isMobile = false }) => (
     <div className={cn(
       isMobile ? "flex flex-col gap-4" : "hidden sm:flex items-center gap-6 text-sm font-medium"
     )}>
-      <Link 
-        href="/" 
-        className={getLinkClasses("/", isMobile)} 
+      <Link
+        href="/"
+        className={getLinkClasses("/", isMobile)}
         onClick={() => isMobile && setIsMenuOpen(false)}
       >
         Home
       </Link>
-      <Link 
-        href="/ads/all" 
-        className={getLinkClasses("/ads", isMobile, false)} 
+      <Link
+        href="/ads/all"
+        className={getLinkClasses("/ads", isMobile, false)}
         onClick={() => isMobile && setIsMenuOpen(false)}
       >
         Categories
@@ -64,9 +70,10 @@ const Navbar = () => {
         <Heart className={cn("w-4.5 h-4.5", textColor)} />
       </Link>
 
-      <Link href="#" className="relative hover:opacity-80 transition-opacity">
-        <Bell className={cn("w-4.5 h-4.5", textColor)} />
-        <span className="absolute -top-1.5 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center">
+      <Link href="#" className="relative hover:opacity-80 transition-opacity inline-block">
+        {/* Ensure the Bell icon is white to match the image */}
+        <Bell className={cn("w-5 h-5", "text-white")} />
+        <span className="absolute -top-1.5 -right-2 z-10 bg-transparent border-[2px] border-white text-white text-[8px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
           3
         </span>
       </Link>
@@ -87,12 +94,8 @@ const Navbar = () => {
 
         <div className="hidden sm:flex flex-col items-end gap-3 mt-2">
           <div className={cn("flex items-center gap-3 text-xs tracking-wide", textColor)}>
-            {isAuth && (
-              <>
-                <Link href="/post-ad" className="hover:opacity-80 transition-opacity">Place an Ad</Link>
-                <span className="opacity-40">|</span>
-              </>
-            )}
+            <span onClick={handleClick} className="hover:opacity-80 transition-opacity cursor-pointer">Place an Ad</span>
+            <span className="opacity-40">|</span>
             <Link href="#" className="hover:opacity-80 transition-opacity">Help</Link>
             <span className="opacity-40 text-[10px]">|</span>
             {!isAuth ? (
@@ -100,6 +103,11 @@ const Navbar = () => {
             ) : (
               <UserMenu />
             )}
+            <LoginDialog
+              open={showLoginDialog}
+              onOpenChange={setShowLoginDialog}
+              description="You must be logged in to start a chat."
+            />
           </div>
 
           <div className="flex items-center gap-5 mt-1">
@@ -112,12 +120,13 @@ const Navbar = () => {
 
         <div className="flex sm:hidden items-center gap-4 my-auto">
           {isAuth && (
-            <div className="flex gap-4 items-center">
-               <Link href="#" className="relative cursor-pointer hover:opacity-80 transition-opacity">
-                <Bell className={cn("w-5 h-5", textColor)} />
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">3</span>
-              </Link>
-            </div>
+            <Link href="#" className="relative hover:opacity-80 transition-opacity inline-block">
+              {/* Ensure the Bell icon is white to match the image */}
+              <Bell className={cn("w-5 h-5", "text-white")} />
+              <span className="absolute -top-1.5 -right-2 z-10 bg-transparent border-[2px] border-white text-white text-[8px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                3
+              </span>
+            </Link>
           )}
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="cursor-pointer">
             {isMenuOpen ? <X className={cn("w-6 h-6", textColor)} /> : <Menu className={cn("w-6 h-6", textColor)} />}
@@ -127,7 +136,7 @@ const Navbar = () => {
       </div>
 
       {isMenuOpen && (
-        <div className="block sm:hidden mt-3 bg-white border-t border-gray-100 animate-in slide-in-from-top-2 duration-200">
+        <div className="block sm:hidden bg-white border-t border-gray-100 animate-in slide-in-from-top-2 ml-4 duration-200">
           <div className="flex flex-col gap-4 py-4 px-4">
             <NavLinks isMobile />
             <div className="flex flex-col gap-4">

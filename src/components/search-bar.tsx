@@ -24,18 +24,17 @@ const SearchBar = () => {
   }
 
   return (
-    <div className="bg-white rounded-sm shadow-sm border border-gray-100 w-full">
-      <div className="flex items-center overflow-x-auto border-b border-gray-200 px-2 sm:px-6 pt-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+    <div className="bg-white shadow-sm border border-gray-100 w-full px-2 sm:px-14 pb-2 pt-3">
+      <div className="flex items-center overflow-x-auto border-b-2 border-gray-200 pt-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         <div className="flex flex-nowrap">
           {LOCATIONS.map((loc) => (
             <button
               key={loc}
               onClick={() => setActiveLocation(loc)}
-              className={`mr-6 pb-3 text-sm font-medium transition-all whitespace-nowrap ${
-                activeLocation === loc
-                  ? "border-b-4 border-yellow-500 text-black font-bold"
-                  : "text-gray-500 hover:text-gray-800 border-b-4 border-transparent"
-              }`}
+              className={`mr-6 pb-1.5 text-sm transition-all font-semibold whitespace-nowrap ${activeLocation === loc
+                  ? "border-b-4 border-yellow-500 text-black"
+                  : "border-b-4 border-transparent"
+                }`}
             >
               {loc}
             </button>
@@ -43,26 +42,30 @@ const SearchBar = () => {
         </div>
       </div>
 
-      <div className="py-4 px-2 sm:px-6 sm:pb-6 sm:pt-4">
-        <div className="w-full">
-          <label className="text-xs sm:text-sm font-semibold text-gray-500 block mb-2">
-            Search query
-          </label>
-          <div className="flex flex-col sm:flex-row items-stretch gap-3 sm:gap-4">
-            <Input
+      <div className="py-4">
+        <div className="flex flex-col sm:flex-row items-stretch gap-3 sm:gap-4 w-full max-w-4xl">
+          {/* Input Container with Label Inside */}
+          <div className="flex-1 border border-gray-300 bg-white px-4 py-2 flex flex-col justify-center min-h-[40px]">
+            <label>
+              <h6 className="text-[15px] font-medium text-black block leading-tight">Search query</h6>
+            </label>
+            <input
+              type="text"
               placeholder="Ex. KTM 690 Enduro R"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="rounded-sm h-12 w-full text-base"
+              className="w-full bg-transparent border-none outline-none p-0 text-gray-400 placeholder:text-gray-300 text-[19px] mt-0.5"
             />
-            <Button
-              onClick={handleSearch}
-              className="w-full sm:w-auto px-8 h-12 bg-solid hover:bg-hover text-black font-medium text-lg rounded-sm shrink-0"
-            >
-              Search
-            </Button>
           </div>
+
+          {/* Search Button */}
+          <button
+            onClick={handleSearch}
+            className="w-full sm:w-auto px-12 bg-[#F2A416] hover:bg-[#e0941a] transition-colors text-black font-medium text-lg shrink-0 flex items-center justify-center min-h-[40px] font-['DM_Sans',sans-serif]"
+          >
+            Search
+          </button>
         </div>
       </div>
     </div>

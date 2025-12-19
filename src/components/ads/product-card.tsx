@@ -43,14 +43,14 @@ export default function ProductCard({
                 height={200}
                 className="w-full h-52 object-cover"
               />
-              <button
+              {/* <button
                 className="absolute top-2 right-2.5 bg-white/80 hover:bg-white p-2 rounded-full shadow-sm"
                 onClick={(e) => {
                   e.preventDefault()
                 }}
               >
                 <Heart size={17} className="text-gray-600 hover:text-red-500" />
-              </button>
+              </button> */}
             </div>
 
             <CardContent className="pt-4 px-0">

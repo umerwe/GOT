@@ -21,12 +21,12 @@ const HeroSection = () => {
       </div>
 
       <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 z-10 flex flex-col items-start justify-center h-full pb-16 sm:pb-0">
-        <div className="w-full max-w-2xl">
-          <h1 className="text-xl sm:text-2xl lg:text-3xl text-white mb-4 leading-tight font-bold">
+        <div className="w-full max-w-[630px]">
+          <h1 className="text-xl xs:text-[28px] text-white mb-4 leading-tight">
             The <span className="text-solid">Leading Marketplace</span> for buying and selling everything Motorcycles, Parts, Gear and Accessories
           </h1>
 
-          <p className="text-lg sm:text-xl text-solid mb-8 leading-relaxed">
+          <p className="text-[16px] sm:text-xl text-solid mb-8 leading-relaxed">
             Buy, sell, and connect with fellow Bike enthusiasts in the UAE
           </p>
         </div>

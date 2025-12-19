@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { MapPin, Facebook, Instagram } from "lucide-react"
+import { MapPin} from "lucide-react"
 import { useAppSelector } from "@/store/hooks";
 import { quickLinks, searches, section } from "@/data/footer";
 import { useState } from "react";
@@ -15,13 +15,13 @@ export default function Footer() {
 
   const FooterColumn = ({ title, links }: { title: string; links: { label: string; href: string }[] }) => (
     <div className={`flex flex-col space-y-4`}>
-      <h3 className="text-white text-sm font-bold uppercase tracking-widest">{title}</h3>
+      <h6 className="text-white text-[14px] uppercase tracking-widest">{title}</h6>
       <ul className="space-y-2">
         {links.map((link) => (
           <li key={link.label}>
             <Link
               href={link.href}
-              className="text-[#999999] hover:text-white text-[15px] transition-colors duration-200 font-normal"
+              className="text-[#999999] hover:text-white text-[14px] transition-colors duration-200 font-normal"
             >
               {link.label}
             </Link>
@@ -30,22 +30,6 @@ export default function Footer() {
       </ul>
     </div>
   )
-
-  const SocialIcon = ({ href, icon }: { href: string; icon: React.ReactNode }) => {
-    return (
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="group bg-[#2a2a2a] text-[#999999] hover:bg-white hover:text-black transition-all duration-300 rounded-full w-10 h-10 flex items-center justify-center"
-      >
-        <div className="transition-transform duration-300 group-hover:rotate-12">
-          {icon}
-        </div>
-      </a>
-    )
-  }
-
   return (
     <footer className="bg-[#111111] text-[#999999] pt-10 md:pt-20 pb-10 font-sans px-4 md:px-8 lg:px-12">
       <div className="max-w-7xl mx-auto">
@@ -94,11 +78,37 @@ export default function Footer() {
             />
           </div>
 
-          {/* Social Icons Section */}
           <div className="w-full lg:w-auto flex justify-start lg:justify-end">
             <div className="flex items-center gap-3">
-              <SocialIcon href="https://web.facebook.com/people/Get-Out-There-UAE/100086864606365/" icon={<Facebook className="w-5 h-5" />} />
-              <SocialIcon href="https://www.instagram.com/getoutthereuae/" icon={<Instagram className="w-5 h-5" />} />
+              {/* Facebook Link */}
+              <Link
+                href="https://web.facebook.com/people/Get-Out-There-UAE/100086864606365/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src="/icons/fb.png"
+                  alt="Facebook"
+                  width={256}
+                  height={256}
+                  className="w-[30px] h-[30px] object-contain hover:opacity-75 transition-opacity duration-300"
+                />
+              </Link>
+
+              {/* Instagram Link */}
+              <Link
+                href="https://www.instagram.com/getoutthereuae/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src="/icons/insta.png"
+                  alt="Instagram"
+                  width={256}
+                  height={256}
+                  className="w-[30px] h-[30px] object-contain hover:opacity-75 transition-opacity duration-300"
+                />
+              </Link>
             </div>
           </div>
         </div>

@@ -62,7 +62,7 @@ export default function ProductCard2({
                                     height={200}
                                     className="w-full h-full object-cover"
                                 />
-                                <button
+                                {/* <button
                                     className="absolute top-2 right-2.5 bg-white/80 hover:bg-white p-2 rounded-full shadow-sm z-10"
                                     onClick={(e) => {
                                         e.stopPropagation()
@@ -70,7 +70,7 @@ export default function ProductCard2({
                                     }}
                                 >
                                     <Heart size={17} className="text-gray-600 hover:text-red-500" />
-                                </button>
+                                </button> */}
                             </div>
                         </div>
 

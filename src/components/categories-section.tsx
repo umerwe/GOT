@@ -25,7 +25,7 @@ const CategoriesSection = () => {
     };
 
     return (
-        <section className="bg-white">
+        <section>
             <div className="max-w-7xl mx-auto">
                 <div className="flex items-center justify-between mt-10 sm:mt-0 mb-[10px]">
                     <h2 className="text-2xl text-[#000000]">Popular Categories</h2>
@@ -69,8 +69,8 @@ const CategoriesSection = () => {
                                         fill
                                         className="object-cover group-hover:scale-105 transition-transform duration-200"
                                     />
-                                    <div className="absolute bottom-0 right-0 p-2 bg-dark rounded-tl-lg">
-                                        <p className="text-white text-center text-xs font-semibold drop-shadow-lg leading-tight">
+                                    <div className="absolute bottom-0 right-0 p-2 bg-[#E9A426]">
+                                        <p className="text-black text-center text-xs font-semibold drop-shadow-lg leading-tight">
                                             {category?.child?.length} Items
                                         </p>
                                     </div>

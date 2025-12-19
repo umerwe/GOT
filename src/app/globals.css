@@ -152,6 +152,7 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: "Inter", sans-serif !important;
   }
 
   h2 {
@@ -177,6 +178,10 @@
   h5 {
     font-family: "Inter", sans-serif !important;
     font-weight: 700 !important;
+  }
+
+  h6 {
+    font-family: "Roboto", sans-serif !important;
   }
 
 
