@@ -106,7 +106,7 @@ const Navbar = () => {
             <LoginDialog
               open={showLoginDialog}
               onOpenChange={setShowLoginDialog}
-              description="You must be logged in to start a chat."
+              description="You must be logged in to start a post ad."
             />
           </div>
 

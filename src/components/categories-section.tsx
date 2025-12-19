@@ -70,7 +70,7 @@ const CategoriesSection = () => {
                                         className="object-cover group-hover:scale-105 transition-transform duration-200"
                                     />
                                     <div className="absolute bottom-0 right-0 p-2 bg-[#E9A426]">
-                                        <p className="text-black text-center text-xs font-semibold drop-shadow-lg leading-tight">
+                                        <p className="text-black text-center text-[13px] font-medium drop-shadow-lg leading-tight">
                                             {category?.child?.length} Items
                                         </p>
                                     </div>
