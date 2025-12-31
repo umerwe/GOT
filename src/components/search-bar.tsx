@@ -24,14 +24,14 @@ const SearchBar = () => {
   }
 
   return (
-    <div className="bg-white shadow-sm border border-gray-100 w-full px-2 sm:px-14 pb-2 pt-3">
-      <div className="flex items-center overflow-x-auto border-b-2 border-gray-200 pt-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+    <div className="bg-white shadow-sm border-[3px] border-[#F1F1F1] w-full px-2 sm:px-[60px] pt-[28px]">
+      <div className="flex items-center overflow-x-auto border-b-2 border-gray-200 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         <div className="flex flex-nowrap">
           {LOCATIONS.map((loc) => (
             <button
               key={loc}
               onClick={() => setActiveLocation(loc)}
-              className={`mr-6 pb-1.5 text-sm transition-all font-semibold whitespace-nowrap ${activeLocation === loc
+              className={`mr-6 pb-1.5 text-[15px] transition-all font-medium whitespace-nowrap ${activeLocation === loc
                   ? "border-b-4 border-yellow-500 text-black"
                   : "border-b-4 border-transparent"
                 }`}
@@ -42,10 +42,10 @@ const SearchBar = () => {
         </div>
       </div>
 
-      <div className="py-4">
+      <div className="pt-[20px] pb-[29px]">
         <div className="flex flex-col sm:flex-row items-stretch gap-3 sm:gap-4 w-full max-w-4xl">
           {/* Input Container with Label Inside */}
-          <div className="flex-1 border border-gray-300 bg-white px-4 py-2 flex flex-col justify-center min-h-[40px]">
+          <div className="flex-1 border border-gray-300 bg-white px-[24px] py-2 flex flex-col justify-center min-h-[40px]">
             <label>
               <h6 className="text-[15px] font-medium text-black block leading-tight">Search query</h6>
             </label>
@@ -55,7 +55,7 @@ const SearchBar = () => {
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full bg-transparent border-none outline-none p-0 text-gray-400 placeholder:text-gray-300 text-[19px] mt-0.5"
+              className="w-full bg-transparent border-none outline-none p-0 text-[#BBBBBB] placeholder:text-gray-300 text-[19px] mt-0.5"
             />
           </div>
 

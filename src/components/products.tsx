@@ -27,7 +27,7 @@ const TrendingBikes = () => {
   return (
     <div className="scroll-smooth border-b-3 border-[#EBEBEB] pb-4">
       <div className="flex items-center justify-between mb-[10px]">
-        <h2 className="text-2xl font-semibold text-[#000000]">Featured Products</h2>
+        <h2>Featured Products</h2>
         <div className="flex items-center gap-2">
 
           <Button

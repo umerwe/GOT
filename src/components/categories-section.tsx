@@ -26,9 +26,9 @@ const CategoriesSection = () => {
 
     return (
         <section>
-            <div className="max-w-7xl mx-auto">
-                <div className="flex items-center justify-between mt-10 sm:mt-0 mb-[10px]">
-                    <h2 className="text-2xl text-[#000000]">Popular Categories</h2>
+            <div>
+                <div className="flex items-center justify-between mt-[72px] mb-[20px]">
+                    <h2>Popular Categories</h2>
 
                     <div className="flex items-center gap-2">
                         <Button
@@ -55,14 +55,14 @@ const CategoriesSection = () => {
                 {isLoading && <SkeletonLoader type="categories" count={6} />}
 
                 {!isLoading && data && (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 justify-center">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-[10px] justify-center">
                         {visibleCategories.map((category: Category) => (
                             <Link
                                 href={`/ads/${category.id}`}
                                 key={category.id}
                                 className="flex flex-col group cursor-pointer"
                             >
-                                <div className="relative w-full h-28 aspect-square rounded-none overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200">
+                                <div className="relative w-full h-[129px] aspect-square rounded-none overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200">
                                     <Image
                                         src={category.image}
                                         alt={`${category.title} category`}
@@ -77,7 +77,7 @@ const CategoriesSection = () => {
                                 </div>
 
                                 <div className="mt-2 px-1">
-                                    <h1 className="text-[#000000] font-semibold text-sm sm:text-base leading-tight truncate">
+                                    <h1 className="text-[#000000] font-semibold text-[12px] sm:text-base leading-tight truncate">
                                         {category.title}
                                     </h1>
                                 </div>

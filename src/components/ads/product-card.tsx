@@ -31,7 +31,7 @@ export default function ProductCard({
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-4 gap-6">
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-4 gap-[10px]">
       {products.map((product) => (
         <Link key={product.id} href={`/listing/${product.id}`}>
           <Card className="overflow-hidden rounded-none shadow-none border-none cursor-pointer h-full">
@@ -41,7 +41,7 @@ export default function ProductCard({
                 alt={product.title || "Product image"}
                 width={300}
                 height={200}
-                className="w-full h-52 object-cover"
+                className="w-full h-[343px] object-cover"
               />
               {/* <button
                 className="absolute top-2 right-2.5 bg-white/80 hover:bg-white p-2 rounded-full shadow-sm"
@@ -53,12 +53,12 @@ export default function ProductCard({
               </button> */}
             </div>
 
-            <CardContent className="pt-4 px-0">
-              <h1 className="font-semibold text-base truncate" title={product.title}>
+            <CardContent className="pt-[17px] px-0">
+              <h1 className="text-[16px] truncate" title={product.title}>
                 {capitalizeWords(product.title)}
               </h1>
 
-              <div className="flex items-center flex-wrap gap-y-1 text-sm text-gray-500">
+              <div className="flex items-center flex-wrap gap-y-1 text-[14px] text-[#6A7282]">
                 <span className="text-gray-400">
                   {product.manufacturing_year || "N/A"}
                 </span>
@@ -77,7 +77,7 @@ export default function ProductCard({
               </div>
 
               <div className="flex items-center justify-between mt-1.5">
-                <h2 className="text-base font-bold text-gray-900">
+                <h2 className="text-[16px]">
                   AED {product.price.toLocaleString()}
                 </h2>
               </div>

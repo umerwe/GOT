@@ -28,7 +28,7 @@ const AllMotorcyclesSection = () => {
     return (
         <div className="scroll-smooth">
                 <div className="flex items-center justify-between mb-[10px]">
-                    <h2 className="text-2xl font-semibold text-[#000000]">All Motorcycles</h2>
+                    <h2>All Motorcycles</h2>
 
                     <div className="flex items-center gap-2">
                         <Button

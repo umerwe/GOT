@@ -60,72 +60,75 @@ const SkeletonLoader = ({ type, count = 4 }: SkeletonLoaderProps) => {
                 </div>
             );
 
-        case "product2":
-            return (
-                <div className="max-w-7xl mx-auto px-2 border border-gray-200 sm:px-4 lg:px-0 flex flex-col">
-                    {Array.from({ length: count }).map((_, index) => (
-                        <div
-                            key={index}
-                            className="w-full bg-white p-2 border border-gray-200 animate-pulse"
-                        >
-                            <div className="flex flex-col lg:flex-row gap-4">
+      case "product2":
+  return (
+    <div className="px-2 mb-[60px] border border-gray-200 sm:px-4 lg:px-0 flex flex-col">
+      {Array.from({ length: count }).map((_, index) => (
+        <div
+          key={index}
+          // Matching exact padding and border of ProductCard2
+          className="w-full bg-white pt-[21.22px] pb-[46.15px] px-[32px] border border-gray-200 animate-pulse"
+        >
+          {/* Matching gap-[80px] used in the actual component */}
+          <div className="flex flex-col lg:flex-row gap-[80px]">
 
-                                {/* Image Section Skeleton */}
-                                <div className="w-full lg:w-[189px] flex-shrink-0">
-                                    <div className="relative h-48 lg:h-[123px] w-full bg-gray-200 rounded-sm" />
-                                </div>
+            {/* Image Section Skeleton - Exact Widths */}
+            <div className="w-full lg:w-[189px] flex-shrink-0">
+              <div className="relative h-48 lg:h-[121.34px] w-full bg-gray-200 rounded-sm" />
+            </div>
 
-                                {/* Content Section Skeleton */}
-                                <div className="flex-1 flex flex-col space-y-1 min-w-0 justify-between mt-2">
-                                    <div className="space-y-2">
-                                        {/* Title Line */}
-                                        <div className="h-6 bg-gray-200 rounded w-3/4" />
-
-                                        {/* Description Lines */}
-                                        <div className="space-y-1 mt-2">
-                                            <div className="h-4 bg-gray-200 rounded w-full" />
-                                            <div className="h-4 bg-gray-200 rounded w-5/6" />
-                                        </div>
-                                    </div>
-
-                                    {/* Price Line */}
-                                    <div className="mt-2">
-                                        <div className="h-5 bg-gray-200 rounded w-1/4" />
-                                    </div>
-                                </div>
-
-                                {/* Right Detail Section Skeleton */}
-                                <div className="w-full lg:w-[270px] flex-shrink-0 border-t lg:border-t-0  pt-4 lg:pl-5 flex flex-col justify-center gap-1">
-                                    {/* Row 1 */}
-                                    <div className="flex justify-between py-1 px-2">
-                                        <div className="h-3 bg-gray-200 rounded w-12" />
-                                        <div className="h-3 bg-gray-200 rounded w-16" />
-                                    </div>
-
-                                    {/* Row 2 (Simulating the bg-[#FFF6E5] row spacing) */}
-                                    <div className="flex justify-between py-1 px-2 rounded">
-                                        <div className="h-3 bg-gray-200 rounded w-16" />
-                                        <div className="h-3 bg-gray-200 rounded w-8" />
-                                    </div>
-
-                                    {/* Row 3 */}
-                                    <div className="flex justify-between py-1 px-2">
-                                        <div className="h-3 bg-gray-200 rounded w-14" />
-                                        <div className="h-3 bg-gray-200 rounded w-12" />
-                                    </div>
-
-                                    {/* Row 4 */}
-                                    <div className="flex justify-between py-1 px-2 rounded">
-                                        <div className="h-3 bg-gray-200 rounded w-10" />
-                                        <div className="h-3 bg-gray-200 rounded w-12" />
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    ))}
+            {/* Content Section Skeleton - Matching space-y-1 */}
+            <div className="flex-1 flex flex-col space-y-1 min-w-0">
+              <div className="space-y-[10px]">
+                {/* Title Line */}
+                <div className="h-6 bg-gray-200 rounded w-3/4" />
+                {/* Description Lines - Matching text height/spacing */}
+                <div className="space-y-2 mt-2">
+                  <div className="h-4 bg-gray-200 rounded w-full" />
+                  <div className="h-4 bg-gray-200 rounded w-5/6" />
                 </div>
-            )
+              </div>
+
+              {/* Price Line */}
+              <div className="mt-4">
+                <div className="h-6 bg-gray-200 rounded w-24" />
+              </div>
+            </div>
+
+            {/* Right Detail Section Skeleton - Width 224px */}
+            <div className="w-full lg:w-[224px] flex-shrink-0 border-t lg:border-t-0 flex flex-col">
+              <div className="space-y-1">
+                {/* Mileage Row */}
+                <div className="flex justify-between h-[32px] items-center px-2">
+                  <div className="h-3 bg-gray-200 rounded w-12" />
+                  <div className="h-3 bg-gray-200 rounded w-16" />
+                </div>
+
+                {/* Engine Size Row (Shaded) */}
+                <div className="flex justify-between h-[32px] items-center px-2 bg-gray-50 rounded">
+                  <div className="h-3 bg-gray-200 rounded w-16" />
+                  <div className="h-3 bg-gray-200 rounded w-8" />
+                </div>
+
+                {/* Condition Row */}
+                <div className="flex justify-between h-[32px] items-center px-2">
+                  <div className="h-3 bg-gray-200 rounded w-14" />
+                  <div className="h-3 bg-gray-200 rounded w-12" />
+                </div>
+
+                {/* Year Row (Shaded) */}
+                <div className="flex justify-between h-[32px] items-center px-2 bg-gray-50 rounded">
+                  <div className="h-3 bg-gray-200 rounded w-10" />
+                  <div className="h-3 bg-gray-200 rounded w-12" />
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      ))}
+    </div>
+  )
         case "list":
             return (
                 <div className="w-full space-y-4 md:space-y-6">

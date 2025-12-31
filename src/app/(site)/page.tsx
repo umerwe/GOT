@@ -24,7 +24,7 @@ export default function Home() {
   }, [session, status, handleSessionAuth]);
 
   return (
-    <div className="flex flex-col gap-[60px]">
+    <div className="flex flex-col">
       <HeroSection />
       <Container className="space-y-[60px]">
         <CategoriesSection />
