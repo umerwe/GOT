@@ -34,8 +34,7 @@ const FeaturedProducts = () => {
     return (
         <div className="bg-white py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
-                {/* Header */}
-                <h2 className="text-3xl font-bold text-[#000000] mb-8">Featured Products</h2>
+                <h2>Featured Products</h2>
 
                 {/* Products Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
