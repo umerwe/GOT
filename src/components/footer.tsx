@@ -18,7 +18,10 @@ export default function Footer() {
       <h6 className="text-[white] text-[14px] font-normal uppercase tracking-widest">{title}</h6>
       <ul className="space-y-[5px]">
         {links.map((link) => (
-          <li key={link.label} className="h-[28px]">
+          <li
+           key={link.label} className="h-[28px]"
+           style={{ fontFamily: "Roboto, sans-serif" }}
+           >
             <Link
               href={link.href}
               className="text-[#7E7E7E] hover:text-white text-[14px] transition-colors duration-200 font-normal"

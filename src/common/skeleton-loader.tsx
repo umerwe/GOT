@@ -60,75 +60,75 @@ const SkeletonLoader = ({ type, count = 4 }: SkeletonLoaderProps) => {
                 </div>
             );
 
-      case "product2":
-  return (
-    <div className="px-2 mb-[60px] border border-gray-200 sm:px-4 lg:px-0 flex flex-col">
-      {Array.from({ length: count }).map((_, index) => (
-        <div
-          key={index}
-          // Matching exact padding and border of ProductCard2
-          className="w-full bg-white pt-[21.22px] pb-[46.15px] px-[32px] border border-gray-200 animate-pulse"
-        >
-          {/* Matching gap-[80px] used in the actual component */}
-          <div className="flex flex-col lg:flex-row gap-[80px]">
+        case "product2":
+            return (
+                <div className="px-2 mb-[60px] border border-gray-200 sm:px-4 lg:px-0 flex flex-col">
+                    {Array.from({ length: count }).map((_, index) => (
+                        <div
+                            key={index}
+                            // Matching exact padding and border of ProductCard2
+                            className="w-full bg-white pt-[21.22px] pb-[46.15px] px-[32px] border border-gray-200 animate-pulse"
+                        >
+                            {/* Matching gap-[80px] used in the actual component */}
+                            <div className="flex flex-col lg:flex-row gap-[80px]">
 
-            {/* Image Section Skeleton - Exact Widths */}
-            <div className="w-full lg:w-[189px] flex-shrink-0">
-              <div className="relative h-48 lg:h-[121.34px] w-full bg-gray-200 rounded-sm" />
-            </div>
+                                {/* Image Section Skeleton - Exact Widths */}
+                                <div className="w-full lg:w-[189px] flex-shrink-0">
+                                    <div className="relative h-48 lg:h-[121.34px] w-full bg-gray-200 rounded-sm" />
+                                </div>
 
-            {/* Content Section Skeleton - Matching space-y-1 */}
-            <div className="flex-1 flex flex-col space-y-1 min-w-0">
-              <div className="space-y-[10px]">
-                {/* Title Line */}
-                <div className="h-6 bg-gray-200 rounded w-3/4" />
-                {/* Description Lines - Matching text height/spacing */}
-                <div className="space-y-2 mt-2">
-                  <div className="h-4 bg-gray-200 rounded w-full" />
-                  <div className="h-4 bg-gray-200 rounded w-5/6" />
+                                {/* Content Section Skeleton - Matching space-y-1 */}
+                                <div className="flex-1 flex flex-col space-y-1 min-w-0">
+                                    <div className="space-y-[10px]">
+                                        {/* Title Line */}
+                                        <div className="h-6 bg-gray-200 rounded w-3/4" />
+                                        {/* Description Lines - Matching text height/spacing */}
+                                        <div className="space-y-2 mt-2">
+                                            <div className="h-4 bg-gray-200 rounded w-full" />
+                                            <div className="h-4 bg-gray-200 rounded w-5/6" />
+                                        </div>
+                                    </div>
+
+                                    {/* Price Line */}
+                                    <div className="mt-4">
+                                        <div className="h-6 bg-gray-200 rounded w-24" />
+                                    </div>
+                                </div>
+
+                                {/* Right Detail Section Skeleton - Width 224px */}
+                                <div className="w-full lg:w-[224px] flex-shrink-0 border-t lg:border-t-0 flex flex-col">
+                                    <div className="space-y-1">
+                                        {/* Mileage Row */}
+                                        <div className="flex justify-between h-[32px] items-center px-2">
+                                            <div className="h-3 bg-gray-200 rounded w-12" />
+                                            <div className="h-3 bg-gray-200 rounded w-16" />
+                                        </div>
+
+                                        {/* Engine Size Row (Shaded) */}
+                                        <div className="flex justify-between h-[32px] items-center px-2 bg-gray-50 rounded">
+                                            <div className="h-3 bg-gray-200 rounded w-16" />
+                                            <div className="h-3 bg-gray-200 rounded w-8" />
+                                        </div>
+
+                                        {/* Condition Row */}
+                                        <div className="flex justify-between h-[32px] items-center px-2">
+                                            <div className="h-3 bg-gray-200 rounded w-14" />
+                                            <div className="h-3 bg-gray-200 rounded w-12" />
+                                        </div>
+
+                                        {/* Year Row (Shaded) */}
+                                        <div className="flex justify-between h-[32px] items-center px-2 bg-gray-50 rounded">
+                                            <div className="h-3 bg-gray-200 rounded w-10" />
+                                            <div className="h-3 bg-gray-200 rounded w-12" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    ))}
                 </div>
-              </div>
-
-              {/* Price Line */}
-              <div className="mt-4">
-                <div className="h-6 bg-gray-200 rounded w-24" />
-              </div>
-            </div>
-
-            {/* Right Detail Section Skeleton - Width 224px */}
-            <div className="w-full lg:w-[224px] flex-shrink-0 border-t lg:border-t-0 flex flex-col">
-              <div className="space-y-1">
-                {/* Mileage Row */}
-                <div className="flex justify-between h-[32px] items-center px-2">
-                  <div className="h-3 bg-gray-200 rounded w-12" />
-                  <div className="h-3 bg-gray-200 rounded w-16" />
-                </div>
-
-                {/* Engine Size Row (Shaded) */}
-                <div className="flex justify-between h-[32px] items-center px-2 bg-gray-50 rounded">
-                  <div className="h-3 bg-gray-200 rounded w-16" />
-                  <div className="h-3 bg-gray-200 rounded w-8" />
-                </div>
-
-                {/* Condition Row */}
-                <div className="flex justify-between h-[32px] items-center px-2">
-                  <div className="h-3 bg-gray-200 rounded w-14" />
-                  <div className="h-3 bg-gray-200 rounded w-12" />
-                </div>
-
-                {/* Year Row (Shaded) */}
-                <div className="flex justify-between h-[32px] items-center px-2 bg-gray-50 rounded">
-                  <div className="h-3 bg-gray-200 rounded w-10" />
-                  <div className="h-3 bg-gray-200 rounded w-12" />
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      ))}
-    </div>
-  )
+            )
         case "list":
             return (
                 <div className="w-full space-y-4 md:space-y-6">
@@ -228,61 +228,60 @@ const SkeletonLoader = ({ type, count = 4 }: SkeletonLoaderProps) => {
 
         case "alllisting":
             return (
-                <div className="w-full">
-                    {/* Breadcrumb Placeholder (matches ListingById container) */}
-                    <div className="max-w-[1400px] mx-auto px-3 mt-4">
+                <div className="pl-[23px] pr-[62px] w-full">
+                    {/* Breadcrumb Placeholder */}
+                    <div className="mt-[27px]">
                         <Skeleton className="h-4 w-64 rounded-sm" />
                     </div>
 
-                    {/* Main Content Container (matches ListingById container) */}
-                    <div className="max-w-7xl mx-auto px-3 pt-10 pb-16">
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* Main Content Container - Matches pt-[53px] and pl-[80px] from ListingById */}
+                    <div className="pt-[53px] pb-[98px] lg:pl-[80px] px-0">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-[22px]">
 
                             {/* --- LEFT COLUMN: Images & Description --- */}
-                            <div className="lg:col-span-2 space-y-8">
+                            <div className="lg:col-span-2 space-y-[20px]">
 
-                                {/* Main Image Gallery - rounded-none to match actual image */}
+                                {/* Main Image Gallery - matches rounded-none and aspect ratios */}
                                 <div className="bg-gray-50 rounded-none overflow-hidden relative">
-                                    <Skeleton className="w-full aspect-[4/3] lg:aspect-[16/10] rounded-none bg-gray-200" />
+                                    <Skeleton className="w-full aspect-[4/3] lg:aspect-[16/10] rounded-none" />
                                 </div>
 
-                                {/* Specs Grid - border-2 and rounded-none to match actual specs */}
+                                {/* Specs Grid - matches border-2, rounded-none, and grid layout */}
                                 <div className="border-2 border-gray-200 rounded-none p-6 bg-white">
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-y-6 gap-x-4">
                                         {[...Array(8)].map((_, i) => (
                                             <div key={i} className="flex flex-col gap-1">
-                                                <Skeleton className="h-3 w-16 mb-1" /> {/* Label */}
-                                                <Skeleton className="h-4 w-24" />      {/* Value */}
+                                                <Skeleton className="h-3 w-16" /> {/* Label */}
+                                                <Skeleton className="h-5 w-24" /> {/* Value */}
                                             </div>
                                         ))}
                                     </div>
                                 </div>
 
-                                {/* Description */}
-                                <div className="space-y-2">
-                                    <Skeleton className="h-6 w-32 mb-2" /> {/* Title "Overview" */}
-                                    <div className="space-y-1.5">
+                                {/* Description - matches space-y-[11px] */}
+                                <div className="space-y-[11px]">
+                                    <Skeleton className="h-6 w-32" /> {/* Title "Overview" */}
+                                    <div className="space-y-2">
                                         <Skeleton className="h-4 w-full" />
                                         <Skeleton className="h-4 w-full" />
-                                        <Skeleton className="h-4 w-11/12" />
                                         <Skeleton className="h-4 w-4/5" />
                                     </div>
                                 </div>
                             </div>
 
                             {/* --- RIGHT COLUMN: Details & Actions --- */}
-                            <div className="lg:col-span-1 space-y-4">
+                            <div className="lg:col-span-1 space-y-[10px] px-[24px]">
 
                                 {/* Title Header */}
-                                <div className="space-y-2">
-                                    {/* Product Title */}
-                                    <Skeleton className="h-8 w-11/12" />
-                                    <Skeleton className="h-8 w-3/4" />
+                                <div className="space-y-[10px]">
+                                    {/* Product Title - width matches your 199px limit */}
+                                    <Skeleton className="h-6 w-[199px]" />
+                                    <Skeleton className="h-6 w-[150px]" />
 
-                                    {/* Brand/Category tags */}
+                                    {/* Brand/Category dots */}
                                     <div className="flex gap-2 pt-1">
-                                        <Skeleton className="h-4 w-20" />
-                                        <Skeleton className="h-4 w-20" />
+                                        <Skeleton className="h-4 w-16" />
+                                        <Skeleton className="h-4 w-16" />
                                     </div>
 
                                     {/* Location */}
@@ -292,35 +291,33 @@ const SkeletonLoader = ({ type, count = 4 }: SkeletonLoaderProps) => {
                                     </div>
                                 </div>
 
-                                {/* Price */}
-                                <div className="border-t py-4">
-                                    <Skeleton className="h-7 w-48" />
+                                {/* Price - matches border-t and pt-[10px] */}
+                                <div className="border-t pt-[10px]">
+                                    <Skeleton className="h-7 w-32" />
                                 </div>
 
                                 {/* Seller Info */}
-                                <div className="flex items-center justify-between -mt-4">
+                                <div className="flex items-center justify-between py-2">
                                     <div className="flex gap-2 items-center">
-                                        <Skeleton className="h-4 w-12" /> {/* "Seller" */}
+                                        <Skeleton className="h-4 w-10" /> {/* "Seller" */}
                                         <Skeleton className="h-4 w-24" /> {/* Name */}
                                     </div>
-                                    {/* Image is commented out in your original code, but if needed: */}
-                                    {/* <Skeleton className="w-10 h-10 rounded-full" /> */}
                                 </div>
 
-                                {/* Action Buttons - rounded-md to match your buttons */}
+                                {/* Action Buttons - matches rounded-none and h-12 */}
                                 <div className="grid grid-cols-2 gap-3">
-                                    <Skeleton className="h-12 rounded-md bg-gray-200" />
-                                    <Skeleton className="h-12 rounded-md bg-gray-200" />
+                                    <Skeleton className="h-12 rounded-none" />
+                                    <Skeleton className="h-12 rounded-none" />
                                 </div>
 
                                 {/* Safety Note */}
-                                <div className="flex items-center gap-2 mt-2">
+                                <div className="flex items-center gap-2 border-b pb-[10px] mt-2">
                                     <Skeleton className="h-4 w-4 rounded-full" />
-                                    <Skeleton className="h-3 w-56" />
+                                    <Skeleton className="h-3 w-40" />
                                 </div>
 
-                                {/* Wishlist Button */}
-                                <Skeleton className="h-12 w-full rounded-md mt-2" />
+                                {/* Wishlist Button - matches rounded-none and h-12 */}
+                                <Skeleton className="h-12 w-full rounded-none" />
                             </div>
 
                         </div>

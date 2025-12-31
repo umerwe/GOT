@@ -75,7 +75,7 @@ const Navbar = () => {
       <Link href="#" className="relative hover:opacity-80 transition-opacity inline-block flex-shrink-0">
         <Bell className={cn("w-5 h-5", textColor)} />
         <span className={cn(
-          "absolute -top-1.5 -right-2 z-10 bg-transparent border-[2px] text-[6.06px] font-medium rounded-full w-4 h-4 flex items-center justify-center",
+          "absolute -top-1.5 -right-[9px] z-10 bg-transparent border-[2px] text-[7.06px] font-medium rounded-full w-4 h-4 flex items-center justify-center",
           isHome ? "text-[#111111] border-[#111111] sm:text-white sm:border-white" : "text-[#111111] border-black"
         )}>
           3
@@ -86,8 +86,8 @@ const Navbar = () => {
 
   return (
     <nav className={cn(
-      "w-full top-0 sm:px-6 lg:pl-[49px] lg:pr-[50.42px] border-b-2 z-[500] transition-colors duration-300",
-      isHome ? "bg-transparent border-transparent absolute" : isAuthPage ? "bg-[#F3F4F6] border-gray-100 sticky" : "bg-white border-gray-100 sticky"
+      "w-full top-0 sm:px-6 lg:pl-[49px] lg:pr-[50.42px] border-b-[2px] border-[#E6E6E6] z-[500] transition-colors duration-300",
+      isHome ? "bg-transparent border-transparent absolute" : isAuthPage ? "bg-[#F3F4F6] border-gray-100 block" : "bg-white border-gray-100 sticky"
     )}>
       <div className="flex items-start justify-between gap-5 pr-[16px] sm:pr-0">
         {/* Left Side: Logo */}
@@ -113,7 +113,7 @@ const Navbar = () => {
         </div>
 
         {/* Right Side Actions - FIXED ALIGNMENT */}
-        <div className="hidden sm:flex flex-col items-end gap-[28px] mt-[11px] min-w-[210px]">
+        <div className="hidden sm:flex flex-col items-end gap-[24px] mt-[3px] min-w-[210px]">
           {/* Top Row: Ad, Help, Auth */}
           <div className={cn("flex items-center gap-3 text-xs tracking-wide whitespace-nowrap h-8", textColor)}>
             <span onClick={handleClick} className="hover:opacity-80 transition-opacity cursor-pointer">Place an Ad</span>

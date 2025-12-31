@@ -8,15 +8,14 @@ import { useState } from "react"
 import { useAppSelector } from "@/store/hooks"
 import { useRouter } from "next/navigation"
 import {
-  Heart,
   MapPin,
   MessageCircle,
   Phone,
-  Share2,
   AlertCircle,
   ChevronLeft,
   ChevronRight
 } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface ProductDetailsProps {
   product: Product
@@ -29,7 +28,7 @@ export default function Listing({ product }: ProductDetailsProps) {
   const [showLoginDialog, setShowLoginDialog] = useState(false)
   const [showPhone, setShowPhone] = useState(false)
 
-  const { token, userId } = useAppSelector((state) => state.auth)
+  const { token, userId } = useAppSelector((state) => state?.auth)
   const router = useRouter()
 
   const handleChatClick = () => {
@@ -70,9 +69,9 @@ export default function Listing({ product }: ProductDetailsProps) {
 
   return (
     <div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-[22px]">
         {/* --- LEFT COLUMN: Images & Description --- */}
-        <div className="lg:col-span-2 space-y-8">
+        <div className="lg:col-span-2 space-y-[20px]">
 
           {/* Main Image Gallery */}
           <div className="bg-gray-50 rounded-none overflow-hidden relative group">
@@ -81,26 +80,45 @@ export default function Listing({ product }: ProductDetailsProps) {
                 src={activeImage || "/placeholder.svg"}
                 alt="Product Main"
                 fill
-                className="object-contain bg-gray-100"
+                className="object-cover bg-gray-100"
               />
 
               {/* Navigation Arrows */}
-              {(product.product_images?.length || 0) > 1 && (
-                <>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); handlePrevImage(); }}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <ChevronLeft className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); handleNextImage(); }}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                </>
-              )}
+              <>
+                <button
+                  disabled={(product.product_images?.length || 0) <= 1}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handlePrevImage()
+                  }}
+                  className={cn(
+                    "absolute left-4 top-1/2 -translate-y-1/2 p-2 shadow-md transition-all",
+                    "bg-white hover:bg-gray-100",
+                    "cursor-pointer",
+                    (product.product_images?.length || 0) <= 1 &&
+                    "cursor-not-allowed"
+                  )}
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+
+                <button
+                  disabled={(product.product_images?.length || 0) <= 1}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleNextImage()
+                  }}
+                  className={cn(
+                    "absolute right-4 top-1/2 -translate-y-1/2 p-2 shadow-md transition-all",
+                    "bg-white hover:bg-gray-100",
+                    "cursor-pointer",
+                    (product.product_images?.length || 0) <= 1 &&
+                    "cursor-not-allowed"
+                  )}
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </>
             </div>
           </div>
 
@@ -122,19 +140,19 @@ export default function Listing({ product }: ProductDetailsProps) {
           </div>
 
           {/* Description */}
-          <div className="space-y-2">
-            <h1 className="text-lg font-bold">Overview</h1>
-            <div className="text-gray-600 text-sm">
+          <div className="space-y-[11px]">
+            <h1 className="text-[18px]">Overview</h1>
+            <div className="text-gray-600 text-sm font-normal">
               {product.description}
             </div>
           </div>
         </div>
 
         {/* --- RIGHT COLUMN: Details & Actions --- */}
-        <div className="lg:col-span-1 space-y-4">
+        <div className="lg:col-span-1 space-y-[10px] px-[24px]">
 
           {/* Title Header */}
-          <div className="space-y-2">
+          <div className="space-y-[10px]">
             {/* <div className="flex gap-2 mb-2">
               <span className="bg-yellow-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wide">
                 Featured
@@ -144,34 +162,34 @@ export default function Listing({ product }: ProductDetailsProps) {
               </span>
             </div> */}
 
-            <h3 className="text-2xl font-bold text-[#000000] leading-tight">
-              {capitalizeWords(product.title)}
+            <h3 className="text-[18px] w-[199px] leading-[24px] tracking-[-0.31px]">
+              {capitalizeWords(product?.title)}
             </h3>
 
             <div className="text-sm text-gray-500 flex flex-wrap gap-x-2">
-              <span>{product.brand?.title}</span>
+              <span>{product.brand?.title || "None"}</span>
               <span>•</span>
-              <span>{product.category?.title}</span>
+              <span>{product.category?.title || "None"}</span>
             </div>
 
-            <div className="flex gap-2 text-gray-500 text-sm pt-1">
+            <div className="flex gap-2 text-gray-500 text-sm">
               <MapPin className="w-5 h-5" />
               <span>{product.address || "Location not specified"}</span>
             </div>
           </div>
 
           {/* Price */}
-          <div className="border-t py-4">
-            <h1 className="text-lg font-bold text-[#000000]">
+          <div className="border-t pt-[10px]">
+            <h1 className="text-[18px]">
               AED {product.price.toLocaleString()}
             </h1>
           </div>
 
           {/* Seller Info */}
-          <div className="flex items-center justify-between -mt-4">
+          <div className="flex items-center justify-between">
             <div className="text-sm">
               <span className="text-[#000000] font-semibold">Seller</span>
-              <span className="ml-1 text-[#000000] underline cursor-pointer hover:text-solid">
+              <span className="ml-1 text-[#000000] underline cursor-pointer">
                 @{product.user?.name}
               </span>
             </div>
@@ -188,7 +206,7 @@ export default function Listing({ product }: ProductDetailsProps) {
             {Number(userId) !== product.user?.id ? (
               <Button
                 onClick={handleChatClick}
-                className="bg-gray-900 hover:bg-black text-white rounded-md h-12 text-sm font-medium"
+                className="bg-[#111111] hover:bg-black text-white rounded-none h-12 text-sm font-medium"
               >
                 <MessageCircle className="w-4 h-4 mr-2" />
                 Chat with seller
@@ -202,7 +220,7 @@ export default function Listing({ product }: ProductDetailsProps) {
             {/* Contact Button */}
             <Button
               variant="default"
-              className="bg-gray-900 hover:bg-black text-white rounded-md h-12 text-sm font-medium"
+              className="bg-[#111111] hover:bg-black text-white rounded-none h-12 text-sm font-medium"
               onClick={() => setShowPhone(!showPhone)}
             >
               <Phone className="w-4 h-4 mr-2" />
@@ -211,7 +229,7 @@ export default function Listing({ product }: ProductDetailsProps) {
           </div>
 
           {/* Safety Note */}
-          <div className="flex items-center gap-2 text-xs lg:text-sm text-gray-500">
+          <div className="flex items-center gap-2 text-[12px] font-normal text-[#6A7282] border-b pb-[10px]">
             <AlertCircle className="w-3 h-3 md:w-4 md:h-4 text-solid" />
             <span className="cursor-pointer">
               Learn more about our{" "}
@@ -224,9 +242,8 @@ export default function Listing({ product }: ProductDetailsProps) {
           {/* Wishlist Button */}
           <Button
             variant="outline"
-            className="w-full border-yellow-500 text-yellow-600 hover:bg-yellow-50 hover:text-yellow-700 h-12 font-medium"
+            className="w-full rounded-none border-[3px] border-[#E9A426] text-yellow-600 text-sm hover:bg-yellow-50 hover:text-yellow-700 h-12 font-medium"
           >
-            <Heart className="w-4 h-4 mr-2" />
             Wishlist now
           </Button>
         </div>
@@ -244,10 +261,10 @@ function SpecBox({ label, value }: { label: string; value?: string | number | nu
 
   return (
     <div className="flex flex-col gap-1">
-      <span className="text-xs text-gray-500 tracking-wide">
+      <span className="text-xs font-normal text-gray-500 tracking-wide">
         {label}
       </span>
-      <h1 className="text-sm font-bold text-[#000000] truncate">
+      <h1 className="text-[16px] text-[#111111] truncate">
         {value || "-"}
       </h1>
     </div>

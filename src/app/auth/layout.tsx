@@ -11,7 +11,7 @@ export default function AuthLayout({
   return (
     <AuthGuard>
       <Navbar />
-      <div className="bg-[#F3F4F6] py-14">
+      <div className="bg-[#F3F4F6] pt-[61.5px] pb-[132.5px] ">
         {children}
       </div>
       <Footer />

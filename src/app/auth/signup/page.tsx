@@ -14,6 +14,9 @@ import "react-phone-input-2/lib/style.css";
 import { signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import { useAppSelector } from "@/store/hooks";
+import Image from "next/image";
+import { Eye, EyeClosed, EyeOff } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function SignUpForm() {
   const configData = useAppSelector((state) => state.config.data);
@@ -43,55 +46,64 @@ export default function SignUpForm() {
   };
 
   return (
-    <div className="w-full max-w-[450px] mx-auto bg-white p-4 sm:p-8">
-      {/* Header Section */}
-      <div className="mb-8">
-        <h2 className="text-xl font-bold text-[#000000]">User Sign Up</h2>
-        <p className="text-gray-600 text-sm">
+    <div className="w-full max-w-[450px] mx-auto bg-white p-[24px]">
+      <div className="mb-[24px]">
+        <h5 className="text-[22px] text-[#000000] h-[35px]">User Sign Up</h5>
+        <p className="text-[#000000] text-[14px]">
           Create an account to get started
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-[24px]">
         {/* Full Name */}
-        <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-gray-700">Full Name</label>
+        <div className="space-y-[4px]">
+          <label className="block text-sm font-medium text-[#0E1620]">Full Name</label>
           <Input
             type="text"
             placeholder="Enter Your Name"
             {...register("name")}
-            className="rounded-none"
+            className={`rounded-none ${errors.name ? 'border-red-500' : ''}`}
           />
           {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
         </div>
 
         {/* Email */}
-        <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-gray-700">Email Address</label>
+        <div className="space-y-[4px]">
+          <label className="block text-sm font-medium text-[#0E1620]">Email Address</label>
           <Input
             type="email"
             placeholder="twinum@example.com"
             {...register("email")}
-            className="rounded-none"
+            className={`rounded-none ${errors.email ? 'border-red-500' : ''}`}
           />
           {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
         </div>
 
         {/* Phone */}
-        <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-gray-700">Phone</label>
+        <div className="space-y-[4px]">
+          <label className="block text-sm font-medium text-[#0E1620]">Phone</label>
           <Controller
             name="phone"
             control={control}
             render={({ field }) => (
               <PhoneInput
                 {...field}
-                country={"pk"}
+                country="pk"
                 enableSearch
-                inputClass={`!w-full !h-10 sm:!h-10 !text-sm !rounded-none !border-gray-300 focus:!ring-black focus:!border-black ${errors.phone ? "!border-red-500" : ""
-                  }`}
-                buttonClass={`!h-10 sm:!h-10 !rounded-none ${errors.phone ? "!border-red-500" : "!border-gray-300"
-                  }`}
+                inputClass={cn(
+                  "!w-full !h-[40px] !text-sm !bg-white !pl-12 !pr-3",
+                  "!border !border-gray-300 !rounded-none",
+                  "!shadow-xs !transition-[color,box-shadow] !outline-none",
+                  "focus-visible:!ring-[1px] focus-visible:!ring-gray-500 focus-visible:!border-gray-500",
+                  errors.phone && "!border-red-500 focus-visible:!ring-red-500"
+                )}
+                buttonClass={cn(
+                  "!h-[40px] !border !border-gray-300 !bg-white !rounded-none",
+                  "!shadow-xs",
+                  "focus-visible:!ring-[1px] focus-visible:!ring-gray-500 focus-visible:!border-gray-500",
+                  errors.phone && "!border-red-500 focus-visible:!ring-red-500"
+                )}
+                containerClass="!w-full !rounded-none"
                 onChange={(value) => field.onChange("+" + value)}
               />
             )}
@@ -100,42 +112,42 @@ export default function SignUpForm() {
         </div>
 
         {/* Password */}
-        <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-gray-700">Password</label>
+        <div className="space-y-[4px]">
+          <label className="block text-sm font-medium text-[#0E1620]">Password</label>
           <div className="relative">
             <Input
               type={showPassword ? "text" : "password"}
               placeholder="•••••••••••••"
               {...register("password")}
-              className="rounded-none"
+              className={`rounded-none ${errors.password ? 'border-red-500' : ''}`}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
             >
-              {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
           {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
         </div>
 
         {/* Confirm Password */}
-        <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
+        <div className="space-y-[4px]">
+          <label className="block text-sm font-medium text-[#0E1620]">Confirm Password</label>
           <div className="relative">
             <Input
               type={showConfirmPassword ? "text" : "password"}
               placeholder="•••••••••••••"
               {...register("confirmPassword")}
-              className="rounded-none"
+              className={`rounded-none ${errors.confirmPassword ? 'border-red-500' : ''}`}
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
             >
-              {showConfirmPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+              {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
           {errors.confirmPassword && (
@@ -144,7 +156,7 @@ export default function SignUpForm() {
         </div>
 
         {/* Terms Checkbox */}
-        <div className="space-y-1">
+        <div className="space-y-[4px]">
           <div className="flex items-start gap-2 pt-1">
             <input
               type="checkbox"
@@ -154,11 +166,11 @@ export default function SignUpForm() {
             />
             <label htmlFor="terms" className="text-sm text-gray-600 leading-snug">
               I agree to the{" "}
-              <Link href="/terms-and-conditions" className="text-[#000000] font-semibold hover:underline">
+              <Link href="/terms-and-conditions" className="text-[#000000] hover:underline">
                 Terms & Conditions
               </Link>{" "}
               and{" "}
-              <Link href="/privacy-policy" className="text-[#000000] font-semibold hover:underline">
+              <Link href="/privacy-policy" className="text-[#000000] hover:underline">
                 Privacy Policy
               </Link>
             </label>
@@ -170,44 +182,54 @@ export default function SignUpForm() {
         <Button
           type="submit"
           disabled={isPending}
-          className="w-full bg-black hover:bg-gray-800 text-white font-medium h-11 sm:h-12 rounded-md transition-all text-base mt-2"
+          className="w-full bg-black hover:bg-gray-800 text-white font-medium h-11 sm:h-12 rounded-none transition-all text-base mt-2"
         >
           {isPending ? "Signing up..." : "Continue"}
         </Button>
 
-        {/* Divider */}
-        <div className="relative flex items-center justify-center mb-6">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-gray-300"></span>
+        <div>
+          <div className="relative flex items-center justify-center h-[32px] mb-[8px]">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-[#000000]"></span>
+            </div>
+            <div className="relative bg-white px-4">
+              <span className="text-[#000000] text-sm">or sign up with</span>
+            </div>
           </div>
-          <div className="relative bg-white px-4">
-            <span className="text-gray-500 text-sm">or sign up with</span>
-          </div>
-        </div>
 
-        {/* Google Button */}
-        {configData?.google_login && (
-          <div className="grid grid-cols-1">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => signIn("google")}
-              className="w-full flex items-center justify-center gap-2 h-11 sm:h-12 border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 rounded-md font-medium"
-            >
-              <FcGoogle size={20} />
-              Google
-            </Button>
-          </div>
-        )}
+          {/* Google Button */}
+          {configData?.google_login && (
+            <div className="grid grid-cols-1">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => signIn("google")}
+                className="w-full text-[12px] flex items-center justify-center gap-2 h-[36px]
+                         border border-[#D0D5DD] bg-white text-black hover:bg-gray-50
+                         rounded-none font-normal"
+              >
+                <Image
+                  src="/google-logo.png"
+                  alt="Google"
+                  width={16}
+                  height={16}
+                />
+                Google
+              </Button>
+            </div>
+          )}
 
-        {/* Footer Link */}
-        <div className="text-center mt-6">
-          <p className="text-sm text-gray-600">
-            Already have an account?{" "}
-            <Link href="/auth/login" className="text-[#000000] font-bold underline hover:no-underline">
-              Sign In
-            </Link>
-          </p>
+          {/* Footer Link */}
+          <div className="text-[#000000] text-center mt-[32px]">
+            <p className="text-sm">
+              Already have an account?{" "}
+              <Link
+                href="/auth/login"
+                className="text-[#000000] text-sm font-normal underline hover:no-underline">
+                Sign In
+              </Link>
+            </p>
+          </div>
         </div>
       </form>
     </div>

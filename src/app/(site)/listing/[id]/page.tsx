@@ -16,8 +16,8 @@ export default function ListingById() {
   if (!product) return <NotFoundWrapper itemName="Product" />
 
   return (
-    <div>
-      <Container className="max-w-[1400px] mx-auto px-3 mt-4">
+    <div className="pl-[23px] pr-[62px]">
+      <Container className="mt-[27px]">
         <Breadcrumb
           items={[
             { title: "Home", href: "/" },
@@ -26,7 +26,7 @@ export default function ListingById() {
           ]}
         />
       </Container>
-      <Container className="pt-10 pb-16">
+      <Container className="pt-[53px] pb-[98px] pl-[80px] px-0">
         <Listing
           product={product}
         />
