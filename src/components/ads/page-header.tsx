@@ -23,7 +23,7 @@ export default function PageHeader({
   }
 
   return (
-    <div className="">
+    <div className="px-[8px]">
       <Breadcrumb
         items={[
           { title: "Home", href: "/" },
