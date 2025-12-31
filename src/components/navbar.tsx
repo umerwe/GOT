@@ -86,7 +86,7 @@ const Navbar = () => {
 
   return (
     <nav className={cn(
-      "w-full top-0 sm:px-6 lg:pl-[49px] lg:pr-[50.42px] border-b-[2px] border-[#E6E6E6] z-[500] transition-colors duration-300",
+      "w-full top-0 md:pl-[31px] md:pr-[50.42px] border-b-[2px] border-[#E6E6E6] z-[500] transition-colors duration-300",
       isHome ? "bg-transparent border-transparent absolute" : isAuthPage ? "bg-[#F3F4F6] border-gray-100 block" : "bg-white border-gray-100 sticky"
     )}>
       <div className="flex items-start justify-between gap-5 pr-[16px] sm:pr-0">
@@ -99,10 +99,10 @@ const Navbar = () => {
                 width={256}
                 height={256}
                 alt="logo-img"
-                className={cn("object-contain -rotate-8", isHome ? "w-[144px] h-[134.39px]" : "w-[108px] h-[100.79px]")}
+                className={cn("object-contain", isHome ? "w-[144px] h-[134.39px]" : "w-[108px] h-[100.79px]")}
               />
             ) : (
-              <div className={cn("bg-gray-200 animate-pulse rounded-md -rotate-8", isHome ? "w-[104px] h-[100.39px]" : "w-[108px] h-[100.79px]")} />
+              <div className={cn("bg-gray-200 animate-pulse rounded-md", isHome ? "w-[104px] h-[100.39px]" : "w-[108px] h-[100.79px]")} />
             )}
           </Link>
         </div>

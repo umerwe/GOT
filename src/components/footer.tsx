@@ -53,7 +53,7 @@ export default function Footer() {
                   alt="Get Out There Logo"
                   width={174}
                   height={162}
-                  className={`object-contain -rotate-8 transition-opacity duration-300 ${logoLoading ? "opacity-0" : "opacity-100"
+                  className={`object-contain transition-opacity duration-300 ${logoLoading ? "opacity-0" : "opacity-100"
                     }`}
                   priority
                   onLoadingComplete={() => setLogoLoading(false)}

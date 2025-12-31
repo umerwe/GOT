@@ -260,7 +260,7 @@ export default function CategoryLayout() {
   )
 
   return (
-    <div className="max-w-7xl mx-auto px-3 py-6">
+    <div className="px-[17px] py-6">
       <PageHeader
         categoryTitle={displayLabels.category}
         resultCount={filteredProducts?.length ?? 0}
@@ -329,6 +329,7 @@ export default function CategoryLayout() {
                   isHome={false}
                   isLoading={isProductsLoading}
                   count={itemsPerPage}
+                  isAdsPage={true}
                 />
               ) : (
                 <ProductCard2

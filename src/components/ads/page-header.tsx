@@ -30,7 +30,7 @@ export default function PageHeader({
           { title: categoryTitle }
         ]}
       />
-      <h2 className="text-[32px] font-bold mb-1">{categoryTitle}</h2>
+      <h2 className="text-[32px] mb-1">{categoryTitle}</h2>
       {/* <p className="text-gray-500">{resultCount} results</p> */}
     </div>
   )

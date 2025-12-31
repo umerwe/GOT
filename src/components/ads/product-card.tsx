@@ -6,10 +6,10 @@ import Image from "next/image"
 import Link from "next/link"
 import SkeletonLoader from "@/common/skeleton-loader"
 import NotFoundWrapper from "@/common/not-found"
-import { Heart } from "lucide-react"
 
 interface ProductCardProps {
   isHome?: boolean
+  isAdsPage?: boolean
   products?: Product[]
   isLoading?: boolean
   count?: number
@@ -19,6 +19,7 @@ export default function ProductCard({
   products = [],
   isLoading = false,
   count = 4,
+  isAdsPage = false,
 }: ProductCardProps) {
   if (isLoading) {
     return <SkeletonLoader type="products" count={count} />
@@ -31,7 +32,7 @@ export default function ProductCard({
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-4 gap-[10px]">
+    <div className={`grid grid-cols-2 sm:grid-cols-2  gap-[10px] ${isAdsPage ? 'md:grid-cols-3' : 'md:grid-cols-4'}`}>
       {products.map((product) => (
         <Link key={product.id} href={`/listing/${product.id}`}>
           <Card className="overflow-hidden rounded-none shadow-none border-none cursor-pointer h-full">
