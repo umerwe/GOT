@@ -149,7 +149,7 @@ export default function Listing({ product }: ProductDetailsProps) {
         </div>
 
         {/* --- RIGHT COLUMN: Details & Actions --- */}
-        <div className="lg:col-span-1 space-y-[10px] px-[24px]">
+        <div className="lg:col-span-1 space-y-[10px] sm:px-[24px]">
 
           {/* Title Header */}
           <div className="space-y-[10px]">
@@ -206,9 +206,15 @@ export default function Listing({ product }: ProductDetailsProps) {
             {Number(userId) !== product.user?.id ? (
               <Button
                 onClick={handleChatClick}
-                className="bg-[#111111] hover:bg-black text-white rounded-none h-12 text-sm font-medium"
+                className="bg-[#111111] hover:bg-black text-white rounded-none h-12 text-sm font-medium leading-[20px] tracking-[-0.15px]"
               >
-                <MessageCircle className="w-4 h-4 mr-2" />
+                <Image
+                  src="/icons/chat.png"
+                  alt="Chat"
+                  width={256}
+                  height={256}
+                  className="w-[18.44px] h-[17.44px] mr-[10px]"
+                />
                 Chat with seller
               </Button>
             ) : (
@@ -220,10 +226,16 @@ export default function Listing({ product }: ProductDetailsProps) {
             {/* Contact Button */}
             <Button
               variant="default"
-              className="bg-[#111111] hover:bg-black text-white rounded-none h-12 text-sm font-medium"
+              className="bg-[#111111] hover:bg-black text-white rounded-none h-12 text-sm font-medium leading-[20px] tracking-[-0.15px]"
               onClick={() => setShowPhone(!showPhone)}
             >
-              <Phone className="w-4 h-4 mr-2" />
+               <Image
+                  src="/icons/phone.png"
+                  alt="Phone"
+                  width={256}
+                  height={256}
+                  className="w-[18.44px] h-[17px] mr-[10px]"
+                />
               {showPhone ? product.user?.phoneNumber || "No Number" : "Contact details"}
             </Button>
           </div>
@@ -242,7 +254,7 @@ export default function Listing({ product }: ProductDetailsProps) {
           {/* Wishlist Button */}
           <Button
             variant="outline"
-            className="w-full rounded-none border-[3px] border-[#E9A426] text-yellow-600 text-sm hover:bg-yellow-50 hover:text-yellow-700 h-12 font-medium"
+            className="w-full rounded-none border-[3px] border-[#E9A426] text-yellow-600 text-sm hover:text-yellow-700 h-12 font-medium"
           >
             Wishlist now
           </Button>

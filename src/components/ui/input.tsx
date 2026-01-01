@@ -41,8 +41,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       ) : null
 
     const baseClasses = cn(
-      `file:text-foreground bg-white rounded-lg placeholder:text-muted-foreground mt-1`,
-      "dark:bg-input/30 border-input flex h-[40px] w-full border pl-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none",
+      `file:text-foreground bg-white placeholder:text-muted-foreground mt-1`,
+      "dark:bg-input/30 border-[#C7CBD2] flex h-[40px] w-full border-[2px] pl-3 h-[48px] text-sm shadow-xs transition-[color,box-shadow] outline-none",
       "file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium",
       "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
       "focus-visible:ring-[1px] focus-visible:ring-gray-500 focus-visible:border-gray-500",

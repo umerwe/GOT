@@ -182,11 +182,11 @@ export function AdForm({
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         <div>
-          <h3 className="text-lg font-semibold mb-4">Photos</h3>
-          <div className="p-6">
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+          <h4 className="text-[16px] h-[24px] mb-[2.5px]">Photos</h4>
+          <div className="">
+            <div className="border-2 border-gray-300 p-8 text-center">
               <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600 mb-2">Drag & drop images here</p>
+              <p className="text-black mb-2">Drag & drop images here</p>
               <p className="text-sm text-gray-500">Or click to upload (max 5 images)</p>
               <input
                 type="file"
@@ -201,7 +201,7 @@ export function AdForm({
                 <Button
                   type="button"
                   variant="outline"
-                  className="mt-4 bg-transparent cursor-pointer"
+                  className="mt-4 h-[40px] w-[120px] bg-transparent text-[#4A5565] cursor-pointer rounded-none text-sm"
                   onClick={() => document.getElementById("image-upload")?.click()}
                   disabled={isPending}
                 >
@@ -221,11 +221,11 @@ export function AdForm({
                     ),
                 )}
             </div>
-            <div className="flex space-x-2 mt-4">
+            <div className="flex space-x-2 mt-[12px]">
               {Array.from({ length: 5 }).map((_, index) => (
                 <div
                   key={index}
-                  className="w-16 h-16 bg-gray-200 rounded border-2 border-gray-300 flex items-center justify-center overflow-hidden relative"
+                  className="w-[58px] h-[58px] bg-gray-50 border-[2px] border-[#EAEEF5] flex items-center justify-center overflow-hidden relative"
                 >
                   {index < uploadedImages.length && (
                     <>
@@ -255,8 +255,8 @@ export function AdForm({
         </div>
 
         <div>
-          <h3 className="text-lg font-semibold mb-4">Product Details (Listing Information)</h3>
-          <div className="p-6 space-y-4">
+          <h2 className="text-[20px] font-semibold mb-[13.5px]">Product Details</h2>
+          <div className="space-y-[16.5px]">
             <Input
               id="title"
               label="Title"
@@ -276,7 +276,7 @@ export function AdForm({
               error={errors.brand_id?.message}
             />
 
-<SelectField
+            <SelectField
               id="category_id"
               label="Category"
               placeholder="Select a Category"
@@ -311,7 +311,7 @@ export function AdForm({
               <Textarea
                 id="description"
                 placeholder="Describe your item..."
-                className="bg-gray-100 min-h-[120px] mt-1"
+                className="min-h-[120px] mt-1 mb-[12px]"
                 {...register("description")}
                 disabled={isPending}
               />
@@ -425,8 +425,8 @@ export function AdForm({
         </div>
 
         <div>
-          <h3 className="text-lg font-semibold mb-4">Price & Location</h3>
-          <div className="p-6 space-y-4">
+          <h2 className="text-[20px] mb-[13.5]">Price & Location</h2>
+          <div className="space-y-[16.5px]">
             <Input
               id="price"
               label="Price"
@@ -436,13 +436,18 @@ export function AdForm({
               disabled={isPending}
             />
 
-            <LocationInput setValue={setValue} register={register} errors={errors} isPending={isPending} />
+            <LocationInput
+              setValue={setValue}
+              register={register}
+              errors={errors}
+              isPending={isPending}
+            />
           </div>
         </div>
 
         <div>
-          <div className="p-6">
-            <div className="flex items-center space-x-3 mt-4">
+          <div className="mt-[-10px]">
+            <div className="flex items-center space-x-3">
               <Checkbox
                 id="guidelines"
                 checked={guidelinesChecked}
@@ -453,7 +458,7 @@ export function AdForm({
                 I confirm that this ad follows the community&apos;s guidelines
               </Label>
             </div>
-            <div className="flex flex-col justify-center items-center gap-4 mt-6">
+            {/* <div className="flex flex-col justify-center items-center gap-4 mt-6">
               <Button
                 type="submit"
                 className="bg-solid hover:bg-hover text-black"
@@ -461,10 +466,7 @@ export function AdForm({
               >
                 {isPending ? "Submitting..." : "Submit Ad"}
               </Button>
-              <p className="text-xs text-gray-500 flex items-center">
-                ✓ Your ad is under review. We&apos;ll notify you when it&apos;s live!
-              </p>
-            </div>
+            </div> */}
           </div>
         </div>
       </form>

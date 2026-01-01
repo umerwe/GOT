@@ -129,50 +129,50 @@ const SkeletonLoader = ({ type, count = 4 }: SkeletonLoaderProps) => {
                     ))}
                 </div>
             )
-        case "list":
-            return (
-                <div className="w-full space-y-4 md:space-y-6">
-                    {Array.from({ length: count }).map((_, i) => (
-                        <div
-                            key={i}
-                            className="flex flex-col gap-4 p-4 border rounded-xl bg-white 
-                     md:grid md:grid-cols-12 md:gap-4 md:items-center md:p-0 md:border-none md:bg-transparent"
-                        >
-                            {/* 1. Ads Column (Image + Title/Price) */}
-                            <div className="flex items-center gap-4 col-span-12 md:col-span-4">
-                                <Skeleton className="w-16 h-16 md:w-12 md:h-12 rounded-lg flex-shrink-0" />
-                                <div className="space-y-2 w-full">
-                                    <Skeleton className="h-4 w-3/4 md:w-full" /> {/* Title */}
-                                    <Skeleton className="h-3 w-1/4 md:w-1/3" /> {/* Price */}
-                                </div>
-                            </div>
-
-                            {/* Mobile Divider (Optional, only shows on small screens) */}
-                            <div className="h-px bg-gray-100 w-full md:hidden" />
-
-                            <div className="grid grid-cols-2 md:contents">
-                                {/* 2. Category Column */}
-                                <div className="col-span-1 md:col-span-2 space-y-2">
-                                    <Skeleton className="h-4 w-20 md:w-24" /> {/* Category */}
-                                    <Skeleton className="h-3 w-12 md:w-16" /> {/* Subcategory */}
-                                </div>
-
-                                {/* 3. Status Column */}
-                                <div className="col-span-1 md:col-span-3 flex items-center gap-2 md:justify-start justify-end">
-                                    <Skeleton className="w-2 h-2 rounded-full" /> {/* Dot */}
-                                    <Skeleton className="h-4 w-16" /> {/* Status Text */}
-                                </div>
-                            </div>
-
-                            {/* 4. Actions Column */}
-                            <div className="col-span-12 md:col-span-3 flex items-center justify-between md:justify-end gap-2 pt-2 md:pt-0">
-                                <Skeleton className="h-9 w-full md:w-24 rounded-md" /> {/* Edit Button (Full width on mobile) */}
-                                <Skeleton className="h-9 w-9 rounded-md flex-shrink-0" /> {/* Kebab Menu */}
-                            </div>
+       case "list":
+    return (
+        <>
+            {Array.from({ length: count }).map((_, i) => (
+                <div
+                    key={i}
+                    className="grid grid-cols-1 sm:grid-cols-12 gap-4 p-4 items-center animate-pulse"
+                >
+                    {/* 1. Ads Column (Matches your first column exactly) */}
+                    <div className="col-span-1 sm:col-span-4 flex items-start sm:items-center gap-3">
+                        <Skeleton className="w-[60px] h-[60px] bg-gray-200 flex-shrink-0 rounded-none border border-gray-100" />
+                        <div className="min-w-0 space-y-1">
+                            <Skeleton className="h-[24px] w-[180px] bg-gray-200" /> {/* Title */}
+                            <Skeleton className="h-[20px] w-[80px] bg-gray-100" />  {/* Price */}
                         </div>
-                    ))}
+                    </div>
+
+                    {/* 2. Category Column (Matches pl-16 and -mt-2) */}
+                    <div className="col-span-1 sm:col-span-2 pl-16 sm:pl-0 -mt-2 sm:mt-0 space-y-1">
+                        <Skeleton className="h-[20px] w-[100px] bg-gray-200" />
+                        <Skeleton className="h-[20px] w-[60px] bg-gray-100" />
+                    </div>
+
+                    {/* 3. Ad Status Column */}
+                    <div className="col-span-1 sm:col-span-2 pl-16 sm:pl-0 -mt-2 sm:mt-0">
+                        <div className="flex items-center gap-2">
+                            <Skeleton className="w-2 h-2 rounded-full bg-gray-200" />
+                            <Skeleton className="h-[20px] w-[60px] bg-gray-100" />
+                        </div>
+                    </div>
+
+                    {/* 4. Actions Column (Matches Button width w-[138.96px]) */}
+                    <div className="col-span-1 sm:col-span-2 flex items-center gap-2">
+                        <Skeleton className="h-[32px] w-[138.96px] rounded-none bg-gray-200" />
+                    </div>
+
+                    {/* 5. More Icon Column */}
+                    <div className="col-span-1 sm:col-span-2 flex items-center justify-end">
+                        <Skeleton className="h-8 w-8 bg-gray-100 rounded-none" />
+                    </div>
                 </div>
-            );
+            ))}
+        </>
+    );
 
         case "profile":
             return (

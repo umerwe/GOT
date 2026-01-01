@@ -1,18 +1,41 @@
 import * as React from "react"
-
 import { cn } from "@/lib/utils"
+import { Label } from "@/components/ui/label"
 
-function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
-  return (
-    <textarea
-      data-slot="textarea"
-      className={cn(
-        "border-input placeholder:text-muted-foreground focus-visible:ring-solid aria-invalid:border-destructive dark:bg-input/30 flex field-sizing-content min-h-16 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[2px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-        className
-      )}
-      {...props}
-    />
-  )
+interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  label?: string
+  error?: string
 }
+
+const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ className, label, error, ...props }, ref) => {
+    return (
+      <div className="relative w-full">
+        {label && <Label htmlFor={props.id}>{label}</Label>}
+
+        <textarea
+          ref={ref}
+          className={cn(
+            // Matching border [2px] and color #C7CBD2 from Input
+            "flex min-h-[120px] w-full bg-white border-[#C7CBD2] border-[2px] px-3 py-3 text-sm shadow-xs outline-none transition-[color,box-shadow]",
+            "placeholder:text-muted-foreground mt-1",
+            // Matching the specific focus ring from your Input
+            "focus-visible:ring-[1px] focus-visible:ring-gray-500 focus-visible:border-gray-500",
+            // Error state
+            error && "border-destructive ring-destructive/20 dark:aria-invalid:ring-destructive/40",
+            // Disabled state
+            "disabled:cursor-not-allowed disabled:opacity-50",
+            className
+          )}
+          {...props}
+        />
+
+        {error && <p className="text-red-500 text-sm mt-1.5">{error}</p>}
+      </div>
+    )
+  }
+)
+
+Textarea.displayName = "Textarea"
 
 export { Textarea }

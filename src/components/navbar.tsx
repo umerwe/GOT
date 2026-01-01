@@ -27,6 +27,9 @@ const Navbar = () => {
   const isAds = pathname.startsWith("/ads");
   const isAdDetail = pathname.startsWith("/listing");
   const isAuthPage = pathname.startsWith("/auth");
+  const isPrivacyPolicy = pathname.startsWith("/privacy-policy");
+  const isTermsAndConditions = pathname.startsWith("/terms-and-conditions");
+
   const textColor = isHome ? "text-[#111111] sm:text-white" : "text-[#111111]";
 
 
@@ -40,7 +43,7 @@ const Navbar = () => {
   };
 
   function handleClick() {
-    return isAuth ? router.push("post-ad") : setShowLoginDialog(true);
+    return isAuth ? router.push("/post-ad") : setShowLoginDialog(true);
   }
 
   const closeMenu = () => setIsMenuOpen(false);
@@ -109,7 +112,7 @@ const Navbar = () => {
 
         {/* Center: NavLinks */}
         <div className="mt-[45.31px] mb-[31.48px]">
-          {(isAds || isAdDetail) && <NavLinks />}
+          {(isAds || isAdDetail || isPrivacyPolicy || isTermsAndConditions) && <NavLinks />}
         </div>
 
         {/* Right Side Actions - FIXED ALIGNMENT */}

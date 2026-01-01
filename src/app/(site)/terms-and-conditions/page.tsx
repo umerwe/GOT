@@ -11,7 +11,7 @@ const TermsAndCondition = () => {
 
   return (
     <>
-      <Container className="max-w-[1400px] mx-auto px-3 mt-4">
+      <Container className="sm:px-[70px] mt-4">
         <Breadcrumb
           items={[
             { title: "Home", href: "/" },
@@ -19,9 +19,9 @@ const TermsAndCondition = () => {
           ]}
         />
       </Container>
-      <Container className='mt-4 mb-16'>
+      <Container className='mt-4 mb-16 sm:px-[189px]'>
         <div
-          className="prose prose-lg max-w-5xl mx-auto text-gray-800 leading-relaxed bg-white rounded-xl"
+          className="prose prose-lg text-gray-800 leading-relaxed bg-white rounded-xl"
           dangerouslySetInnerHTML={{ __html: termsData }}
         />
       </Container>

@@ -6,7 +6,7 @@ import SearchBar from "./search-bar"
 
 const HeroSection = () => {
   return (
-   <div className="relative min-h-[520px] sm:min-h-[598px] flex items-center">
+   <div className="relative min-h-[598px] flex items-center">
 
   {/* Background */}
   <div className="absolute inset-0 w-full h-full overflow-hidden -z-10">

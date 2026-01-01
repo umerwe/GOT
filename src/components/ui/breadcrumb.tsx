@@ -24,10 +24,10 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
           return (
             <li key={index} className={isLast ? "text-solid" : ""}>
               {isLast ? (
-                <span>{capitalizeWords(item.title)}</span>
+                <span className="truncate">{capitalizeWords(item.title)}</span>
               ) : (
                 <div className="flex items-center">
-                  <Link href={item.href || "#"} className="text-gray-900 hover:underline">
+                  <Link href={item.href || "#"} className="text-gray-900 truncate hover:underline">
                     {capitalizeWords(item?.title)}
                   </Link>
                   <ChevronRight className="mx-2 text-[#0156FF] w-3 h-3" />

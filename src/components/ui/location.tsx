@@ -231,42 +231,44 @@ export function LocationInput({
 
   return (
     <>
-      <div className="relative">
+      <div className="w-full">
+        {/* Label matched to other components */}
         <Label htmlFor="address">Address</Label>
 
-        {/* Input + Button container */}
-        <div className="relative">
+        <div className="relative mt-1">
           <input
             id="address"
             ref={inputRef}
             type="text"
             placeholder="Enter location"
-            className="w-full text-sm py-2 px-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-solid bg-gray-100 mt-1"
+            disabled={isLoading || isPending}
             onChange={(e) => setLocation(e.target.value)}
             onKeyPress={handleKeyPress}
-            disabled={isLoading || isPending}
+            className="flex h-[48px] w-full border-[#C7CBD2] border-[2px] bg-white pl-3 pr-12 text-sm shadow-xs transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:ring-[1px] focus-visible:ring-gray-500 focus-visible:border-gray-500 disabled:cursor-not-allowed disabled:opacity-50"
           />
+
+          {/* Button positioned inside the 48px input */}
           <button
             type="button"
             onClick={handleSearchClick}
             disabled={isLoading || isPending}
-            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 pt-2 text-gray-500 hover:text-gray-700 disabled:opacity-50"
+            className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-gray-500 hover:text-gray-700 disabled:opacity-50 transition-colors"
           >
             {isLoading ? (
               <div className="animate-spin h-5 w-5 border-2 border-gray-300 border-t-gray-600 rounded-full"></div>
             ) : (
-              <Search className="w-4.5 h-4.5 text-gray-500" />
+              <Search className="w-5 h-5 text-gray-500" />
             )}
           </button>
         </div>
 
-        {/* Error below input */}
+        {/* Error message matched to text-sm and mt-1.5 */}
         {errors.address && (
-          <p className="text-red-500 text-xs mt-1">{errors.address.message}</p>
+          <p className="text-red-500 text-sm mt-1.5">{errors.address.message}</p>
         )}
       </div>
 
-      <div ref={mapRef} className="w-full h-64 rounded border bg-gray-100 mt-4">
+      <div ref={mapRef} className="w-full h-[346px] border bg-gray-100 mt-4">
         {!isMapReady && (
           <div className="flex items-center justify-center h-full text-gray-500">
             Loading map...
@@ -278,7 +280,7 @@ export function LocationInput({
         type="button"
         onClick={handleUseCurrentLocation}
         disabled={isLoading || isPending}
-        className="w-full bg-solid text-black p-2 rounded hover:bg-hover disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center mt-4"
+        className="w-full text-sm bg-black text-white h-[48px] font-normal hover:bg-gray-900 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center mt-[18px]"
       >
         {isLoading ? (
           <>
