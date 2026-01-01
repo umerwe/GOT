@@ -119,7 +119,7 @@ function genId() {
 // 🔹 Default styles for variants
 const TOAST_DEFAULTS = {
   default: {
-    className: "bg-solid text-white",
+    className: "bg-black text-white",
     duration: 3000,
   },
   destructive: {
