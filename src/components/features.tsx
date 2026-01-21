@@ -15,7 +15,10 @@ export default function Features() {
     const [sortBy, setSortBy] = useState("")
     const [limit, setLimit] = useState("4")
 
-    const { data, isLoading } = useGetProducts({})
+    const { data, isLoading } = useGetProducts({
+        type: "motor_bike",
+        per_page : 4
+    })
     const featuresData = data?.data || [];
 
     const processedProducts = useMemo(() => {

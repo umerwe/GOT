@@ -12,6 +12,7 @@ const AccessoriesSection = () => {
     const { data, isLoading } = useGetProducts({
         type: "accessories",
         page: page,
+        per_page : 8
     });
 
     const motorcyclesData = data?.data || [];

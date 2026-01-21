@@ -10,9 +10,10 @@ const TrendingBikes = () => {
   const [page, setPage] = useState(1);
 
   const { data, isLoading } = useGetProducts({
-    page: page
+    page: page,
+    per_page: 4
   });
-
+  
   const products = data?.data || [];
   const pagination = data?.pagination;
 
