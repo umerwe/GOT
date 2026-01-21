@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import Link from "next/link"
 import { useState, useCallback, useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -458,15 +459,25 @@ export function AdForm({
                 I confirm that this ad follows the community&apos;s guidelines
               </Label>
             </div>
-            {/* <div className="flex flex-col justify-center items-center gap-4 mt-6">
-              <Button
-                type="submit"
-                className="bg-solid hover:bg-hover text-black"
-                disabled={isPending || !guidelinesChecked}
-              >
-                {isPending ? "Submitting..." : "Submit Ad"}
-              </Button>
-            </div> */}
+            <div className="flex flex-col sm:flex-row items-center gap-4 mt-[50px]">
+              <Link href="/profile" className="w-full sm:flex-1">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full h-[48px] font-medium text-sm bg-transparent rounded-none"
+                >
+                  View Existing Ads
+                </Button>
+              </Link>
+
+                <Button
+                  type="submit"
+                  className="w-full sm:flex-1 bg-black hover:bg-black/80 text-white text-sm h-[48px] font-medium rounded-none"
+                  disabled={isPending || !guidelinesChecked}
+                >
+                  {isPending ? "Submitting..." : "Submit Ad"}
+                </Button>
+            </div>
           </div>
         </div>
       </form>
