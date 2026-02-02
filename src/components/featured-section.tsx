@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react"
 import { useGetProducts } from "@/hooks/useProduct"
-import LridCard from "./cards/list-card"
+import ListCard from "./cards/list-card"
 import {
     Select,
     SelectContent,
@@ -79,7 +79,7 @@ export default function Features() {
                 </div>
             </div>
 
-            <LridCard
+            <ListCard
                 products={processedProducts}
                 isLoading={isLoading}
             />

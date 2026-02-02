@@ -2,12 +2,12 @@
 import AccessoriesSection from "@/components/accessories-section";
 import AllMotorcyclesSection from "@/components/all-motorcycles-section";
 import BrandsSection from "@/components/brands-section";
-import CategoriesSection from "@/components/categories-section";
+import PopularCategoriesSection from "@/components/popular-categories-section";
 import Container from "@/components/container";
-import Features from "@/components/features";
+import FeaturedSection from "@/components/featured-section";
 import Footer from "@/components/footer";
 import HeroSection from "@/components/hero";
-import Products from "@/components/products";
+import FeaturedProductsSection from "@/components/featured-products-section";
 import { useHandleSessionAuth } from "@/hooks/useAuth";
 import { ExtendedSession } from "@/types/auth";
 import { useSession } from "next-auth/react";
@@ -27,12 +27,12 @@ export default function Home() {
     <div className="flex flex-col">
       <HeroSection />
       <Container className="space-y-[60px]">
-        <CategoriesSection />
-        <Products />
+        <PopularCategoriesSection />
+        <FeaturedProductsSection />
         <AccessoriesSection />
         <BrandsSection />
         <AllMotorcyclesSection />
-        <Features />
+        <FeaturedSection />
       </Container>
       <Footer />
     </div>

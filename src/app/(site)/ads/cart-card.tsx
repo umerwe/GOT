@@ -111,7 +111,7 @@ export default function CartCard({
             className="flex items-center gap-[10px] group"
           >
             <div className="w-8 h-8 rounded-full border-2 border-gray-400 flex items-center justify-center text-gray-400 group-hover:border-gray-500 group-hover:text-gray-500 transition-all">
-              <Heart size={16} className="stroke-3" />
+              <Heart size={17} className="stroke-3" />
             </div>
             <span className="text-sm font-semibold text-gray-900">
               Add to Wishlist

@@ -5,28 +5,20 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { capitalizeWords } from "@/utils/capitalizeWords"
 import SkeletonLoader from "@/common/skeleton-loader"
+import { getConditionLabel } from "@/utils/getConditionLabel"
 
-interface LridCardProps {
+interface ListCardProps {
     products: Product[]
     isLoading?: boolean
     count?: number
 }
 
-export default function LridCard({
+export default function ListCard({
     products,
     isLoading = false,
     count
-}: LridCardProps) {
+}: ListCardProps) {
     const router = useRouter()
-
-    const getConditionLabel = (cond: number | string | undefined) => {
-        if (!cond) return "N/A"
-        if (typeof cond === "string") return cond
-        if (cond >= 9) return "New"
-        if (cond >= 8) return "Excellent"
-        if (cond >= 6) return "Good"
-        return "Fair"
-    }
 
     if (isLoading) {
         return (
@@ -48,14 +40,11 @@ export default function LridCard({
                 <div
                     key={product.id}
                     onClick={() => router.push(`/listing/${product.id}`)}
-                    // MOBILE: Reduced padding | DESKTOP: Kept your exact pt-[21.22px] pb-[46.15px] px-[32px]
                     className="w-full  bg-white p-4 lg:pt-[21.22px] lg:pb-[41.78px] lg:px-[32px] border border-gray-200 hover:shadow-md transition-shadow cursor-pointer"
                 >
-                    {/* MOBILE: gap-6 | DESKTOP: gap-[80px] */}
                     <div className="flex flex-col lg:flex-row gap-6 lg:gap-[80px]">
-                        
+
                         {/* Image Section */}
-                        {/* MOBILE: w-full | DESKTOP: w-[189px] */}
                         <div className="w-full lg:w-[189px] flex-shrink-0">
                             {/* MOBILE: h-56 | DESKTOP: h-[121.34px] */}
                             <div className="relative h-56 lg:h-[122.63px] w-full overflow-hidden rounded-none">
@@ -70,7 +59,7 @@ export default function LridCard({
 
                         {/* Content Section */}
                         <div className="flex-1 flex flex-col space-y-3 lg:space-y-1 min-w-0">
-                            <div className="space-y-[10px]">
+                            <div className="space-y-[4px]">
                                 <Link
                                     href={`/listing/${product.id}`}
                                     className="block hover:text-blue-600 transition-colors"
@@ -96,7 +85,6 @@ export default function LridCard({
                         </div>
 
                         {/* Right Detail Section */}
-                        {/* MOBILE: w-full | DESKTOP: w-[224px] */}
                         <div className="w-full lg:w-[224px] flex-shrink-0 border-t border-gray-100 pt-4 lg:pt-0 lg:border-t-0 flex flex-col">
                             <div className="text-[12px] font-normal">
                                 <div className="flex justify-between h-[32px] items-center px-2">

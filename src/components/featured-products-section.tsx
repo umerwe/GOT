@@ -28,7 +28,7 @@ const TrendingBikes = () => {
   return (
     <div className="scroll-smooth border-b-3 border-[#EBEBEB] pb-[45px]">
       <div className="flex items-center justify-between mb-[10px]">
-        <h2>Featured Products</h2>
+        <h2>Featured Ads</h2>
         <div className="flex items-center gap-2">
 
           <Button

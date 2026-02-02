@@ -17,7 +17,7 @@ import NoListingsFound from "@/common/no-listing-found"
 import FilterSidebar from "@/components/ads/filter-sidebar"
 import PageHeader from "@/components/ads/page-header"
 import GridCard from "@/components/cards/grid-card"
-import LridCard from "@/components/cards/list-card"
+import ListCard from "@/components/cards/list-card"
 import { ChevronLeft, SlidersHorizontal, ChevronDownIcon } from "lucide-react"
 import { BiSolidGrid } from "react-icons/bi";
 import { BsFilterLeft } from "react-icons/bs";
@@ -332,7 +332,7 @@ export default function CategoryLayout() {
                   isAdsPage={true}
                 />
               ) : (
-                <LridCard
+                <ListCard
                   products={filteredProducts}
                   isLoading={isProductsLoading}
                   count={itemsPerPage}

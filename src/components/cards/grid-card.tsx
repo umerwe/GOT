@@ -6,6 +6,7 @@ import Image from "next/image"
 import Link from "next/link"
 import SkeletonLoader from "@/common/skeleton-loader"
 import NotFoundWrapper from "@/common/not-found"
+import { Heart } from "lucide-react"
 
 interface GridCardProps {
   isHome?: boolean
@@ -44,43 +45,58 @@ export default function GridCard({
                 height={200}
                 className="w-full h-[343px] object-cover"
               />
-              {/* <button
-                className="absolute top-2 right-2.5 bg-white/80 hover:bg-white p-2 rounded-full shadow-sm"
+              <button
+                className="absolute bottom-3 right-2.5 bg-white/80 hover:bg-white p-2 rounded-full shadow-sm"
                 onClick={(e) => {
                   e.preventDefault()
                 }}
               >
-                <Heart size={17} className="text-gray-600 hover:text-red-500" />
-              </button> */}
+                <Heart size={17} className="text-gray-500 hover:text-red-500" />
+              </button>
             </div>
 
             <CardContent className="pt-[17px] px-0">
-              <h1 className="text-[16px] truncate" title={product.title}>
-                {capitalizeWords(product.title)}
-              </h1>
+              <div className="flex justify-between items-start gap-2">
+                <div className="flex-1 min-w-0">
+                  <h1 className="text-base truncate font-medium" title={product.title}>
+                    {capitalizeWords(product.title)}
+                  </h1>
 
-              <div className="flex items-center flex-wrap gap-y-1 text-[14px] text-[#6A7282]">
-                <span className="text-gray-400">
-                  {product.manufacturing_year || "N/A"}
-                </span>
+                  <div className="flex items-center flex-wrap gap-y-1 text-sm text-[#6A7282] mt-0.5">
+                    <span className="text-gray-400">
+                      {product.manufacturing_year || "N/A"}
+                    </span>
 
-                <span className="text-gray-400 px-1">|</span>
+                    <span className="text-gray-400 px-1">|</span>
 
-                <span className="text-gray-400">
-                  {product.mileage ? `${product.mileage} ${product.mileage_unit || "km"}` : "0 km"}
-                </span>
+                    <span className="text-gray-400">
+                      {product.mileage ? `${product.mileage} ${product.mileage_unit || "km"}` : "0 km"}
+                    </span>
 
-                <span className="text-gray-400 px-1">|</span>
+                    <span className="text-gray-400 px-1">|</span>
 
-                <span className="text-gray-400">
-                  {product.engine_size ? capitalizeWords(product.engine_size) : "-"}
-                </span>
-              </div>
+                    <span className="text-gray-400">
+                      {product.engine_size ? capitalizeWords(product.engine_size) : "-"}
+                    </span>
+                  </div>
 
-              <div className="flex items-center justify-between mt-1.5">
-                <h2 className="text-[16px]">
-                  AED {product.price.toLocaleString()}
-                </h2>
+                  <h2 className="text-[16px] font-bold mt-1.5">
+                    AED {product.price.toLocaleString()}
+                  </h2>
+                </div>
+
+                {/* BRAND IMAGE ON RIGHT */}
+                {product.brand?.image && (
+                  <div className="flex-shrink-0">
+                    <Image
+                      src={product.brand.image}
+                      alt={product.brand.title || "Brand"}
+                      width={55}
+                      height={50}
+                      className="object-cover"
+                    />
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
