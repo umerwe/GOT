@@ -30,6 +30,9 @@ export default function Home() {
         <PopularCategoriesSection />
         <FeaturedProductsSection />
         <AccessoriesSection />
+        <AccessoriesSection
+          isSecond={true}
+        />
         <BrandsSection />
         <AllMotorcyclesSection />
         <FeaturedSection />

@@ -14,6 +14,7 @@ interface GridCardProps {
   products?: Product[]
   isLoading?: boolean
   count?: number
+  isSecond ?: boolean
 }
 
 export default function GridCard({
@@ -21,6 +22,7 @@ export default function GridCard({
   isLoading = false,
   count = 4,
   isAdsPage = false,
+  isSecond
 }: GridCardProps) {
   if (isLoading) {
     return <SkeletonLoader type="products" count={count} />
@@ -33,7 +35,7 @@ export default function GridCard({
   }
 
   return (
-    <div className={`grid grid-cols-2 sm:grid-cols-2  gap-[10px] ${isAdsPage ? 'md:grid-cols-3' : 'md:grid-cols-4'}`}>
+    <div className={`grid grid-cols-2 sm:grid-cols-2 gap-[10px] ${isAdsPage ? 'md:grid-cols-3' : 'md:grid-cols-4'}`}>
       {products.map((product) => (
         <Link key={product.id} href={`/listing/${product.id}`}>
           <Card className="overflow-hidden rounded-none shadow-none border-none cursor-pointer h-full">
@@ -55,7 +57,7 @@ export default function GridCard({
               </button>
             </div>
 
-            <CardContent className="pt-[17px] px-0">
+            <CardContent className="pt-[17px] px-0 bg-transparent">
               <div className="flex justify-between items-start gap-2">
                 <div className="flex-1 min-w-0">
                   <h1 className="text-base truncate font-medium" title={product.title}>
@@ -86,7 +88,7 @@ export default function GridCard({
                 </div>
 
                 {/* BRAND IMAGE ON RIGHT */}
-                {product.brand?.image && (
+                {(isSecond && product.brand?.image) && (
                   <div className="flex-shrink-0">
                     <Image
                       src={product.brand.image}

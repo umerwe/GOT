@@ -259,7 +259,7 @@ export default function Listing({ product }: ProductDetailsProps) {
           {/* Wishlist Button */}
           <Button
             variant="outline"
-            className="w-full rounded-none border-4 border-[#E9A426] text-[#E9A426] hover:bg-orange-50/30 hover:text-[#E9A426]/80 text-base h-[54px] font-bold"
+            className="w-full rounded-none border-3 border-[#E9A426] text-[#E9A426] hover:bg-orange-50/30 hover:text-[#E9A426]/80 text-base h-[54px] font-medium"
           >
             Wishlist now
           </Button>

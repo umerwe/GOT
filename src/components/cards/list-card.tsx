@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { capitalizeWords } from "@/utils/capitalizeWords"
 import SkeletonLoader from "@/common/skeleton-loader"
 import { getConditionLabel } from "@/utils/getConditionLabel"
+import { Heart } from "lucide-react"
 
 interface ListCardProps {
     products: Product[]
@@ -58,8 +59,8 @@ export default function ListCard({
                         </div>
 
                         {/* Content Section */}
-                        <div className="flex-1 flex flex-col space-y-3 lg:space-y-1 min-w-0">
-                            <div className="space-y-[4px]">
+                        <div className="flex-1 flex space-y-3 gap-[20px] lg:space-y-1 min-w-0 relative">
+                            <div className="space-y-[4px] max-w-[538px]">
                                 <Link
                                     href={`/listing/${product.id}`}
                                     className="block hover:text-blue-600 transition-colors"
@@ -75,13 +76,26 @@ export default function ListCard({
                                 <h4 className="text-[14px] text-[#111111] line-clamp-3">
                                     {product.description || "No description available for this bike."}
                                 </h4>
-                            </div>
-
-                            <div>
-                                <h2 className="text-[16px] font-semibold lg:font-normal">
+                                <h2 className="text-[16px] font-semibold lg:font-normal mt-[4px]">
                                     AED {product.price.toLocaleString()}
                                 </h2>
                             </div>
+
+                            
+
+                            {product.brand?.image && (
+                                <div className="flex-shrink-0 mt-[67px]">
+                                    <Image
+                                        src={product.brand.image}
+                                        alt={product.brand.title || "Brand"}
+                                        width={55}
+                                        height={50}
+                                        className="object-cover"
+                                    />
+                                </div>
+                            )}
+
+
                         </div>
 
                         {/* Right Detail Section */}
@@ -117,6 +131,33 @@ export default function ListCard({
                                     </span>
                                 </div>
                             </div>
+                        </div>
+
+                        <div className="relative">
+                            <div className="flex items-center gap-1.5 text-[10px] text-[#78A962]">
+                                <div className="bg-[#78A962] rounded-full w-[14px] h-[14px] flex items-center justify-center">
+                                    <svg
+                                        width="10"
+                                        height="10"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        className="text-white"
+                                    >
+                                        <polyline points="20 6 9 17 4 12" />
+                                    </svg>
+                                </div>
+                                <span>Verified</span>
+                            </div>
+
+                            <button className="flex items-center gap-[10px] group absolute -bottom-2 right-0">
+                                <div className="w-8 h-8 rounded-full border-2 border-gray-400 flex items-center justify-center text-gray-400 group-hover:border-gray-500 group-hover:text-gray-500 transition-all">
+                                    <Heart size={17} className="stroke-3" />
+                                </div>
+                            </button>
                         </div>
                     </div>
                 </div>
