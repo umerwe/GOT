@@ -59,7 +59,7 @@ export default function ListCard({
                         </div>
 
                         {/* Content Section */}
-                        <div className="flex-1 flex space-y-3 gap-[20px] lg:space-y-1 min-w-0 relative">
+                        <div className="flex-1 flex justify-between md:justify-start space-y-3 gap-[20px] lg:space-y-1 min-w-0 relative">
                             <div className="space-y-[4px] max-w-[538px]">
                                 <Link
                                     href={`/listing/${product.id}`}
