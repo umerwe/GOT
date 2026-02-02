@@ -48,9 +48,6 @@ export default function CheckoutPage() {
                 </Container>
 
                 <Container className="pt-[28px] pb-[98px]">
-                    {/* Using flex instead of grid for rigid pixel-perfect widths. 
-                       490px + 380px + 30px gap = 900px total content width.
-                    */}
                     <div className="flex flex-col lg:flex-row gap-[30px] items-start justify-center">
                         
                         {/* Left: Payment Details - Locked to 490px */}

@@ -11,8 +11,8 @@ const OrderSummary = ({
             <div className="bg-[#F6F6F6] p-[20px] space-y-[20px]">
                 <h2 className="text-[20px] text-gray-900 pb-[10px] border-b border-gray-900">Order summary</h2>
 
-                <h1 className="text-sm text-gray-900">
-                    Sales tax will be calculated during checkout where applicable
+                <h1 className="text-sm text-gray-900 border-l-5 border-[#2D78CE] pl-[14px]">
+                    The sales tax is calculated when you select your shipping address at checkout.
                 </h1>
 
                 <div className="space-y-[20px]">

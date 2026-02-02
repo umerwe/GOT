@@ -1,7 +1,9 @@
 "use client";
 
-import { CreditCard, Landmark, Info } from "lucide-react";
+import { CreditCard, Landmark, ChevronDown } from "lucide-react";
 import Image from "next/image";
+import { Label } from "../ui/label";
+import { CiCreditCard1 } from "react-icons/ci";
 
 export default function PaymentForm() {
   return (
@@ -27,7 +29,7 @@ export default function PaymentForm() {
         {/* Form Fields */}
         <div className="space-y-[20px]">
           <div className="space-y-[20px]">
-            <label className="text-gray-500 font-medium mb-[5px]">Card number</label>
+            <Label>Card number</Label>
             <div className="relative">
               <input
                 type="text"
@@ -41,14 +43,14 @@ export default function PaymentForm() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-[20px]">
-              <label className="text-gray-500 font-medium mb-[5px]">Expiration date (MM/YY)</label>
+              <Label>Expiration date (MM/YY)</Label>
               <input type="text" className="w-full h-[54px] px-4 border border-gray-300" />
             </div>
             <div className="space-y-[20px]">
-              <label className="text-gray-500 font-medium mb-[5px]">Security code</label>
+              <Label>Security code</Label>
               <div className="relative">
                 <input type="text" className="w-full h-[54px] px-4 border border-gray-300" />
-                <Landmark className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300" size={20} />
+                <CiCreditCard1 className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500" size={28} />
               </div>
             </div>
           </div>
@@ -61,13 +63,18 @@ export default function PaymentForm() {
           <input
             type="email"
             placeholder="email@example.com"
-            className="w-full h-[54px] px-4 border border-gray-300"
+            className="w-full h-[54px] px-2.5 border text-gray-600 border-gray-300 font-medium placeholder:text-gray-500"
           />
 
           <div className="relative flex items-center border border-gray-300 h-[54px]">
             <div className="flex items-center gap-2 px-4 border-r border-gray-200 h-full">
-              <span className="text-lg">🇦🇪</span>
-              <span className="text-gray-400">▼</span>
+              <div className="w-4.5 h-3 relative overflow-hidden rounded-[2px] shadow-sm flex-shrink-0">
+                <div className="absolute left-0 top-0 bottom-0 w-[25%] bg-[#FF0000] z-10" />
+                <div className="absolute right-0 top-0 h-[33.33%] w-[75%] bg-[#00732F]" />
+                <div className="absolute right-0 top-[33.33%] h-[33.33%] w-[75%] bg-white" />
+                <div className="absolute right-0 bottom-0 h-[33.33%] w-[75%] bg-black" />
+              </div>
+              <ChevronDown className="w-4 h-4 text-gray-400" />
             </div>
             <input type="tel" className="flex-1 px-4 focus:outline-none" placeholder="+971 585300320" />
           </div>
@@ -76,16 +83,27 @@ export default function PaymentForm() {
             By selecting to save your info, you agree to create an account subject to Link's Terms and Privacy Policy.
           </p>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-[20px] ">
-              <label className="text-gray-500 font-medium mb-[5px]">Country</label>
-              <select className="w-full h-[54px] px-4 border border-gray-300 appearance-none bg-white">
-                <option>United Arab Emirates</option>
-              </select>
+          {/* Form Fields - Country and Postal Code */}
+          <div className="grid grid-cols-[1.8fr_1fr] gap-4">
+            <div className="space-y-[10px]">
+              <Label>Country</Label>
+              <div className="relative">
+                <select className="w-full h-[54px] px-4 border border-gray-300 appearance-none bg-white focus:outline-none focus:border-gray-900">
+                  <option>United Arab Emirates</option>
+                </select>
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <ChevronDown className="w-4 h-4 text-gray-400" />
+                </div>
+              </div>
             </div>
-            <div className="space-y-[20px]">
-              <label className="text-gray-500 font-medium mb-[5px]">Postal Code</label>
-              <input type="text" placeholder="00000" className="w-full h-[54px] px-4 border border-gray-300" />
+
+            <div className="space-y-[10px]">
+              <Label>Postal Code</Label>
+              <input
+                type="text"
+                placeholder="00000"
+                className="w-full h-[54px] px-4 border border-gray-300 focus:outline-none focus:border-gray-900"
+              />
             </div>
           </div>
 

@@ -3,7 +3,7 @@
 import { useGetProducts } from '@/hooks/useProduct'
 import React, { useState } from 'react'
 import { Button } from '@/components/ui/button';
-import ProductCard from './ads/product-card';
+import GridCard from './cards/grid-card';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const AllMotorcyclesSection = () => {
@@ -53,7 +53,7 @@ const AllMotorcyclesSection = () => {
                     </div>
                 </div>
 
-                <ProductCard products={motorcyclesData} isLoading={isLoading} />
+                <GridCard products={motorcyclesData} isLoading={isLoading} />
         </div>
     )
 }

@@ -7,7 +7,7 @@ import Link from "next/link"
 import SkeletonLoader from "@/common/skeleton-loader"
 import NotFoundWrapper from "@/common/not-found"
 
-interface ProductCardProps {
+interface GridCardProps {
   isHome?: boolean
   isAdsPage?: boolean
   products?: Product[]
@@ -15,12 +15,12 @@ interface ProductCardProps {
   count?: number
 }
 
-export default function ProductCard({
+export default function GridCard({
   products = [],
   isLoading = false,
   count = 4,
   isAdsPage = false,
-}: ProductCardProps) {
+}: GridCardProps) {
   if (isLoading) {
     return <SkeletonLoader type="products" count={count} />
   }

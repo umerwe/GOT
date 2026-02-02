@@ -64,7 +64,7 @@ const SkeletonLoader = ({ type, count = 4 }: SkeletonLoaderProps) => {
                     {Array.from({ length: count }).map((_, index) => (
                         <div
                             key={index}
-                            // Matching exact padding and border of ProductCard2
+                            // Matching exact padding and border of LridCard
                             className="w-full bg-white pt-[21.22px] pb-[46.15px] px-[32px] border border-gray-200 animate-pulse"
                         >
                             {/* Matching gap-[80px] used in the actual component */}

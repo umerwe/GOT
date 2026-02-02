@@ -9,13 +9,18 @@ import { useAppSelector } from "@/store/hooks"
 import { useRouter } from "next/navigation"
 import {
   MapPin,
-  MessageCircle,
   Phone,
   AlertCircle,
   ChevronLeft,
-  ChevronRight
-} from "lucide-react"
+  ChevronRight,
+  Heart,
+  Lock,
+  Flame
+} from "lucide-react";
+import { BsChatDotsFill } from "react-icons/bs";
+
 import { cn } from "@/lib/utils"
+import FeaturesSection from "./listing/features-section"
 
 interface ProductDetailsProps {
   product: Product
@@ -122,7 +127,9 @@ export default function Listing({ product }: ProductDetailsProps) {
             </div>
           </div>
 
-          {/* Specs Grid (Replicating the bottom grid in image) */}
+          <FeaturesSection />
+
+          {/* Specs Grid */}
           <div className="border-2 border-gray-200 rounded-none p-6 bg-white">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-y-6 gap-x-4">
               <SpecBox label="Usage" value={product.usage ? capitalizeWords(product.usage) : "-"} />
@@ -151,113 +158,127 @@ export default function Listing({ product }: ProductDetailsProps) {
         {/* --- RIGHT COLUMN: Details & Actions --- */}
         <div className="lg:col-span-1 space-y-[10px] sm:px-[24px]">
 
-          {/* Title Header */}
-          <div className="space-y-[10px]">
-            {/* <div className="flex gap-2 mb-2">
-              <span className="bg-yellow-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wide">
+          {/* Popularity Badge */}
+          <div className="flex items-center gap-1.5 text-[#636E7E] text-sm">
+            <Flame size={16} className="text-[#FF7A00]" />
+            <span>Popular: Recently 66 wishlisted this item</span>
+          </div>
+
+          {/* Tags & Wishlist Icon */}
+          <div className="flex justify-between items-center py-[5px]">
+            <div className="flex gap-2">
+              <span className="bg-[#E9A426] text-[#111111] px-3 h-[22px] flex items-center justify-center text-xs rounded">
                 Featured
               </span>
-              <span className="bg-gray-200 text-gray-700 text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wide">
+
+              <span className="bg-[#E9A426] text-[#111111] px-3 h-[22px] flex items-center justify-center text-xs rounded">
                 Verified
               </span>
-            </div> */}
+            </div>
 
-            <h3 className="text-[18px] w-[199px] leading-[24px] tracking-[-0.31px]">
+            <button
+              className="flex items-center gap-[10px] group"
+            >
+              <div className="w-8 h-8 rounded-full border-2 border-gray-400 flex items-center justify-center text-gray-400 group-hover:border-gray-500 group-hover:text-gray-500 transition-all">
+                <Heart size={16} className="stroke-3" />
+              </div>
+            </button>
+          </div>
+
+          {/* Title Header */}
+          <div className="space-y-[6px]">
+            <h3 className="text-[22px] font-bold leading-[1.2] tracking-tight text-[#111111]">
               {capitalizeWords(product?.title)}
             </h3>
 
-            <div className="text-sm text-gray-500 flex flex-wrap gap-x-2">
+            <div className="text-[13px] text-[#636E7E] flex flex-wrap gap-x-2">
               <span>{product.brand?.title || "None"}</span>
               <span>•</span>
-              <span>{product.category?.title || "None"}</span>
+              <span>{product.condition || "Good condition"}</span>
+              <span>•</span>
+              <span>GCC Specs</span>
             </div>
 
-            <div className="flex gap-2 text-gray-500 text-sm">
-              <MapPin className="w-5 h-5" />
+            <div className="flex gap-1.5 text-[#636E7E] text-sm items-start">
+              <MapPin className="w-4 h-4 mt-1" />
               <span>{product.address || "Location not specified"}</span>
             </div>
           </div>
 
           {/* Price */}
-          <div className="border-t pt-[10px]">
-            <h1 className="text-[18px]">
+          <div className="flex justify-between items-baseline border-t border-gray-100 pt-[15px]">
+            <h1 className="text-[24px] font-bold text-[#111111]">
               AED {product.price.toLocaleString()}
             </h1>
+            <span className="text-[#C17C00] font-medium text-sm cursor-pointer underline underline-offset-2">Need financing?</span>
           </div>
 
           {/* Seller Info */}
-          <div className="flex items-center justify-between">
-            <div className="text-sm">
-              <span className="text-[#000000] font-semibold">Seller</span>
-              <span className="ml-1 text-[#000000] underline cursor-pointer">
-                @{product.user?.name}
-              </span>
-            </div>
-            {/* {product.user?.profile_image && (
-              <div className="w-10 h-10 relative rounded-full overflow-hidden bg-gray-100">
-                <Image src={product.user.profile_image} alt="Seller" fill className="object-cover" />
-              </div>
-            )} */}
+          <div className="text-[15px]">
+            <span className="text-[#111111] font-semibold">Seller </span>
+            <span className="text-[#111111] underline cursor-pointer font-medium">
+              @{product.user?.name}
+            </span>
           </div>
 
           {/* Action Buttons */}
           <div className="grid grid-cols-2 gap-3">
-            {/* Chat Button */}
             {Number(userId) !== product.user?.id ? (
               <Button
                 onClick={handleChatClick}
-                className="bg-[#111111] hover:bg-black text-white rounded-none h-12 text-sm font-medium leading-[20px] tracking-[-0.15px]"
+                className="bg-[#111111] hover:bg-black text-white rounded-none h-[54px] text-sm font-medium"
               >
-                <Image
-                  src="/icons/chat.png"
-                  alt="Chat"
-                  width={256}
-                  height={256}
-                  className="w-[18.44px] h-[17.44px] mr-[10px]"
-                />
+                <BsChatDotsFill className="w-[18.5px] h-[17px]" />
                 Chat with seller
               </Button>
             ) : (
-              <Button disabled className="h-12 bg-gray-200 text-gray-500">
+              <Button disabled className="h-[54px] bg-gray-200 text-gray-500 rounded-none">
                 Your Listing
               </Button>
             )}
 
-            {/* Contact Button */}
             <Button
               variant="default"
-              className="bg-[#111111] hover:bg-black text-white rounded-none h-12 text-sm font-medium leading-[20px] tracking-[-0.15px]"
+              className="bg-[#111111] hover:bg-black text-white rounded-none h-[54px] text-sm font-medium"
               onClick={() => setShowPhone(!showPhone)}
             >
-               <Image
-                  src="/icons/phone.png"
-                  alt="Phone"
-                  width={256}
-                  height={256}
-                  className="w-[18.44px] h-[17px] mr-[10px]"
-                />
+              <Phone size={20} className="mr-2" fill="white" />
               {showPhone ? product.user?.phoneNumber || "No Number" : "Contact details"}
             </Button>
           </div>
 
           {/* Safety Note */}
-          <div className="flex items-center gap-2 text-[12px] font-normal text-[#6A7282] border-b pb-[10px]">
-            <AlertCircle className="w-3 h-3 md:w-4 md:h-4 text-solid" />
-            <span className="cursor-pointer">
+          <div className="flex items-center gap-2 text-[13px] text-[#636E7E] border-b border-gray-100 pb-[15px]">
+            <AlertCircle size={16} className="text-[#E9A426]" />
+            <span>
               Learn more about our{" "}
-              <span className="hover:text-solid underline underline-offset-2">
-                Safety Policy
-              </span>
+              <span className="underline cursor-pointer">Safety Policy</span>
             </span>
           </div>
 
           {/* Wishlist Button */}
           <Button
             variant="outline"
-            className="w-full rounded-none border-[3px] border-[#E9A426] text-yellow-600 text-sm hover:text-yellow-700 h-12 font-medium"
+            className="w-full rounded-none border-4 border-[#E9A426] text-[#E9A426] hover:bg-orange-50/30 hover:text-[#E9A426]/80 text-base h-[54px] font-bold"
           >
             Wishlist now
           </Button>
+
+          {/* Finance Section */}
+          <Image
+            src="/details-banner1.png"
+            alt="Finance Banner"
+            width={400}
+            height={80}
+          />
+
+          {/* Advertisement Space */}
+          <Image
+            src="/details-banner2.png"
+            alt="Advertisement Banner"
+            width={400}
+            height={80}
+          />
         </div>
       </div>
 
@@ -269,14 +290,14 @@ export default function Listing({ product }: ProductDetailsProps) {
     </div>
   )
 }
-function SpecBox({ label, value }: { label: string; value?: string | number | null }) {
 
+function SpecBox({ label, value }: { label: string; value?: string | number | null }) {
   return (
     <div className="flex flex-col gap-1">
-      <span className="text-xs font-normal text-gray-500 tracking-wide">
+      <span className="text-xs font-normal text-gray-500 tracking-wide uppercase">
         {label}
       </span>
-      <h1 className="text-[16px] text-[#111111] truncate">
+      <h1 className="text-[16px] font-semibold text-[#111111] truncate">
         {value || "-"}
       </h1>
     </div>

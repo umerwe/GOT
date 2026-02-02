@@ -6,17 +6,17 @@ import { useRouter } from "next/navigation"
 import { capitalizeWords } from "@/utils/capitalizeWords"
 import SkeletonLoader from "@/common/skeleton-loader"
 
-interface ProductCardProps {
+interface LridCardProps {
     products: Product[]
     isLoading?: boolean
     count?: number
 }
 
-export default function ProductCard2({
+export default function LridCard({
     products,
     isLoading = false,
     count
-}: ProductCardProps) {
+}: LridCardProps) {
     const router = useRouter()
 
     const getConditionLabel = (cond: number | string | undefined) => {

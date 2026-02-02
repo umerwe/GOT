@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useGetProducts } from "@/hooks/useProduct";
-import ProductCard from "./ads/product-card";
+import GridCard from "./cards/grid-card";
 
 const TrendingBikes = () => {
   const [page, setPage] = useState(1);
@@ -53,7 +53,7 @@ const TrendingBikes = () => {
         </div>
       </div>
 
-      <ProductCard products={products} isLoading={isLoading} />
+      <GridCard products={products} isLoading={isLoading} />
     </div>
   );
 };
