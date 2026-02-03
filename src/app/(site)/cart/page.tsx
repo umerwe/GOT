@@ -56,7 +56,7 @@ export default function CartPage() {
 
   return (
     <>
-      <div className="lg:pl-[72px] lg:pr-[72px]">
+      <div className="w-full lg:px-[72px] ">
         <Container className="mt-[17px]">
           <Breadcrumb
             items={[
@@ -66,10 +66,11 @@ export default function CartPage() {
           />
         </Container>
 
-        <Container className="pt-[48px] pb-[98px] xl:pl-[80px] px-0">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Cart Items */}
-            <div className="lg:col-span-2">
+        <Container className="pt-[48px] pb-[98px]">
+          <div className="grid grid-cols-1 lg:grid-cols-[715px_380px] gap-[30px] justify-center">
+            
+            {/* Left Section: Cart Items */}
+            <div className="w-full lg:max-w-[715px]">
               <div className="bg-white rounded-lg">
                 <div className="flex justify-between items-center mb-[30px] py-[20px] border-b border-gray-900">
                   <h1 className="text-3xl font-semibold text-gray-900">Your cart</h1>
@@ -90,10 +91,13 @@ export default function CartPage() {
               </div>
             </div>
 
-            <OrderSummary
-              cartItems={cartItems}
-              subtotal={subtotal}
-            />
+            {/* Right Section: Order Summary */}
+            <div className="w-full lg:max-w-[380px]">
+              <OrderSummary
+                cartItems={cartItems}
+                subtotal={subtotal}
+              />
+            </div>
           </div>
         </Container>
       </div>

@@ -12,12 +12,14 @@ interface ListCardProps {
     products: Product[]
     isLoading?: boolean
     count?: number
+    isHome?: boolean
 }
 
 export default function ListCard({
     products,
     isLoading = false,
-    count
+    count,
+    isHome = true
 }: ListCardProps) {
     const router = useRouter()
 
@@ -36,18 +38,17 @@ export default function ListCard({
     const displayData = count ? products.slice(0, count) : products
 
     return (
-        <div className="px-2 mb-[60px] sm:px-4 lg:px-0 flex flex-col">
+        <div className="px-2 sm:px-4 lg:px-0 flex flex-col">
             {displayData.map((product) => (
                 <div
                     key={product.id}
                     onClick={() => router.push(`/listing/${product.id}`)}
                     className="w-full  bg-white p-4 lg:pt-[21.22px] lg:pb-[41.78px] lg:px-[32px] border border-gray-200 hover:shadow-md transition-shadow cursor-pointer"
                 >
-                    <div className="flex flex-col lg:flex-row gap-6 lg:gap-[80px]">
+                    <div className={`flex flex-col lg:flex-row gap-6 ${isHome ? "lg:gap-[80px]" : "lg:gap-[18px]"}`}>
 
                         {/* Image Section */}
                         <div className="w-full lg:w-[189px] flex-shrink-0">
-                            {/* MOBILE: h-56 | DESKTOP: h-[121.34px] */}
                             <div className="relative h-56 lg:h-[122.63px] w-full overflow-hidden rounded-none">
                                 <Image
                                     src={product.product_images?.[0] as string}
@@ -60,7 +61,7 @@ export default function ListCard({
 
                         {/* Content Section */}
                         <div className="flex-1 flex justify-between md:justify-start space-y-3 gap-[20px] lg:space-y-1 min-w-0 relative">
-                            <div className="space-y-[4px] max-w-[538px]">
+                            <div className={`space-y-[4px] ${isHome ? "max-w-[538px]" : "w-full"}`}>
                                 <Link
                                     href={`/listing/${product.id}`}
                                     className="block hover:text-blue-600 transition-colors"
@@ -81,9 +82,9 @@ export default function ListCard({
                                 </h2>
                             </div>
 
-                            
 
-                            {product.brand?.image && (
+
+                            {(isHome && product.brand?.image) && (
                                 <div className="flex-shrink-0 mt-[67px]">
                                     <Image
                                         src={product.brand.image}
@@ -134,31 +135,42 @@ export default function ListCard({
                         </div>
 
                         <div className="relative">
-                            <div className="flex items-center gap-1.5 text-[10px] text-[#78A962]">
-                                <div className="bg-[#78A962] rounded-full w-[14px] h-[14px] flex items-center justify-center">
-                                    <svg
-                                        width="10"
-                                        height="10"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        className="text-white"
-                                    >
-                                        <polyline points="20 6 9 17 4 12" />
-                                    </svg>
+                            {
+                                isHome &&
+                                <div className="flex items-center gap-1.5 text-[10px] text-[#78A962]">
+                                    <div className="bg-[#78A962] rounded-full w-[14px] h-[14px] flex items-center justify-center">
+                                        <svg
+                                            width="10"
+                                            height="10"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            className="text-white"
+                                        >
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg>
+                                    </div>
+                                    <span>Verified</span>
+                                    <button className="flex items-center gap-[10px] group absolute -bottom-2 right-0">
+                                        <div className="w-8 h-8 rounded-full border-2 border-gray-400 flex items-center justify-center text-gray-400 group-hover:border-gray-500 group-hover:text-gray-500 transition-all">
+                                            <Heart size={17} className="stroke-3" />
+                                        </div>
+                                    </button>
                                 </div>
-                                <span>Verified</span>
-                            </div>
 
-                            <button className="flex items-center gap-[10px] group absolute -bottom-2 right-0">
+                            }
+                        </div>
+                        {
+                            !isHome &&
+                            <button className="flex items-baseline-last gap-[10px] group">
                                 <div className="w-8 h-8 rounded-full border-2 border-gray-400 flex items-center justify-center text-gray-400 group-hover:border-gray-500 group-hover:text-gray-500 transition-all">
                                     <Heart size={17} className="stroke-3" />
                                 </div>
                             </button>
-                        </div>
+                        }
                     </div>
                 </div>
             ))}

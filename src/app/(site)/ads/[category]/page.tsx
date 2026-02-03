@@ -18,10 +18,13 @@ import FilterSidebar from "@/components/ads/filter-sidebar"
 import PageHeader from "@/components/ads/page-header"
 import GridCard from "@/components/cards/grid-card"
 import ListCard from "@/components/cards/list-card"
-import { ChevronLeft, SlidersHorizontal, ChevronDownIcon } from "lucide-react"
+import { ChevronLeft, SlidersHorizontal, ChevronDownIcon, Star } from "lucide-react"
 import { BiSolidGrid } from "react-icons/bi";
 import { BsFilterLeft } from "react-icons/bs";
 import { sellerData } from "@/constants/category"
+import Image from 'next/image';
+import { FiMapPin } from "react-icons/fi";
+import Link from 'next/link'
 
 export default function CategoryLayout() {
   const { category } = useParams()
@@ -69,7 +72,7 @@ export default function CategoryLayout() {
   const { data: productsResponse, isLoading: isProductsLoading } = useGetProducts({
     ...appliedFilters,
     page: currentPage,
-    per_page: itemsPerPage
+    per_page: viewMode === "grid" ? 6 : 4
   })
 
   const products = useMemo(() => productsResponse?.data ?? [], [productsResponse])
@@ -324,19 +327,237 @@ export default function CategoryLayout() {
           {!isNotFound ? (
             <>
               {viewMode === 'grid' ? (
-                <GridCard
-                  products={filteredProducts}
-                  isHome={false}
-                  isLoading={isProductsLoading}
-                  count={itemsPerPage}
-                  isAdsPage={true}
-                />
+                <div className="bg-white space-y-[30px]">
+                  <div className='bg-[#F5F5F5] pt-[19px] px-[20px] pb-[30px] rounded-none'>
+                    <Link
+                      href="/seller"
+                      className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-[23px]">
+                      <div className="flex items-center gap-3">
+                        <div className="relative">
+                          <Image
+                            src="/moto-mania.png"
+                            alt="MotoMania"
+                            width={56}
+                            height={50}
+                            className="rounded-full object-contain"
+                          />
+                          <div className="absolute bottom-1 right-0 bg-[#E9A426] rounded-full p-0.5">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                          </div>
+                        </div>
+                        <div>
+                          <h1 className="text-lg text-[#111111]">MotoMania</h1>
+                          <p className="text-[#636E7E] text-sm">Premier distributor of motorbike parts and accessories in the UAE.</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-1 text-sm text-[#111111]">
+                          <div className="bg-black text-white w-[22px] h-[22px] rounded-[60px] flex items-center justify-center">
+                            <FiMapPin size={11} />
+                          </div>
+                          <span>UAE, Dubai</span>
+                        </div>
+
+                        <div className="flex items-center gap-2 bg-[#E9A426] px-3 h-[30px] rounded-full">
+                          <div className="bg-[#111111] rounded-full p-0.5">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#E9A426]"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                          </div>
+                          <span className="text-xs font-medium text-[#111111] pt-0.5">Verified Seller</span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-[#111111]">4.5 rating</span>
+                          <div className="flex">
+                            {[...Array(4)].map((_, i) => (
+                              <Star key={i} size={20} fill="#E9A426" className="text-[#E9A426]" />
+                            ))}
+                            <Star size={20} className="text-[#E9A426]" />
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                    <GridCard
+                      products={filteredProducts}
+                      isHome={false}
+                      isLoading={isProductsLoading}
+                      count={8}
+                      isAdsPage={true}
+                    />
+                  </div>
+                  <div className='bg-[#F5F5F5] pt-[19px] px-[20px] pb-[30px] rounded-none'>
+                    <Link
+                      href="/seller"
+                      className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-[23px]">
+                      <div className="flex items-center gap-3">
+                        <div className="relative">
+                          <Image
+                            src="/moto-hub.png"
+                            alt="MotoHub"
+                            width={56}
+                            height={50}
+                            className="rounded-full object-contain"
+                          />
+                          <div className="absolute bottom-1 right-0 bg-[#E9A426] rounded-full p-0.5">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                          </div>
+                        </div>
+                        <div>
+                          <h1 className="text-lg text-[#111111]">MotoHub</h1>
+                          <p className="text-[#636E7E] text-sm">Premier motorcycle parts, accessories, and repair hub in Dubai.</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-1 text-sm text-[#111111]">
+                          <div className="bg-black text-white w-[22px] h-[22px] rounded-[60px] flex items-center justify-center">
+                            <FiMapPin size={11} />
+                          </div>
+                          <span>UAE, Dubai</span>
+                        </div>
+
+                        <div className="flex items-center gap-2 bg-[#E9A426] px-3 h-[30px] rounded-full">
+                          <div className="bg-[#111111] rounded-full p-0.5">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#E9A426]"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                          </div>
+                          <span className="text-xs font-medium text-[#111111] pt-0.5">Verified Seller</span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-[#111111]">4.5 rating</span>
+                          <div className="flex">
+                            {[...Array(4)].map((_, i) => (
+                              <Star key={i} size={20} fill="#E9A426" className="text-[#E9A426]" />
+                            ))}
+                            <Star size={20} className="text-[#E9A426]" />
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                    <GridCard
+                      products={filteredProducts}
+                      isHome={false}
+                      isLoading={isProductsLoading}
+                      count={8}
+                      isAdsPage={true}
+                    />
+                  </div>
+                </div>
               ) : (
-                <ListCard
-                  products={filteredProducts}
-                  isLoading={isProductsLoading}
-                  count={itemsPerPage}
-                />
+                <div className="bg-white space-y-[20px]">
+                  <div className='bg-[#F5F5F5] pt-[19px] px-[20px] pb-[30px] rounded-none'>
+                    <Link
+                      href="/seller"
+                      className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-[23px]">
+                      <div className="flex items-center gap-3">
+                        <div className="relative">
+                          <Image
+                            src="/moto-mania.png"
+                            alt="MotoMania"
+                            width={56}
+                            height={50}
+                            className="rounded-full object-contain"
+                          />
+                          <div className="absolute bottom-1 right-0 bg-[#E9A426] rounded-full p-0.5">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                          </div>
+                        </div>
+                        <div>
+                          <h1 className="text-lg text-[#111111]">MotoMania</h1>
+                          <p className="text-[#636E7E] text-sm">Premier distributor of motorbike parts and accessories in the UAE.</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-1 text-sm text-[#111111]">
+                          <div className="bg-black text-white w-[22px] h-[22px] rounded-[60px] flex items-center justify-center">
+                            <FiMapPin size={11} />
+                          </div>
+                          <span>UAE, Dubai</span>
+                        </div>
+
+                        <div className="flex items-center gap-2 bg-[#E9A426] px-3 h-[30px] rounded-full">
+                          <div className="bg-[#111111] rounded-full p-0.5">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#E9A426]"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                          </div>
+                          <span className="text-xs font-medium text-[#111111] pt-0.5">Verified Seller</span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-[#111111]">4.5 rating</span>
+                          <div className="flex">
+                            {[...Array(4)].map((_, i) => (
+                              <Star key={i} size={20} fill="#E9A426" className="text-[#E9A426]" />
+                            ))}
+                            <Star size={20} className="text-[#E9A426]" />
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                    <ListCard
+                      products={filteredProducts}
+                      isLoading={isProductsLoading}
+                      count={4}
+                      isHome={false}
+                    />
+                  </div>
+                  <div className='bg-[#F5F5F5] pt-[19px] px-[20px] pb-[30px] rounded-none'>
+                    <Link
+                      href="/seller"
+                      className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-[23px]">
+                      <div className="flex items-center gap-3">
+                        <div className="relative">
+                          <Image
+                            src="/moto-hub.png"
+                            alt="MotoHub"
+                            width={56}
+                            height={50}
+                            className="rounded-full object-contain"
+                          />
+                          <div className="absolute bottom-1 right-0 bg-[#E9A426] rounded-full p-0.5">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                          </div>
+                        </div>
+                        <div>
+                          <h1 className="text-lg text-[#111111]">MotoHub</h1>
+                          <p className="text-[#636E7E] text-sm">Premier motorcycle parts, accessories, and repair hub in Dubai.</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-1 text-sm text-[#111111]">
+                          <div className="bg-black text-white w-[22px] h-[22px] rounded-[60px] flex items-center justify-center">
+                            <FiMapPin size={11} />
+                          </div>
+                          <span>UAE, Dubai</span>
+                        </div>
+
+                        <div className="flex items-center gap-2 bg-[#E9A426] px-3 h-[30px] rounded-full">
+                          <div className="bg-[#111111] rounded-full p-0.5">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#E9A426]"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                          </div>
+                          <span className="text-xs font-medium text-[#111111] pt-0.5">Verified Seller</span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-[#111111]">4.5 rating</span>
+                          <div className="flex">
+                            {[...Array(4)].map((_, i) => (
+                              <Star key={i} size={20} fill="#E9A426" className="text-[#E9A426]" />
+                            ))}
+                            <Star size={20} className="text-[#E9A426]" />
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                    <ListCard
+                      products={filteredProducts}
+                      isLoading={isProductsLoading}
+                      count={4}
+                      isHome={false}
+                    />
+                  </div>
+                </div>
               )}
 
               <Pagination

@@ -26,7 +26,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       <HeroSection />
-      <Container className="space-y-[60px]">
+      <Container className="space-y-[60px] mb-[60px]">
         <PopularCategoriesSection />
         <FeaturedProductsSection />
         <AccessoriesSection />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Bell, Menu, X, Heart } from "lucide-react";
+import { Bell, Menu, X, Heart, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { useAppSelector } from "@/store/hooks";
 import { usePathname, useRouter } from "next/navigation";
@@ -70,6 +70,10 @@ const Navbar = () => {
         <div className="absolute right-0 top-[33.33%] h-[33.33%] w-[75%] bg-white" />
         <div className="absolute right-0 bottom-0 h-[33.33%] w-[75%] bg-black" />
       </div>
+
+      <Link href="/cart" className="hover:opacity-80 transition-opacity flex-shrink-0">
+        <ShoppingCart className={cn("w-[19.5px] h-[19.5px] stroke-[2.5]", textColor)} />
+      </Link>
 
       <Link href="#" className="hover:opacity-80 transition-opacity flex-shrink-0">
         <Heart className={cn("w-[19.5px] h-[19.5px] stroke-[2.5]", textColor)} />

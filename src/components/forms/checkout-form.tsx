@@ -80,7 +80,7 @@ export default function PaymentForm() {
           </div>
 
           <p className="text-gray-400 text-sm leading-relaxed">
-            By selecting to save your info, you agree to create an account subject to Link's Terms and Privacy Policy.
+            By selecting to save your info, you agree to create an account subject to Link&apos;s Terms and Privacy Policy.
           </p>
 
           {/* Form Fields - Country and Postal Code */}

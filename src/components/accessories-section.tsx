@@ -7,6 +7,7 @@ import GridCard from './cards/grid-card';
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import Image from 'next/image';
 import { FiMapPin } from "react-icons/fi";
+import Link from 'next/link';
 
 
 const AccessoriesSection = ({ isSecond }: { isSecond?: boolean }) => {
@@ -18,7 +19,7 @@ const AccessoriesSection = ({ isSecond }: { isSecond?: boolean }) => {
         per_page: 4
     });
 
-    const motorcyclesData = data?.data || [];
+    const accessoriesData = data?.data || [];
     const pagination = data?.pagination;
 
     const handlePaginate = (dir: number) => {
@@ -55,7 +56,9 @@ const AccessoriesSection = ({ isSecond }: { isSecond?: boolean }) => {
 
             <div className='bg-[#F5F5F5] pt-[19px] px-[14px] pb-[30px] rounded-none'>
                 {/* Seller Info Bar */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-[23px]">
+                <Link
+                    href="/seller"
+                    className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-[23px]">
                     <div className="flex items-center gap-3">
                         <div className="relative">
                             <Image
@@ -94,17 +97,17 @@ const AccessoriesSection = ({ isSecond }: { isSecond?: boolean }) => {
                             <span className="text-sm font-medium text-[#111111]">4.5 rating</span>
                             <div className="flex">
                                 {[...Array(4)].map((_, i) => (
-                                    <Star key={i} size={14} fill="#E9A426" className="text-[#E9A426]" />
+                                    <Star key={i} size={20} fill="#E9A426" className="text-[#E9A426]" />
                                 ))}
-                                <Star size={14} className="text-[#E9A426]" />
+                                <Star size={20} className="text-[#E9A426]" />
                             </div>
                         </div>
                     </div>
-                </div>
+                </Link>
 
                 {/* Grid Content */}
                 <div className="md:grid-cols-5">
-                    <GridCard products={motorcyclesData} isLoading={isLoading} isSecond={isSecond} />
+                    <GridCard products={accessoriesData} isLoading={isLoading} isSecond={isSecond} />
                 </div>
             </div>
         </div>

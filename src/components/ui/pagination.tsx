@@ -45,7 +45,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange, filt
         size="icon"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="h-8 w-8 rounded-md transition-all duration-200 hover:scale-105"
+        className="h-8 w-8 rounded-full border-[#A2A6B0] transition-all duration-200 hover:scale-105"
         aria-label="Previous page"
       >
         <ChevronLeft className="h-4 w-4" />
@@ -58,7 +58,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange, filt
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 cursor-default hover:bg-transparent"
+                className="h-8 w-8 cursor-default pt-2 hover:bg-transparent bg-transparent"
                 disabled
               >
                 <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
@@ -68,9 +68,9 @@ export default function Pagination({ currentPage, totalPages, onPageChange, filt
                 variant={currentPage === page ? "default" : "outline"}
                 size="icon"
                 onClick={() => onPageChange(page as number)}
-                className={`h-8 w-8 rounded-md text-sm font-medium transition-all duration-200 ${currentPage === page
-                  ? "scale-105 shadow-sm"
-                  : "hover:scale-105 hover:bg-accent"}`}
+                className={`text-sm font-medium transition-all duration-200 ${currentPage === page
+                  ? "scale-105 shadow-sm bg-[#F5F7FF] text-black hover:bg-gray-200 hover:text-black rounded-full"
+                  : "hover:scale-105 hover:bg-gray-200 rounded-[50px] h-[32px] w-[39px] border-[#A2A6B0]"}`}
                 aria-label={currentPage === page ? `Current page, page ${page}` : `Go to page ${page}`}
                 aria-current={currentPage === page ? "page" : undefined}
               >
@@ -86,7 +86,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange, filt
         size="icon"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="h-8 w-8 rounded-md transition-all duration-200 hover:scale-105"
+        className="h-8 w-8 rounded-full border-[#A2A6B0] transition-all duration-200 hover:scale-105"
         aria-label="Next page"
       >
         <ChevronRight className="h-4 w-4" />

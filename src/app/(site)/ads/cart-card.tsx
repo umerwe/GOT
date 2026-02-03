@@ -33,18 +33,19 @@ export default function CartCard({
   };
 
   return (
-    <div className="relative flex w-full gap-[30px] py-[20px] pr-[20px] border-b border-gray-100 bg-white">
-      {/* Remove Button - Top Right */}
+    <div className="relative flex flex-col sm:flex-row w-full gap-5 sm:gap-[30px] py-5 pr-0 sm:pr-5 border-b border-gray-100 bg-white">
+      {/* Remove Button - Positioned consistently on both mobile/desktop */}
       <button
         onClick={() => onRemove?.(id)}
-        className="absolute right-5 top-5 text-gray-800 hover:text-black transition-colors"
+        className="absolute right-2 top-7 sm:right-5 sm:top-5 text-white sm:text-gray-800 hover:text-black transition-colors z-10"
       >
         <X size={24} strokeWidth={1.5} />
       </button>
 
-      {/* Left: Brand + Product Image Container */}
-      <div className="flex flex-col gap-2 flex-shrink-0" style={{ width: '196px' }}>
-        <div className="relative overflow-hidden" style={{ width: '196px', height: '141px' }}>
+      {/* Left: Product Image Container */}
+      <div className="flex flex-col gap-2 flex-shrink-0 w-full sm:w-[196px]">
+        {/* Responsive sizing: Full width on mobile, 196x141 on desktop */}
+        <div className="relative overflow-hidden w-full h-[200px] sm:w-[196px] sm:h-[141px]">
           <Image
             src={image}
             alt={name}
@@ -56,15 +57,15 @@ export default function CartCard({
       </div>
 
       {/* Right: Content Section */}
-      <div className="flex flex-1 flex-col justify-between py-1">
+      <div className="flex flex-1 flex-col justify-between py-1 px-2 sm:px-0">
         <div className="space-y-[10px]">
-          <h3 className="text-lg font-bold text-gray-900 leading-tight">
+          <h3 className="text-lg font-bold text-gray-900 leading-tight max-w-[90%] sm:max-w-none">
             {name}
           </h3>
 
           {/* Details/Metadata */}
           {details && (
-            <div className="flex items-center text-sm text-gray-600">
+            <div className="flex flex-wrap items-center text-sm text-gray-600 gap-y-1">
               {details.map((detail, index) => (
                 <h4 key={index} className="flex items-center">
                   {detail}
@@ -78,14 +79,14 @@ export default function CartCard({
 
           {/* Price */}
           <div>
-            <h2 className="text-sm">
+            <h2 className="text-sm font-semibold">
               AED {price.toLocaleString()}
             </h2>
           </div>
         </div>
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-between mt-6">
+        <div className="flex flex-wrap items-center justify-between mt-6 gap-4">
           {/* Quantity Selector */}
           <div className="flex items-center">
             <button
