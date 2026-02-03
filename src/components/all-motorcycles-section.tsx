@@ -53,7 +53,7 @@ const AllMotorcyclesSection = () => {
                     </div>
                 </div>
 
-                <GridCard products={motorcyclesData} isLoading={isLoading} />
+                <GridCard products={motorcyclesData} isLoading={isLoading} isSecond={true} />
         </div>
     )
 }

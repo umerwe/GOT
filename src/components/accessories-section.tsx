@@ -10,7 +10,7 @@ import { FiMapPin } from "react-icons/fi";
 import Link from 'next/link';
 
 
-const AccessoriesSection = ({ isSecond }: { isSecond?: boolean }) => {
+const AccessoriesSection = ({ isSecond, logo }: { isSecond?: boolean, logo?: boolean }) => {
     const [page, setPage] = useState(1);
 
     const { data, isLoading } = useGetProducts({
@@ -107,7 +107,7 @@ const AccessoriesSection = ({ isSecond }: { isSecond?: boolean }) => {
 
                 {/* Grid Content */}
                 <div className="md:grid-cols-5">
-                    <GridCard products={accessoriesData} isLoading={isLoading} isSecond={isSecond} />
+                    <GridCard products={accessoriesData} isLoading={isLoading} isSecond={logo } />
                 </div>
             </div>
         </div>

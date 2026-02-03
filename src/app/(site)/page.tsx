@@ -7,7 +7,7 @@ import Container from "@/components/container";
 import FeaturedSection from "@/components/featured-section";
 import Footer from "@/components/footer";
 import HeroSection from "@/components/hero";
-import FeaturedProductsSection from "@/components/featured-products-section";
+import FeauredAdsSection from "@/components/featured-ads-section";
 import { useHandleSessionAuth } from "@/hooks/useAuth";
 import { ExtendedSession } from "@/types/auth";
 import { useSession } from "next-auth/react";
@@ -28,8 +28,10 @@ export default function Home() {
       <HeroSection />
       <Container className="space-y-[60px] mb-[60px]">
         <PopularCategoriesSection />
-        <FeaturedProductsSection />
-        <AccessoriesSection />
+        <FeauredAdsSection />
+        <AccessoriesSection
+        logo={true}
+         />
         <AccessoriesSection
           isSecond={true}
         />

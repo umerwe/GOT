@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useGetProducts } from "@/hooks/useProduct";
 import GridCard from "./cards/grid-card";
 
-const TrendingBikes = () => {
+const FeauredAdsSection = () => {
   const [page, setPage] = useState(1);
 
   const { data, isLoading } = useGetProducts({
@@ -53,9 +53,9 @@ const TrendingBikes = () => {
         </div>
       </div>
 
-      <GridCard products={products} isLoading={isLoading} />
+      <GridCard products={products} isLoading={isLoading} isSecond={true} />
     </div>
   );
 };
 
-export default TrendingBikes;
+export default FeauredAdsSection;
