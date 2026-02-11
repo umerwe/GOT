@@ -2,7 +2,12 @@ import Image from "next/image";
 import { Star, Share2, Check } from "lucide-react";
 import { FiMapPin } from "react-icons/fi";
 
-export default function SellerHero() {
+interface HeroProps {
+  logo?: string;
+  name?: string;
+}
+
+export default function VendorHero({ logo, name }: HeroProps) {
   return (
     <div className="bg-white pt-12 pb-[30px] relative">
       <button className="absolute top-8 right-12 flex items-center gap-2 text-gray-500 text-sm hover:text-black transition-colors">
@@ -14,10 +19,10 @@ export default function SellerHero() {
         <div className="relative w-32 h-32 mb-[16px]">
           <div className="w-full h-full rounded-full overflow-hidden border border-gray-100">
             <Image
-              src="/moto-mania.png"
-              alt="MotoMania"
+              src={logo || ""}
+              alt={"VendorLogo"}
               fill
-              className="object-cover"
+              className="object-cover rounded-full"
             />
           </div>
 
@@ -30,7 +35,7 @@ export default function SellerHero() {
           </div>
         </div>
 
-        <h1 className="text-2xl font-bold text-[#111111] mb-[10px]">MotoMania</h1>
+        <h1 className="text-2xl font-bold text-[#111111] mb-[10px]">{name}</h1>
 
         {/* Badges */}
         <div className="flex items-center gap-3 mb-[10px]">

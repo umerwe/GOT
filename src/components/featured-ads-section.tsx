@@ -16,7 +16,7 @@ const FeauredAdsSection = () => {
   
   const products = data?.data || [];
   const pagination = data?.pagination;
-
+  
   const handlePaginate = (dir: number) => {
     setPage((prev) => prev + dir);
     document.getElementById("trending-section")?.scrollIntoView({

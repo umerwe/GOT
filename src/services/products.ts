@@ -10,6 +10,19 @@ export const getProducts = async (filters: ProductFilters = {}) => {
   return data
 }
 
+export const getVendorProducts = async (filters: ProductFilters = {}) => {
+  const { data } = await api.get("/vendor-products", {
+    params: {
+      ...filters
+    }
+  })
+  return data
+}
+export const getVendorProduct = async (id: string) => {
+  const { data } = await api.get(`/vendor-product-details/${id}`)
+  return data
+}
+
 
 export const getUserProducts = async (page: number, status?: string) => {
   const params = new URLSearchParams({

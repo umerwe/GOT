@@ -14,7 +14,8 @@ interface GridCardProps {
   products?: Product[]
   isLoading?: boolean
   count?: number
-  isSecond ?: boolean
+  isSecond?: boolean
+  vendorLogo?: string
 }
 
 export default function GridCard({
@@ -22,7 +23,8 @@ export default function GridCard({
   isLoading = false,
   count = 4,
   isAdsPage = false,
-  isSecond
+  isSecond,
+  vendorLogo
 }: GridCardProps) {
   if (isLoading) {
     return <SkeletonLoader type="products" count={count} />
@@ -30,7 +32,7 @@ export default function GridCard({
 
   if (!products || products.length === 0) {
     return (
-      <NotFoundWrapper className="mt-20" />
+      <NotFoundWrapper className="mt-[15px]" />
     )
   }
 
@@ -88,11 +90,11 @@ export default function GridCard({
                 </div>
 
                 {/* BRAND IMAGE ON RIGHT */}
-                {(isSecond && product.brand?.image) && (
+                {(vendorLogo) && (
                   <div className="flex-shrink-0">
                     <Image
-                      src={product.brand.image}
-                      alt={product.brand.title || "Brand"}
+                      src={vendorLogo}
+                      alt="Vendor"
                       width={55}
                       height={50}
                       className="object-cover"

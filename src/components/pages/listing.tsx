@@ -149,7 +149,7 @@ export default function Listing({ product }: ProductDetailsProps) {
           {/* Description */}
           <div className="space-y-[11px]">
             <h1 className="text-[18px]">Overview</h1>
-            <div className="text-gray-600 text-sm font-normal">
+            <div className="text-gray-600 text-sm font-normal first-letter:uppercase">
               {product.description}
             </div>
           </div>

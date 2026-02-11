@@ -13,7 +13,7 @@ export default function AuthEventsListener() {
   useEffect(() => {
     const handleUnauthorized = () => {
       dispatch(logout());
-      router.back()
+      // router.back()
     };
 
     window.addEventListener("unauthorized", handleUnauthorized);

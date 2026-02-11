@@ -7,6 +7,7 @@ import { capitalizeWords } from "@/utils/capitalizeWords"
 import SkeletonLoader from "@/common/skeleton-loader"
 import { getConditionLabel } from "@/utils/getConditionLabel"
 import { Heart } from "lucide-react"
+import NotFoundWrapper from "@/common/not-found"
 
 interface ListCardProps {
     products: Product[]
@@ -32,7 +33,7 @@ export default function ListCard({
     }
 
     if (!products || products.length === 0) {
-        return null
+        return <NotFoundWrapper className="mt-[15px]" />
     }
 
     const displayData = count ? products.slice(0, count) : products

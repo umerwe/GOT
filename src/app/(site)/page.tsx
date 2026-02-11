@@ -29,12 +29,7 @@ export default function Home() {
       <Container className="space-y-[60px] mb-[60px]">
         <PopularCategoriesSection />
         <FeauredAdsSection />
-        <AccessoriesSection
-        logo={true}
-         />
-        <AccessoriesSection
-          isSecond={true}
-        />
+        <AccessoriesSection />
         <BrandsSection />
         <AllMotorcyclesSection />
         <FeaturedSection />
