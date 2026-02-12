@@ -17,6 +17,7 @@ import {
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { IoCard } from "react-icons/io5";
+import { StripeElementChangeEvent } from "@stripe/stripe-js"; // Import this type
 
 // 1. Define Zod Schema
 const paymentSchema = z.object({
@@ -64,8 +65,10 @@ export default function PaymentForm() {
     },
   };
 
-  const handleStripeChange = (event: any, fieldName: string) => {
-    if (event.brand) setCardBrand(event.brand);
+  const handleStripeChange = (
+    event: StripeElementChangeEvent, 
+    fieldName: string
+  ) => {
     setStripeErrors((prev) => ({
       ...prev,
       [fieldName]: event.error ? event.error.message : "",
