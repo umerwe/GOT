@@ -25,6 +25,8 @@ import { sellerData } from "@/constants/category"
 import Image from 'next/image';
 import { FiMapPin } from "react-icons/fi";
 import Link from 'next/link'
+import { Vendor } from "@/types/vendor"
+
 
 export default function CategoryLayout() {
   const { category } = useParams()
@@ -213,7 +215,7 @@ export default function CategoryLayout() {
             </div>
           ) : !isNotFound ? (
             <div className="space-y-[30px]">
-              {vendors.map((vendor: any) => (
+              {vendors.map((vendor: Vendor) => (
                 <div key={vendor.id} className='bg-[#F5F5F5] pt-[19px] px-[20px] pb-[30px] rounded-none'>
 
                   <Link href={`/seller/${vendor.id}`} className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-[23px]">
@@ -245,9 +247,9 @@ export default function CategoryLayout() {
                   </Link>
 
                   {viewMode === 'grid' ? (
-                    <GridCard products={vendor.products} isLoading={false} count={8} isAdsPage={true} />
+                    <GridCard products={vendor.products as Product[]} isLoading={false} count={8} isAdsPage={true} />
                   ) : (
-                    <ListCard products={vendor.products} isLoading={false} count={4} />
+                    <ListCard products={vendor.products as Product[]} isLoading={false} count={4} />
                   )}
                 </div>
               ))}
