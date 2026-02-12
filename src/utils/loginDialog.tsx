@@ -27,11 +27,11 @@ export default function LoginDialog({
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex justify-end gap-3">
-          <Button variant="secondary" className="rounded-none" onClick={() => onOpenChange(false)}>
+          <Button variant="secondary" className="rounded-none " onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
           <Link href={redirectPath}>
-            <Button variant="default" className="text-black rounded-none">Login</Button>
+            <Button variant="default" className="text-white  rounded-none">Login</Button>
           </Link>
         </DialogFooter>
       </DialogContent>

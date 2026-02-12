@@ -11,13 +11,19 @@ export const getProducts = async (filters: ProductFilters = {}) => {
 }
 
 export const getVendorProducts = async (filters: ProductFilters = {}) => {
+  const cleanedFilters = {
+    ...filters,
+    min_price: filters.min_price === "0" ? null : filters.min_price,
+    max_price: filters.max_price === "0" ? null : filters.max_price,
+  };
+
   const { data } = await api.get("/vendor-products", {
-    params: {
-      ...filters
-    }
-  })
-  return data
+    params: cleanedFilters
+  });
+
+  return data;
 }
+
 export const getVendorProduct = async (id: string) => {
   const { data } = await api.get(`/vendor-product-details/${id}`)
   return data

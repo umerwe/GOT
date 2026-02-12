@@ -18,10 +18,20 @@ const Navbar = () => {
   const [showLoginDialog, setShowLoginDialog] = useState(false);
   const isAuth = useAppSelector((state) => state?.auth?.token);
   const configData = useAppSelector((state) => state.config.data);
+  const cartCount = useAppSelector((state) => state.cart.totalItems);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleCartClick = (e: React.MouseEvent) => {
+    if (!isAuth) {
+      e.preventDefault();
+      setShowLoginDialog(true);
+    } else {
+      router.push("/cart");
+    }
+  };
 
   const isHome = pathname === "/";
   const isAds = pathname.startsWith("/ads");
@@ -70,10 +80,20 @@ const Navbar = () => {
         <div className="absolute right-0 top-[33.33%] h-[33.33%] w-[75%] bg-white" />
         <div className="absolute right-0 bottom-0 h-[33.33%] w-[75%] bg-black" />
       </div>
-
-      <Link href="/cart" className="hover:opacity-80 transition-opacity flex-shrink-0">
+      <div
+        onClick={handleCartClick}
+        className="hover:opacity-80 transition-opacity flex-shrink-0 relative cursor-pointer"
+      >
         <ShoppingCart className={cn("w-[19.5px] h-[19.5px] stroke-[2.5]", textColor)} />
-      </Link>
+
+        {mounted && cartCount > 0 && (
+          <span className={cn(
+            "absolute -top-1.5 -right-2 bg-[#E9A426] text-black text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center",
+          )}>
+            {cartCount}
+          </span>
+        )}
+      </div>
 
       <Link href="#" className="hover:opacity-80 transition-opacity flex-shrink-0">
         <Heart className={cn("w-[19.5px] h-[19.5px] stroke-[2.5]", textColor)} />
@@ -106,7 +126,7 @@ const Navbar = () => {
                 width={256}
                 height={256}
                 alt="logo-img"
-                className={cn("object-contain", isHome ? "w-[144px] h-[134.39px]" : "w-[108px] h-[100.79px]")}
+                className={cn("object-contain -rotate-12", isHome ? "w-[144px] h-[134.39px]" : "w-[108px] h-[100.79px]")}
               />
             ) : (
               <div className={cn("bg-gray-200 animate-pulse rounded-md", isHome ? "w-[104px] h-[100.39px]" : "w-[108px] h-[100.79px]")} />
@@ -151,7 +171,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile View */}
-        <div className="flex sm:hidden items-center gap-4 my-auto h-[134.39px]">
+        <div className="flex sm:hidden items-center gap-4 my-auto md:h-[134.39px]">
           {mounted && isAuth && <UserMenu />}
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-1">
             {isMenuOpen ? <X className={`w-6 h-6 ${isHome ? "text-white" : "text-[#111111]"}`} /> : <Menu className={`w-6 h-6 ${isHome ? "text-white" : "text-[#111111]"}`} />}
@@ -181,7 +201,13 @@ const Navbar = () => {
           </div>
         </div>
       )}
+      <LoginDialog
+        open={showLoginDialog} 
+        onOpenChange={setShowLoginDialog} 
+        description="Please login to view your shopping cart items."
+      />
     </nav>
+    
   );
 };
 

@@ -5,6 +5,7 @@ import React from 'react'
 import Image from 'next/image'
 import { Brand } from '@/types/filters'
 import { motion } from 'framer-motion'
+import NotFoundWrapper from '@/common/not-found'
 
 const BrandsSection = () => {
   const { data, isLoading } = useGetBrands();
@@ -13,8 +14,8 @@ const BrandsSection = () => {
 
   return (
     <section className="bg-white border-b-3 border-[#EBEBEB] pb-[20px]">
-      <div className="flex items-center justify-between">
-        <h2>Brands</h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="font-bold">Brands</h2>
       </div>
 
       {isLoading ? (
@@ -26,6 +27,8 @@ const BrandsSection = () => {
             />
           ))}
         </div>
+      ) : data?.length === 0 ? (
+        <NotFoundWrapper />
       ) : (
         <div className="overflow-hidden whitespace-nowrap">
           <motion.div
@@ -47,6 +50,7 @@ const BrandsSection = () => {
                   alt={`Brand Logo ${index + 1}`}
                   fill
                   className="object-contain"
+                  sizes="129.78px"
                 />
               </div>
             ))}

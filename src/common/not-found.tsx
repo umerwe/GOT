@@ -9,7 +9,7 @@ interface NotFoundWrapperProps {
   className ?: string
 }
 
-export default function NotFoundWrapper({ itemName ,className = "min-h-screen"}: NotFoundWrapperProps) {
+export default function NotFoundWrapper({ itemName ,className = ""}: NotFoundWrapperProps) {
   const router = useRouter();
 
   return (

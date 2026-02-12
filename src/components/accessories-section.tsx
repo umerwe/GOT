@@ -97,18 +97,18 @@ const AccessoriesSection = () => {
                                     <div>
                                         <h1 className="text-lg font-bold text-[#111111]">{vendor.name}</h1>
                                         <p className="text-[#636E7E] text-sm max-w-[400px]">
-                                            Premier distributor of motorbike parts and accessories in the UAE.
+                                            {vendor.address}
                                         </p>
                                     </div>
                                 </div>
 
                                 <div className="flex items-center gap-4">
-                                    <div className="flex items-center gap-1 text-sm text-[#111111]">
+                                    {/* <div className="flex items-center gap-1 text-sm text-[#111111]">
                                         <div className="bg-black text-white w-[22px] h-[22px] rounded-full flex items-center justify-center">
                                             <FiMapPin size={11} />
                                         </div>
-                                        <span className="font-medium">UAE, Dubai</span>
-                                    </div>
+                                        <span className="font-medium max-w-[100px] truncate">{vendor.address}</span>
+                                    </div> */}
 
                                     <div className="flex items-center gap-2 bg-[#E9A426] px-3 h-[30px] rounded-full">
                                         <div className="bg-[#111111] rounded-full p-0.5">

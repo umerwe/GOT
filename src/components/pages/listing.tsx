@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { capitalizeWords } from "@/utils/capitalizeWords"
 import LoginDialog from "@/utils/loginDialog"
 import { useState } from "react"
-import { useAppSelector } from "@/store/hooks"
+import { useAppDispatch, useAppSelector } from "@/store/hooks"
 import { useRouter } from "next/navigation"
 import {
   MapPin,
@@ -14,19 +14,24 @@ import {
   ChevronLeft,
   ChevronRight,
   Heart,
-  Lock,
   Flame
 } from "lucide-react";
 import { BsChatDotsFill } from "react-icons/bs";
 
 import { cn } from "@/lib/utils"
 import FeaturesSection from "./listing/features-section"
+import { CartItem } from "@/types/cart"
+import { addToCart } from "@/store/slices/CartSlice"
+import { toast } from "../ui/toast"
+
 
 interface ProductDetailsProps {
   product: Product
 }
 
 export default function Listing({ product }: ProductDetailsProps) {
+  const dispatch = useAppDispatch();
+  const cartItems = useAppSelector((state) => state.cart.items); // Accessing current cart items
   const [activeImage, setActiveImage] = useState<string | null>(
     product?.product_images?.[0] ?? null
   )
@@ -34,7 +39,7 @@ export default function Listing({ product }: ProductDetailsProps) {
   const [showPhone, setShowPhone] = useState(false)
 
   const { token, userId } = useAppSelector((state) => state?.auth)
-  const router = useRouter()
+  const router = useRouter();
 
   const handleChatClick = () => {
     if (!token) {
@@ -56,6 +61,24 @@ export default function Listing({ product }: ProductDetailsProps) {
     router.push(`/chat/${product?.user?.id}`)
   }
 
+  const handleContactClick = () => {
+    const phoneNumber = product.seller?.phoneNumber;
+
+    if (!phoneNumber) {
+      toast({
+        title: "Number not available",
+        description: "The seller has not provided a contact number.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Clean the phone number (remove +, spaces, dashes)
+    const cleanNumber = phoneNumber.replace(/\D/g, "");
+
+    // Open WhatsApp in a new tab
+    window.open(`https://wa.me/${cleanNumber}`, "_blank");
+  };
   const handleNextImage = () => {
     if (!product.product_images) return
     const currentIndex = product.product_images.indexOf(activeImage || "")
@@ -71,6 +94,57 @@ export default function Listing({ product }: ProductDetailsProps) {
       product.product_images.length
     setActiveImage(product.product_images[prevIndex])
   }
+
+  const handleAddToCart = () => {
+    if (!token) {
+      setShowLoginDialog(true)
+      return
+    }
+    const currentVendorId = product.seller?.id || 0;
+
+    // 1. Check for Duplicate Items
+    const isDuplicate = cartItems.some(item => item.id === product.id);
+    if (isDuplicate) {
+      toast({
+        title: "Already in Cart",
+        description: "This item is already in your cart.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // 2. Check for Different Vendor
+    const hasDifferentVendor = cartItems.length > 0 && cartItems.some(item => item.vendor !== currentVendorId);
+    if (hasDifferentVendor) {
+      toast({
+        title: "Vendor Mismatch",
+        description: "You can only add items from the same vendor to one order. Please clear your cart first.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // 3. Prepare Item and Add to Cart
+    const item: CartItem = {
+      id: product.id || 0,
+      name: product.title,
+      price: product.price,
+      image: product.product_images?.[0] || "/placeholder.svg",
+      quantity: 1,
+      vendor: currentVendorId,
+      details: [
+        product.manufacturing_year,
+        product.engine_size,
+        product.usage
+      ].filter(Boolean) as string[],
+    };
+
+    dispatch(addToCart(item));
+    toast({
+      title: "Item added to cart successfully.",
+    });
+    router.push("/cart");
+  };
 
   return (
     <div>
@@ -214,36 +288,41 @@ export default function Listing({ product }: ProductDetailsProps) {
           </div>
 
           {/* Seller Info */}
-          <div className="text-[15px]">
-            <span className="text-[#111111] font-semibold">Seller </span>
-            <span className="text-[#111111] underline cursor-pointer font-medium">
-              @{product.user?.name}
-            </span>
+          <div className="text-sm flex items-center justify-between">
+            <div>
+              <span className="text-[#111111] font-semibold">Seller: </span>
+              <span className="text-[#111111] font-semibold cursor-pointe">
+                {product.seller?.name}
+              </span>
+            </div>
+            <Image
+              src={product.seller?.profile_image || ""}
+              alt={product.seller?.name || ""}
+              width={55}
+              height={50}
+              className=""
+            />
           </div>
 
           {/* Action Buttons */}
-          <div className="grid grid-cols-2 gap-3">
-            {Number(userId) !== product.user?.id ? (
+          <div className={`grid ${product?.seller?.user_type !== "vendor" ? "grid-cols-2" : "grid-cols-1"} gap-3`}>
+            {product?.seller?.user_type !== "vendor" && (
               <Button
                 onClick={handleChatClick}
-                className="bg-[#111111] hover:bg-black text-white rounded-none h-[54px] text-sm font-medium"
+                className="bg-[#111111] hover:bg-black text-white rounded-none h-[54px] text-sm font-medium w-full"
               >
-                <BsChatDotsFill className="w-[18.5px] h-[17px]" />
+                <BsChatDotsFill className="w-[18.5px] h-[17px] mr-2" />
                 Chat with seller
-              </Button>
-            ) : (
-              <Button disabled className="h-[54px] bg-gray-200 text-gray-500 rounded-none">
-                Your Listing
               </Button>
             )}
 
             <Button
               variant="default"
-              className="bg-[#111111] hover:bg-black text-white rounded-none h-[54px] text-sm font-medium"
-              onClick={() => setShowPhone(!showPhone)}
+              className="bg-[#111111] hover:bg-black text-white rounded-none h-[54px] text-sm font-medium w-full"
+              onClick={handleContactClick}
             >
               <Phone size={20} className="mr-2" fill="white" />
-              {showPhone ? product.user?.phoneNumber || "No Number" : "Contact details"}
+              Contact details
             </Button>
           </div>
 
@@ -257,12 +336,16 @@ export default function Listing({ product }: ProductDetailsProps) {
           </div>
 
           {/* Wishlist Button */}
-          <Button
-            variant="outline"
-            className="w-full rounded-none border-3 border-[#E9A426] text-[#E9A426] hover:bg-orange-50/30 hover:text-[#E9A426]/80 text-base h-[54px] font-medium"
-          >
-            Wishlist now
-          </Button>
+          {
+            product.seller?.user_type === "vendor" &&
+            <Button
+              variant="outline"
+              onClick={handleAddToCart}
+              className="w-full cursor-pointer rounded-none border-3 border-[#E9A426] text-[#E9A426] hover:bg-orange-50/30 hover:text-[#E9A426]/80 text-base h-[54px] font-medium"
+            >
+              Add to Cart
+            </Button>
+          }
 
           {/* Finance Section */}
           <Image
@@ -270,6 +353,7 @@ export default function Listing({ product }: ProductDetailsProps) {
             alt="Finance Banner"
             width={400}
             height={80}
+            className="w-full"
           />
 
           {/* Advertisement Space */}
@@ -278,6 +362,7 @@ export default function Listing({ product }: ProductDetailsProps) {
             alt="Advertisement Banner"
             width={400}
             height={80}
+            className="w-full"
           />
         </div>
       </div>

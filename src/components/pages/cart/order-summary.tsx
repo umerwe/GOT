@@ -1,11 +1,28 @@
+"use client";
+
 import { OrderSummaryProps } from "@/types/cart";
 import PaymentMethods from "./paymentMethod";
-import Link from "next/link"
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useAppSelector } from "@/store/hooks";
+import LoginDialog from "@/utils/loginDialog";
 
 const OrderSummary = ({
     cartItems,
     subtotal,
 }: OrderSummaryProps) => {
+    const router = useRouter();
+    const [showLoginDialog, setShowLoginDialog] = useState(false);
+    const isAuth = useAppSelector((state) => state?.auth?.token);
+
+    const handleCheckout = (e: React.MouseEvent) => {
+        if (!isAuth) {
+            e.preventDefault(); // Stop the Link navigation
+            setShowLoginDialog(true);
+        }
+    };
+
     return (
         <div className="lg:col-span-1">
             <div className="bg-[#F6F6F6] p-[20px] space-y-[20px]">
@@ -33,8 +50,9 @@ const OrderSummary = ({
                     </div>
                 </div>
 
-                <Link   
+                <Link
                     href="/checkout"
+                    onClick={handleCheckout}
                 >
                     <button
                         className="w-full bg-[#F2A416] hover:bg-[#e0941a] text-black h-[50px] text-sm font-semibold transition-colors">
@@ -43,6 +61,12 @@ const OrderSummary = ({
                 </Link>
             </div>
             <PaymentMethods />
+
+            <LoginDialog
+                open={showLoginDialog}
+                onOpenChange={setShowLoginDialog}
+                description="Please login to your account to proceed with the checkout."
+            />
         </div>
     )
 }

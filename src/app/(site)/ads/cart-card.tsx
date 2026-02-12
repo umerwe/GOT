@@ -4,15 +4,15 @@ import { Heart, X, Minus, Plus } from "lucide-react";
 import Image from "next/image";
 
 interface CartCardProps {
-  id: string;
+  id: number;
   name: string;
   price: number;
   image: string;
   quantity: number;
   details?: string[];
-  onQuantityChange?: (id: string, quantity: number) => void;
-  onRemove?: (id: string) => void;
-  onAddToWishlist?: (id: string) => void;
+  onQuantityChange?: (id: number, quantity: number) => void;
+  onRemove?: (id: number) => void;
+  onAddToWishlist?: (id: number) => void;
 }
 
 export default function CartCard({

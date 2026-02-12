@@ -1,54 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import { removeFromCart, updateQuantity } from "@/store/slices/CartSlice";
 import CartCard from "../ads/cart-card";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import Container from "@/components/container";
 import OrderSummary from "@/components/pages/cart/order-summary";
-import { CartItem } from "@/types/cart";
 import Footer from "@/components/footer";
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      id: "1",
-      name: "Honda CRF450X",
-      price: 46827,
-      image: "/bike-1.jpg",
-      quantity: 1,
-      details: ["2024", "500 miles", "450 CC"],
-    },
-    {
-      id: "2",
-      name: "KTM 500 EXC F",
-      price: 46000,
-      image: "/bike-parts.png",
-      quantity: 1,
-      details: ["2024", "300 miles", "500 CC"],
-    },
-    {
-      id: "3",
-      name: "Alpinestars SM5 Corp",
-      price: 1022,
-      image: "/accessories.png",
-      quantity: 1,
-      details: ["M", "Helmet"],
-    },
-  ]);
+  const cartItems = useAppSelector((state) => state.cart.items);
+  const dispatch = useAppDispatch();
 
-  const handleQuantityChange = (id: string, quantity: number) => {
-    setCartItems(items =>
-      items.map(item =>
-        item.id === id ? { ...item, quantity } : item
-      )
-    );
+  const handleQuantityChange = (id: number, quantity: number) => {
+    dispatch(updateQuantity({ id, quantity }));
   };
 
-  const handleRemove = (id: string) => {
-    setCartItems(items => items.filter(item => item.id !== id));
+  const handleRemove = (id: number) => {
+    dispatch(removeFromCart(id));
   };
 
-  const handleAddToWishlist = (id: string) => {
+  const handleAddToWishlist = (id: number) => {
     console.log("Added to wishlist:", id);
   };
 
@@ -68,8 +40,7 @@ export default function CartPage() {
 
         <Container className="pt-[48px] pb-[98px]">
           <div className="grid grid-cols-1 lg:grid-cols-[715px_380px] gap-[30px] justify-center">
-            
-            {/* Left Section: Cart Items */}
+
             <div className="w-full lg:max-w-[715px]">
               <div className="bg-white rounded-lg">
                 <div className="flex justify-between items-center mb-[30px] py-[20px] border-b border-gray-900">
@@ -78,20 +49,25 @@ export default function CartPage() {
                 </div>
 
                 <div className="space-y-4">
-                  {cartItems.map(item => (
-                    <CartCard
-                      key={item.id}
-                      {...item}
-                      onQuantityChange={handleQuantityChange}
-                      onRemove={handleRemove}
-                      onAddToWishlist={handleAddToWishlist}
-                    />
-                  ))}
+                  {cartItems.length > 0 ? (
+                    cartItems.map(item => (
+                      <CartCard
+                        key={item.id}
+                        {...item}
+                        onQuantityChange={handleQuantityChange}
+                        onRemove={handleRemove}
+                        onAddToWishlist={handleAddToWishlist}
+                      />
+                    ))
+                  ) : (
+                    <div className="py-10 text-center text-gray-500">
+                      Your cart is empty.
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
 
-            {/* Right Section: Order Summary */}
             <div className="w-full lg:max-w-[380px]">
               <OrderSummary
                 cartItems={cartItems}

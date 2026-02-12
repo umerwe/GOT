@@ -12,6 +12,7 @@ import { useQueryClient } from "@tanstack/react-query"
 
 const menuItems = [
   { title: "Dashboard", icon: User, href: "/dashboard" },
+  { title: "My Orders", icon: User, href: "/dashboard/my-orders" },
   {
     title: "My Ads",
     icon: FileText,

@@ -14,7 +14,13 @@ interface Product {
   title: string;
   description?: string;
   product_images?: string[];
-
+  seller ?: {
+    id : number;
+    name : string;
+    user_type : string;
+    profile_image : string;
+    phoneNumber ?: string;
+  }
   price: number;
 
   status?: "pending" | "approved" | "rejected" | "expired";

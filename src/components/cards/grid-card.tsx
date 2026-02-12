@@ -23,7 +23,6 @@ export default function GridCard({
   isLoading = false,
   count = 4,
   isAdsPage = false,
-  isSecond,
   vendorLogo
 }: GridCardProps) {
   if (isLoading) {

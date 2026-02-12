@@ -115,12 +115,6 @@ export default function ProfilePage() {
                                             <div className="flex flex-col space-y-[20px] text-sm">
                                                 <p className="text-[#A2A6B0] text-xs">Upload jpg/png, maximum 1024 wide</p>
                                                 <div className="flex space-x-4">
-                                                    <button
-                                                        onClick={handleRemoveImage}
-                                                        className="text-[#C17C00] hover:text-hover font-medium text-[14px]"
-                                                    >
-                                                        Remove
-                                                    </button>
                                                     <label className="text-[#C17C00] hover:text-hover font-normal text-[14px] cursor-pointer">
                                                         Upload
                                                         <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
