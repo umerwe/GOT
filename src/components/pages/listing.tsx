@@ -58,7 +58,7 @@ export default function Listing({ product }: ProductDetailsProps) {
       )
     }
 
-    router.push(`/chat/${product?.user?.id}`)
+    router.push(`/chat/${product?.seller?.id}`)
   }
 
   const handleContactClick = () => {
