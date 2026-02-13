@@ -15,7 +15,7 @@ const BrandsSection = () => {
   return (
     <section className="bg-white border-b-3 border-[#EBEBEB] pb-[20px]">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="font-bold">Brands</h2>
+        <h2>Brands</h2>
       </div>
 
       {isLoading ? (

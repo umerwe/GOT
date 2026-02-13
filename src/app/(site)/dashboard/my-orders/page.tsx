@@ -10,66 +10,20 @@ import {
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useState, useMemo } from "react";
-import SkeletonLoader from "@/common/skeleton-loader";
 import Pagination from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
-export interface OrderProduct {
-  id: number;
-  product_id: number;
-  product: {
-    id: number;
-    title: string;
-    image: string;
-  };
-  order_id: number;
-  price: string | number;
-  quantity: number;
-  discount_on_item: string;
-  discount_type: string;
-  tax_amount: string;
-  total_add_on_price: string;
-  order_amount: number;
-}
+import { Order } from "@/types/order";
 
-export interface Order {
-  id: number;
-  order_amount: string;
-  coupon_discount_amount: string;
-  coupon_discount_title: string | null;
-  payment_status: "paid" | "unpaid" | string;
-  order_status: "pending" | "delivered" | "canceled" | string;
-  total_tax_amount: string;
-  payment_method: string;
-  order_note: string | null;
-  order_type: string;
-  delivery_address: string | null;
-  user: {
-    id: number;
-    name: string;
-    email: string;
-  };
-  vendor: {
-    id: number;
-    name: string | null;
-    email: string;
-  };
-  order_details: OrderProduct[];
-  created_at: string;
-  updated_at: string;
-}
 export default function MyOrdersPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const [sortBy, setSortBy] = useState<string>("newest");
 
-    // 1. Server-Side Pagination: Pass only the page to the hook
     const { data: orderResponse, isLoading } = useGetOrderList(currentPage);
 
     const rawOrders = orderResponse?.data ?? [];
-    // 2. Server-Side Metadata: Use totalPages from the API
     const totalPages = orderResponse?.pagination?.totalPages || 1;
     const itemsPerPage = orderResponse?.pagination?.per_page || 10;
 
-    // 3. Client-Side Sorting: Only sorts the items currently visible on this page
     const sortedOrders = useMemo(() => {
         const result = [...rawOrders];
 
@@ -214,7 +168,6 @@ export default function MyOrdersPage() {
                 </div>
             </div>
 
-            {/* --- Pagination is tied to the server totalPages --- */}
             {totalPages > 1 && (
                 <div className="mt-6 flex justify-end">
                     <Pagination

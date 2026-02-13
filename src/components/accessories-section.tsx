@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import GridCard from './cards/grid-card';
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import Image from 'next/image';
-import { FiMapPin } from "react-icons/fi";
 import Link from 'next/link';
 import { Vendor } from '@/types/vendor';
 
@@ -49,7 +48,7 @@ const AccessoriesSection = () => {
                     <div key={vendor.id}>
                         {/* Header Section */}
                         <div className="flex items-center justify-between mb-[15.5px]">
-                            <h2 className="text-[28px] font-bold text-[#111111]">Accessories</h2>
+                            <h2>Accessories</h2>
 
                             <div className="flex items-center gap-2">
                                 <Button

@@ -36,7 +36,6 @@ export default function Listing({ product }: ProductDetailsProps) {
     product?.product_images?.[0] ?? null
   )
   const [showLoginDialog, setShowLoginDialog] = useState(false)
-  const [showPhone, setShowPhone] = useState(false)
 
   const { token, userId } = useAppSelector((state) => state?.auth)
   const router = useRouter();

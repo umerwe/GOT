@@ -10,16 +10,16 @@ interface Category {
 }
 
 interface Product {
-  id?: number; 
+  id?: number;
   title: string;
   description?: string;
   product_images?: string[];
-  seller ?: {
-    id : number;
-    name : string;
-    user_type : string;
-    profile_image : string;
-    phoneNumber ?: string;
+  seller?: {
+    id: number;
+    name: string;
+    user_type: string;
+    profile_image: string;
+    phoneNumber?: string;
   }
   price: number;
 
@@ -77,16 +77,16 @@ interface Product {
 
 interface ProductFilters {
   category_id?: string;
-  type ?: string;
+  type?: string;
   subcategory_id?: string;
-  search ?: string;
+  search?: string;
   brand_id?: string;
   seller_type?: string;
   condition?: string;
   min_price?: string;
   max_price?: string;
-  page ?: number
-  per_page ?: number
+  page?: number
+  per_page?: number
 }
 
 interface FilterOption {
