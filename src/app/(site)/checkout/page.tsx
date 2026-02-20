@@ -6,7 +6,7 @@ import Breadcrumb from "@/components/ui/breadcrumb";
 import Container from "@/components/container";
 import OrderSummary from "@/components/pages/cart/order-summary";
 import PaymentForm from "@/components/forms/checkout-form";
-import Footer from "@/components/footer";
+import Footer from "@/components/layout/footer";
 import { useAppSelector } from "@/store/hooks";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!);

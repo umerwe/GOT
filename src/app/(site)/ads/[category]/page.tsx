@@ -226,20 +226,20 @@ export default function CategoryLayout() {
                         </div>
                       </div>
                       <div>
-                        <h1 className="text-lg font-bold text-[#111111]">{vendor.name}</h1>
+                        <h1 className="text-lg font-bold text-blacky">{vendor.name}</h1>
                         <p className="text-[#636E7E] text-sm">{vendor.address}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      {/* <div className="flex items-center gap-1 text-sm text-[#111111]">
+                      {/* <div className="flex items-center gap-1 text-sm text-blacky">
                         <div className="bg-black text-white w-[22px] h-[22px] rounded-full flex items-center justify-center"><FiMapPin size={11} /></div>
                         <span className="font-medium max-w-[100px] truncate">{vendor.address || "UAE, Dubai"}</span>
                       </div> */}
                       <div className="flex items-center gap-2 bg-[#E9A426] px-3 h-[30px] rounded-full">
-                        <span className="text-xs font-bold text-[#111111]">Verified Seller</span>
+                        <span className="text-xs font-bold text-blacky">Verified Seller</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium text-[#111111]">4.5 rating</span>
+                        <span className="text-sm font-medium text-blacky">4.5 rating</span>
                         <div className="flex">{[...Array(4)].map((_, i) => <Star key={i} size={18} fill="#E9A426" className="text-[#E9A426]" />)}<Star size={18} className="text-[#E9A426]" /></div>
                       </div>
                     </div>

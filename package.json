@@ -38,6 +38,7 @@
     "pusher-js": "^8.4.0",
     "radix-ui": "^1.4.3",
     "react": "19.1.0",
+    "react-country-flag": "^3.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.62.0",
     "react-icon": "^1.0.0",

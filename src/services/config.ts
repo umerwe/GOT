@@ -5,7 +5,6 @@ import { store } from "@/store/store";
 export const getConfig = async () => {
   try {
     const { data } = await api.get("/config");
-
     // ✅ save into Redux
     store.dispatch(setConfig(data));
 

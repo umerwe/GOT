@@ -4,7 +4,7 @@ import { useParams, useSearchParams } from "next/navigation";
 import Container from "@/components/container";
 import Hero from "@/components/pages/vendor/hero";
 import Tabs from "@/components/pages/vendor/tabs";
-import Footer from "@/components/footer";
+import Footer from "@/components/layout/footer";
 import { useGetVendorProduct } from "@/hooks/useProduct";
 import GridCard from "@/components/cards/grid-card";
 import { useMemo } from "react";
@@ -44,7 +44,7 @@ export default function Vendor() {
 
       <Container className="pt-[40px] pb-[198px]">
         <div className="mb-[30px]">
-          <h2 className="text-[24px] font-bold text-[#111111]">
+          <h2 className="text-[24px] font-bold text-blacky">
             Active Listings
           </h2>
         </div>

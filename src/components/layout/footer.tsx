@@ -3,16 +3,14 @@
 import Image from "@/components/custom/MyImage"
 import Link from "next/link"
 import { FaLocationDot } from "react-icons/fa6";
-import { useAppSelector } from "@/store/hooks";
 import { quickLinks, searches, section } from "@/data/footer";
-import { useState } from "react";
-import { SpinnerLoader } from "@/common/loader";
+import { useGetConfig } from "@/hooks/useConfig";
+import Logo from "../logo";
 
 export default function Footer() {
-  const [logoLoading, setLogoLoading] = useState(true)
 
   const currentYear = new Date().getFullYear();
-  const configData = useAppSelector((state) => state.config.data)
+  const { data: configData } = useGetConfig();
 
   const FooterColumn = ({ title, links }: { title: string; links: { label: string; href: string }[] }) => (
     <div className={`flex flex-col space-y-[14px]`}>
@@ -34,36 +32,16 @@ export default function Footer() {
       </ul>
     </div>
   )
+
   return (
-    <footer className="bg-[#111111] text-[#999999] pt-[40px] pb-[16px] font-sans px-[34px]">
+    <footer className="bg-black text-[#999999] pt-[40px] pb-[16px] font-sans px-[34px]">
 
       <div className="flex flex-col lg:flex-row justify-between items-start gap-10 lg:gap-[130px]">
-
-        {/* Logo Section */}
         <div className="w-full lg:w-auto flex-shrink-0">
-          <Link href="/" className="inline-block relative w-[174px] h-[162.38px]">
-
-            {/* Skeleton */}
-            {logoLoading && (
-              <SpinnerLoader className="mx-auto mt-16" />
-            )}
-
-            {configData?.site_logo && (
-              <Image
-                src={configData.site_logo}
-                alt="Get Out There Logo"
-                width={174}
-                height={162}
-                className={`object-contain transition-opacity duration-300 -rotate-12 ${logoLoading ? "opacity-0" : "opacity-100"
-                  }`}
-                priority
-                wrapperClassName="bg-transparent"
-                onLoadingComplete={() => setLogoLoading(false)}
-                disableLoader={true}
-              />
-            )}
-
-          </Link>
+          <Logo
+            logo={configData?.site_logo}
+            className="w-[174px] h-[162px]"
+          />
         </div>
 
         {/* Links Section */}

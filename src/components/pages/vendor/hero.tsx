@@ -68,21 +68,21 @@ export default function VendorHero({ logo, name, address }: HeroProps) {
             </div>
           </div>
 
-          <h1 className="text-2xl font-bold text-[#111111] mb-[10px]">{name}</h1>
+          <h1 className="text-2xl font-bold text-blacky mb-[10px]">{name}</h1>
 
           {/* Badges */}
           <div className="flex items-center gap-3 mb-[10px]">
             <div className="flex items-center gap-2 bg-[#E9A426] px-3 h-[30px] rounded-full">
-              <div className="bg-[#111111] rounded-full p-0.5">
+              <div className="bg-blacky rounded-full p-0.5">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#E9A426]"><polyline points="20 6 9 17 4 12"></polyline></svg>
               </div>
-              <span className="text-xs font-medium text-[#111111] pt-0.5">Verified Seller</span>
+              <span className="text-xs font-medium text-blacky pt-0.5">Verified Seller</span>
             </div>
 
             {/* Tooltip for Address */}
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="flex items-center gap-1 text-sm text-[#111111] cursor-pointer">
+                <div className="flex items-center gap-1 text-sm text-blacky cursor-pointer">
                   <div className="bg-black text-white w-[22px] h-[22px] rounded-[60px] flex items-center justify-center">
                     <FiMapPin size={11} />
                   </div>
@@ -104,7 +104,7 @@ export default function VendorHero({ logo, name, address }: HeroProps) {
               ))}
               <Star size={20} className="text-[#E9A426]" />
             </div>
-            <span className="text-sm font-medium text-[#111111]">4.5 rating</span>
+            <span className="text-sm font-medium text-blacky">4.5 rating</span>
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Container from "@/components/container";
-import Footer from "@/components/footer";
+import Footer from "@/components/layout/footer";
 import { XCircle, AlertCircle, RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -21,7 +21,7 @@ function FailContent() {
       </div>
 
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold text-[#111111]">Payment Failed</h1>
+        <h1 className="text-3xl font-bold text-blacky">Payment Failed</h1>
         <p className="text-gray-500">We couldn&apos;t process your request. Please check your card details and try again.</p>
       </div>
 

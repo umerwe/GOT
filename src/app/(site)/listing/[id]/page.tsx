@@ -6,7 +6,7 @@ import NotFoundWrapper from "@/common/not-found"
 import Listing from "@/components/pages/listing"
 import Breadcrumb from "@/components/ui/breadcrumb"
 import Container from "@/components/container"
-import Footer from "@/components/footer"
+import Footer from "@/components/layout/footer"
 
 export default function ListingById() {
   const { id } = useParams()

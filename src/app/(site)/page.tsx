@@ -5,7 +5,7 @@ import BrandsSection from "@/components/brands-section";
 import PopularCategoriesSection from "@/components/popular-categories-section";
 import Container from "@/components/container";
 import FeaturedSection from "@/components/featured-section";
-import Footer from "@/components/footer";
+import Footer from "@/components/layout/footer";
 import HeroSection from "@/components/hero";
 import FeauredAdsSection from "@/components/featured-ads-section";
 import { useHandleSessionAuth } from "@/hooks/useAuth";

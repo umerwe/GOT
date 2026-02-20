@@ -1,7 +1,7 @@
 import React from "react";
 import AuthGuard from "@/common/auth-guard";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
+import Navbar from "@/components/layout/navbar/nav";
+import Footer from "@/components/layout/footer";
 
 export default function AuthLayout({
   children,

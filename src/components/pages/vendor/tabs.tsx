@@ -31,7 +31,7 @@ export default function SellerTabs() {
                             onClick={() => handleTabClick(tab)}
                             className={`py-[10px] text-[16px] font-bold transition-all relative flex justify-center items-center border-b-[3px] ${isActive
                                     ? "text-[#E9A426] border-[#E9A426]"
-                                    : "text-[#111111] border-gray-200 hover:text-[#E9A426]"
+                                    : "text-blacky border-gray-200 hover:text-[#E9A426]"
                                 }`}
                         >
                             {tab}

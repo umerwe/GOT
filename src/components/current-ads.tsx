@@ -108,7 +108,7 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
           
           {/* --- Table Header --- */}
           {/* Removed 'hidden sm:grid' and forced 'grid' always */}
-          <div className="grid grid-cols-12 gap-4 p-4 border-b border-gray-200 text-[14px] font-bold text-[#111111] uppercase tracking-wide">
+          <div className="grid grid-cols-12 gap-4 p-4 border-b border-gray-200 text-[14px] font-bold text-blacky uppercase tracking-wide">
             <div className="col-span-4">Ads</div>
             <div className="col-span-2">Category</div>
             <div className="col-span-2">Ad Status</div>

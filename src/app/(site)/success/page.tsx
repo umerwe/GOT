@@ -4,7 +4,7 @@ import { useEffect, Suspense, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import Container from "@/components/container";
-import Footer from "@/components/footer";
+import Footer from "@/components/layout/footer";
 import { CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -70,13 +70,13 @@ function SuccessContent() {
       </div>
 
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold text-[#111111]">Payment Successful!</h1>
+        <h1 className="text-3xl font-bold text-blacky">Payment Successful!</h1>
         <p className="text-gray-500">Thank you for your purchase. Your transaction has been completed successfully.</p>
       </div>
 
       <div className="flex flex-col gap-3">
         <Link href="/dashboard/my-orders">
-          <Button className="w-full h-[60px] bg-[#111111] hover:bg-black text-white rounded-none font-bold text-sm transition-all uppercase">
+          <Button className="w-full h-[60px] bg-blacky hover:bg-black text-white rounded-none font-bold text-sm transition-all uppercase">
             Check Orders
           </Button>
         </Link>

@@ -6,7 +6,7 @@ import CartCard from "../ads/cart-card";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import Container from "@/components/container";
 import OrderSummary from "@/components/pages/cart/order-summary";
-import Footer from "@/components/footer";
+import Footer from "@/components/layout/footer";
 
 export default function CartPage() {
   const cartItems = useAppSelector((state) => state.cart.items);
