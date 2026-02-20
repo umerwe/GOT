@@ -2,7 +2,7 @@
 
 import { useGetBrands } from '@/hooks/useBrand'
 import React from 'react'
-import Image from 'next/image'
+import Image from '@/components/custom/MyImage'
 import { Brand } from '@/types/filters'
 import { motion } from 'framer-motion'
 import NotFoundWrapper from '@/common/not-found'
@@ -50,7 +50,8 @@ const BrandsSection = () => {
                   alt={`Brand Logo ${index + 1}`}
                   fill
                   className="object-contain"
-                  sizes="129.78px"
+                  wrapperClassName='bg-transparent'
+                  disableLoader={true}
                 />
               </div>
             ))}

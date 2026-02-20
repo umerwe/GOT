@@ -2,11 +2,11 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { capitalizeWords } from "@/utils/capitalizeWords"
-import Image from "next/image"
 import Link from "next/link"
 import SkeletonLoader from "@/common/skeleton-loader"
 import NotFoundWrapper from "@/common/not-found"
 import { Heart } from "lucide-react"
+import Image from "@/components/custom/MyImage"
 
 interface GridCardProps {
   isHome?: boolean
@@ -40,20 +40,15 @@ export default function GridCard({
       {products.map((product) => (
         <Link key={product.id} href={`/listing/${product.id}`}>
           <Card className="overflow-hidden rounded-none shadow-none border-none cursor-pointer h-full">
-            <div className="relative">
+            <div className="relative w-full h-[343px]">
               <Image
-                src={product.product_images?.[0] || "/placeholder.svg?height=200&width=300"}
-                alt={product.title || "Product image"}
-                width={300}
-                height={200}
-                className="w-full h-[343px] object-cover"
+                src={product?.product_images?.[0] || ""}
+                alt={product.title || "Product"}
+                fill
+                className="object-cover"
               />
-              <button
-                className="absolute bottom-3 right-2.5 bg-white/80 hover:bg-white p-2 rounded-full shadow-sm"
-                onClick={(e) => {
-                  e.preventDefault()
-                }}
-              >
+
+              <button className="absolute bottom-3 right-2.5 z-20 bg-white/80 hover:bg-white p-2 rounded-full shadow-sm">
                 <Heart size={17} className="text-gray-500 hover:text-red-500" />
               </button>
             </div>
@@ -90,13 +85,13 @@ export default function GridCard({
 
                 {/* BRAND IMAGE ON RIGHT */}
                 {(vendorLogo) && (
-                  <div className="flex-shrink-0">
+                  <div className="flex-shrink-0 w-[55px] h-[50px]">
                     <Image
                       src={vendorLogo}
                       alt="Vendor"
                       width={55}
                       height={50}
-                      className="object-cover"
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 )}

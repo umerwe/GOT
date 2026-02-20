@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
+import Image from "@/components/custom/MyImage";
 import { useGetCategories } from "@/hooks/useCategories";
 import Link from "next/link";
 import SkeletonLoader from "@/common/skeleton-loader";
@@ -32,8 +32,7 @@ const CategoriesSection = () => {
         <section>
             <div className="flex items-center justify-between mt-[72px] mb-[20px]">
                 <h2>Popular Categories</h2>
-
-                {/* Pagination only shows if we have categories */}
+                
                 {!isLoading && data.length > 0 && (
                     <div className="flex items-center gap-2">
                         <Button
@@ -76,7 +75,6 @@ const CategoriesSection = () => {
                                     alt={`${category.title} category`}
                                     fill
                                     className="object-cover group-hover:scale-105 transition-transform duration-200"
-                                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
                                 />
                                 <div className="absolute bottom-0 right-0 p-2 bg-[#E9A426]">
                                     <p className="text-black text-center text-[13px] font-medium leading-tight">

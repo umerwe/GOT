@@ -1,6 +1,6 @@
 "use client"
 
-import Image from "next/image"
+import Image from "@/components/custom/MyImage"
 import { Button } from "@/components/ui/button"
 import { capitalizeWords } from "@/utils/capitalizeWords"
 import LoginDialog from "@/utils/loginDialog"
@@ -37,7 +37,7 @@ export default function Listing({ product }: ProductDetailsProps) {
   )
   const [showLoginDialog, setShowLoginDialog] = useState(false)
 
-  const { token, userId } = useAppSelector((state) => state?.auth)
+  const { token } = useAppSelector((state) => state?.auth)
   const router = useRouter();
 
   const handleChatClick = () => {
@@ -294,13 +294,15 @@ export default function Listing({ product }: ProductDetailsProps) {
                 {product.seller?.name}
               </span>
             </div>
-            <Image
-              src={product.seller?.profile_image || ""}
-              alt={product.seller?.name || ""}
-              width={55}
-              height={50}
-              className=""
-            />
+            <div>
+              <Image
+                src={product.seller?.profile_image || ""}
+                alt={product.seller?.name || ""}
+                width={55}
+                height={50}
+                className="w-[55px] h-[50px]"
+              />
+            </div>
           </div>
 
           {/* Action Buttons */}
@@ -347,22 +349,27 @@ export default function Listing({ product }: ProductDetailsProps) {
           }
 
           {/* Finance Section */}
-          <Image
-            src="/details-banner1.png"
-            alt="Finance Banner"
-            width={400}
-            height={80}
-            className="w-full"
-          />
+          <div>
+            <Image
+              src="/details-banner1.png"
+              alt="Finance Banner"
+              width={400}
+              height={80}
+              className="w-[400px] h-[80px]"
+              wrapperClassName="bg-transparent"
+            />
+          </div>
 
           {/* Advertisement Space */}
-          <Image
-            src="/details-banner2.png"
-            alt="Advertisement Banner"
-            width={400}
-            height={80}
-            className="w-full"
-          />
+          <div>
+            <Image
+              src="/details-banner2.png"
+              alt="Advertisement Banner"
+              width={400}
+              height={80}
+              className="w-[400px] h-[80px]"
+            />
+          </div>
         </div>
       </div>
 

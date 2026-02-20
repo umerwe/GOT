@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { capitalizeWords } from "@/utils/capitalizeWords"
@@ -8,6 +7,7 @@ import SkeletonLoader from "@/common/skeleton-loader"
 import { getConditionLabel } from "@/utils/getConditionLabel"
 import { Heart } from "lucide-react"
 import NotFoundWrapper from "@/common/not-found"
+import Image from "@/components/custom/MyImage"
 
 interface ListCardProps {
     products: Product[]
@@ -52,8 +52,8 @@ export default function ListCard({
                         <div className="w-full lg:w-[189px] flex-shrink-0">
                             <div className="relative h-56 lg:h-[122.63px] w-full overflow-hidden rounded-none">
                                 <Image
-                                    src={product.product_images?.[0] as string}
-                                    alt={product.title || "Product image"}
+                                    src={product.product_images?.[0] || ""}
+                                    alt={product.title || "Product"}
                                     fill
                                     className="object-cover"
                                 />
@@ -86,13 +86,15 @@ export default function ListCard({
 
 
                             {(isHome && product.brand?.image) && (
-                                <div className="flex-shrink-0 mt-[67px]">
+                                <div className="flex-shrink-0 mt-[67px] w-[55px] h-[50px]">
                                     <Image
                                         src={product.brand.image}
                                         alt={product.brand.title || "Brand"}
                                         width={55}
                                         height={50}
-                                        className="object-cover"
+                                        wrapperClassName="w-full h-full bg-white"
+                                        className="object-cover w-full h-full"
+                                        disableLoader={true}
                                     />
                                 </div>
                             )}

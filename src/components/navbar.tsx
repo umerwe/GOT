@@ -8,7 +8,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { UserMenu } from "./user-menu";
 import { cn } from "@/lib/utils";
 import LoginDialog from "@/utils/loginDialog";
-import Image from "next/image";
+import Image from "@/components/custom/MyImage";
+import { SpinnerLoader } from "@/common/loader";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -119,17 +120,19 @@ const Navbar = () => {
       <div className="flex items-start justify-between gap-5 pr-[16px] sm:pr-0">
         {/* Left Side: Logo */}
         <div className="flex items-center gap-3 text-base sm:text-xl font-semibold flex-shrink-0">
-          <Link href="/" className="relative flex items-center justify-center">
+          <Link href="/" className={cn("relative flex items-center justify-center", isHome ? "w-[144px] h-[134.39px]" : "w-[108px] h-[100.79px]")}>
             {configData?.site_logo ? (
               <Image
                 src={configData?.site_logo}
                 width={256}
                 height={256}
                 alt="logo-img"
-                className={cn("object-contain -rotate-12", isHome ? "w-[144px] h-[134.39px]" : "w-[108px] h-[100.79px]")}
+                className="object-contain -rotate-12"
+                wrapperClassName="bg-transparent"
+                disableLoader={true}
               />
             ) : (
-              <div className={cn("bg-gray-200 animate-pulse rounded-md", isHome ? "w-[104px] h-[100.39px]" : "w-[108px] h-[100.79px]")} />
+              <SpinnerLoader />
             )}
           </Link>
         </div>
@@ -202,12 +205,12 @@ const Navbar = () => {
         </div>
       )}
       <LoginDialog
-        open={showLoginDialog} 
-        onOpenChange={setShowLoginDialog} 
+        open={showLoginDialog}
+        onOpenChange={setShowLoginDialog}
         description="Please login to view your shopping cart items."
       />
     </nav>
-    
+
   );
 };
 
