@@ -20,8 +20,7 @@ export default function OnboardingReviewPage() {
 
         {/* Next Steps Banner */}
         <div
-          className="flex items-center justify-between px-5 py-4 my-0"
-          style={{ backgroundColor: "#fde9b8" }}
+          className="flex items-center justify-between px-5 py-4 my-0 bg-[#fde9b8]"
         >
           <div>
             <h2 className="text-[17px]">Next steps</h2>

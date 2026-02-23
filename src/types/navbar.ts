@@ -1,5 +1,5 @@
 export interface NavIconsProps {
-    isAuth: any;
+    isAuth: boolean;
     mounted: boolean;
     cartCount: number;
     textColor: string;
@@ -10,7 +10,7 @@ export interface NavIconsProps {
 
 export interface NavActionsProps {
     isMobile?: boolean;
-    isAuth: any;
+    isAuth: boolean;
     mounted: boolean;
     textColor: string;
     handleProtectedAction: (path: string) => void;
