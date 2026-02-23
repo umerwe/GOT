@@ -46,7 +46,7 @@ const NavIcons = ({
                         "absolute -top-1.5 -right-[9px] border-[2px] text-[7px] font-medium rounded-full w-4 h-4 flex items-center justify-center",
                         isHome
                             ? "text-blacky border-blacky sm:text-white sm:border-white"
-                            : "text-blacky border-blacky"
+                            : "text-blacky border-black"
                     )}
                 >
                     3
