@@ -1,7 +1,7 @@
 "use client"
 import { useGetBrands } from "@/hooks/useBrand"
 import { useGetCategories } from "@/hooks/useCategories"
-import { useGetVendorProducts } from "@/hooks/useProduct"
+import { useGetBusinessProducts } from "@/hooks/useProduct"
 import { useParams, useRouter } from "next/navigation"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import Pagination from "@/components/ui/pagination"
@@ -24,7 +24,7 @@ import { BsFilterLeft } from "react-icons/bs";
 import { sellerData } from "@/constants/category"
 import Image from 'next/image';
 import Link from 'next/link'
-import { Vendor } from "@/types/vendor"
+import { Business } from "@/types/business"
 
 
 export default function CategoryLayout() {
@@ -66,15 +66,15 @@ export default function CategoryLayout() {
     return f
   }, [selectedFilters])
 
-  const { data: vendorResponse, isLoading: isProductsLoading } = useGetVendorProducts({
+  const { data: businessResponse, isLoading: isProductsLoading } = useGetBusinessProducts({
     ...appliedFilters,
     page: currentPage,
     per_page: itemsPerPage
   })
 
-  const vendors = useMemo(() => vendorResponse?.data ?? [], [vendorResponse])
-  const totalPages = vendorResponse?.pagination?.totalPages ?? 1
-  const totalItems = vendorResponse?.pagination?.total_items || 0
+  const businesss = useMemo(() => businessResponse?.data ?? [], [businessResponse])
+  const totalPages = businessResponse?.pagination?.totalPages ?? 1
+  const totalItems = businessResponse?.pagination?.total_items || 0
 
   const startItem = totalItems === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1
   const endItem = Math.min(currentPage * itemsPerPage, totalItems)
@@ -118,7 +118,7 @@ export default function CategoryLayout() {
     setIsMobileFilterOpen(false);
   }
 
-  const isNotFound = !isProductsLoading && vendors.length === 0
+  const isNotFound = !isProductsLoading && businesss.length === 0
 
   const RightControls = () => (
     <div className="flex items-center gap-4 text-[13px] text-gray-500">
@@ -199,7 +199,7 @@ export default function CategoryLayout() {
             <div className="space-y-[30px]">
               {[...Array(2)].map((_, i) => (
                 <div key={i} className="bg-[#F5F5F5] pt-[19px] px-[20px] pb-[30px] animate-pulse">
-                  {/* Vendor Info Header Skeleton */}
+                  {/* Business Info Header Skeleton */}
                   <div className="flex items-center gap-3 mb-[23px]">
                     <div className="w-[56px] h-[56px] bg-gray-300 rounded-full" />
                     <div className="space-y-2">
@@ -214,41 +214,41 @@ export default function CategoryLayout() {
             </div>
           ) : !isNotFound ? (
             <div className="space-y-[30px]">
-              {vendors.map((vendor: Vendor) => (
-                <div key={vendor.id} className='bg-[#F5F5F5] pt-[19px] px-[20px] pb-[30px] rounded-none'>
+              {businesss.map((business: Business) => (
+                <div key={business.id} className='bg-[#F5F5F5] pt-[19px] px-[20px] pb-[30px] rounded-none'>
 
-                  <Link href={`/seller/${vendor.id}`} className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-[23px]">
+                  <Link href={`/seller/${business.id}`} className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-[23px]">
                     <div className="flex items-center gap-3">
                       <div className="relative h-[56px] w-[56px]">
-                        <Image src={vendor.logo || "/default-avatar.png"} alt={vendor.name} fill className="rounded-full object-contain bg-white" />
+                        <Image src={business.logo || "/default-avatar.png"} alt={business.name} fill className="rounded-full object-contain bg-white" />
                         <div className="absolute bottom-1 right-0 bg-[#E9A426] rounded-full p-0.5 border-2 border-white">
                           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-black"><polyline points="20 6 9 17 4 12"></polyline></svg>
                         </div>
                       </div>
                       <div>
-                        <h1 className="text-lg font-bold text-blacky">{vendor.name}</h1>
-                        <p className="text-[#636E7E] text-sm">{vendor.address}</p>
+                        <h1 className="text-lg font-bold text-black">{business.name}</h1>
+                        <p className="text-[#636E7E] text-sm">{business.address}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      {/* <div className="flex items-center gap-1 text-sm text-blacky">
+                      {/* <div className="flex items-center gap-1 text-sm text-black">
                         <div className="bg-black text-white w-[22px] h-[22px] rounded-full flex items-center justify-center"><FiMapPin size={11} /></div>
-                        <span className="font-medium max-w-[100px] truncate">{vendor.address || "UAE, Dubai"}</span>
+                        <span className="font-medium max-w-[100px] truncate">{business.address || "UAE, Dubai"}</span>
                       </div> */}
                       <div className="flex items-center gap-2 bg-[#E9A426] px-3 h-[30px] rounded-full">
-                        <span className="text-xs font-bold text-blacky">Verified Seller</span>
+                        <span className="text-xs font-bold text-black">Verified Seller</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium text-blacky">4.5 rating</span>
+                        <span className="text-sm font-medium text-black">4.5 rating</span>
                         <div className="flex">{[...Array(4)].map((_, i) => <Star key={i} size={18} fill="#E9A426" className="text-[#E9A426]" />)}<Star size={18} className="text-[#E9A426]" /></div>
                       </div>
                     </div>
                   </Link>
 
                   {viewMode === 'grid' ? (
-                    <GridCard products={vendor.products as Product[]} isLoading={false} count={8} isAdsPage={true} />
+                    <GridCard products={business.products as Product[]} isLoading={false} count={8} isAdsPage={true} />
                   ) : (
-                    <ListCard products={vendor.products as Product[]} isLoading={false} count={4} />
+                    <ListCard products={business.products as Product[]} isLoading={false} count={4} />
                   )}
                 </div>
               ))}

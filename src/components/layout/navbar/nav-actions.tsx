@@ -14,7 +14,7 @@ const NavActions = ({
   onClose,
 }: NavActionsProps) => {
   const wrapperClass = isMobile 
-    ? "flex flex-col gap-4 text-blacky font-medium" 
+    ? "flex flex-col gap-4 text-black font-medium" 
     : cn("flex items-center gap-3 text-xs tracking-wide h-8", textColor);
 
   const itemClass = "cursor-pointer hover:opacity-70 transition-opacity";

@@ -8,6 +8,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { setUserData } from "@/store/slices/AuthSlice";
 import { toast } from "@/components/ui/toast";
 import { AxiosError } from "axios";
+import { ExtendedSession } from "@/types/auth";
 
 // NEW imports for Firebase
 // import { getFirebaseMessaging } from "@/lib/firebase";
@@ -98,7 +99,7 @@ export const useSignup = () => {
 export const useHandleSessionAuth = () => {
   const dispatch = useAppDispatch();
 
-  return (session: any) => {   //  return (session: ExtendedSession) => {
+  return (session: ExtendedSession) => {
     if (session?.socialLoginResult?.data) {
       const { auth_token, id } = session.socialLoginResult.data;
       dispatch(setUserData({ auth_token, userId: String(id) }));

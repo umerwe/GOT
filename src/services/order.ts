@@ -11,7 +11,7 @@ interface OrderPayload {
   payment_status: "paid" | string;
   delivery_address: string;
   order_note: string | null;
-  vendor_id: number | string;
+  business_id: number | string;
   transaction_id: string;
   coupon_code: string | null;
   products: OrderProduct[];

@@ -26,13 +26,13 @@ export default function FeaturesSection() {
       {features.map((feature, index) => (
         <div key={index} className="flex items-start gap-4">
           {/* Icon Circle */}
-          <div className="flex-shrink-0 w-[34px] h-[34px] bg-blacky rounded-full flex items-center justify-center">
+          <div className="flex-shrink-0 w-[34px] h-[34px] bg-black rounded-full flex items-center justify-center">
             {feature.icon}
           </div>
           
           {/* Text Content */}
           <div className="flex flex-col gap-[4px]">
-            <h1 className="text-lg font-medium text-blacky leading-tight">
+            <h1 className="text-lg font-medium text-black leading-tight">
               {feature.title}
             </h1>
             <p className="text-sm text-gray-600">

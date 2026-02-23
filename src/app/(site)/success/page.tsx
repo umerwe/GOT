@@ -35,7 +35,7 @@ function SuccessContent() {
       payment_status: "paid",
       delivery_address: "",
       order_note: null,
-      vendor_id: cartItems[0].vendor,
+      business_id: cartItems[0].business,
       transaction_id: transactionId,
       coupon_code: null,
       products: cartItems.map((item) => ({
@@ -70,13 +70,13 @@ function SuccessContent() {
       </div>
 
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold text-blacky">Payment Successful!</h1>
+        <h1 className="text-3xl font-bold text-black">Payment Successful!</h1>
         <p className="text-gray-500">Thank you for your purchase. Your transaction has been completed successfully.</p>
       </div>
 
       <div className="flex flex-col gap-3">
         <Link href="/dashboard/my-orders">
-          <Button className="w-full h-[60px] bg-blacky hover:bg-black text-white rounded-none font-bold text-sm transition-all uppercase">
+          <Button className="w-full h-[60px] bg-black hover:bg-black text-white rounded-none font-bold text-sm transition-all uppercase">
             Check Orders
           </Button>
         </Link>

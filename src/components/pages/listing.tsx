@@ -99,7 +99,7 @@ export default function Listing({ product }: ProductDetailsProps) {
       setShowLoginDialog(true)
       return
     }
-    const currentVendorId = product.seller?.id || 0;
+    const currentBusinessId = product.seller?.id || 0;
 
     // 1. Check for Duplicate Items
     const isDuplicate = cartItems.some(item => item.id === product.id);
@@ -112,12 +112,12 @@ export default function Listing({ product }: ProductDetailsProps) {
       return;
     }
 
-    // 2. Check for Different Vendor
-    const hasDifferentVendor = cartItems.length > 0 && cartItems.some(item => item.vendor !== currentVendorId);
-    if (hasDifferentVendor) {
+    // 2. Check for Different Business
+    const hasDifferentBusiness = cartItems.length > 0 && cartItems.some(item => item.business !== currentBusinessId);
+    if (hasDifferentBusiness) {
       toast({
-        title: "Vendor Mismatch",
-        description: "You can only add items from the same vendor to one order. Please clear your cart first.",
+        title: "Business Mismatch",
+        description: "You can only add items from the same business to one order. Please clear your cart first.",
         variant: "destructive",
       });
       return;
@@ -130,7 +130,7 @@ export default function Listing({ product }: ProductDetailsProps) {
       price: product.price,
       image: product.product_images?.[0] || "/placeholder.svg",
       quantity: 1,
-      vendor: currentVendorId,
+      business: currentBusinessId,
       details: [
         product.manufacturing_year,
         product.engine_size,
@@ -306,8 +306,8 @@ export default function Listing({ product }: ProductDetailsProps) {
           </div>
 
           {/* Action Buttons */}
-          <div className={`grid ${product?.seller?.user_type !== "vendor" ? "grid-cols-2" : "grid-cols-1"} gap-3`}>
-            {product?.seller?.user_type !== "vendor" && (
+          <div className={`grid ${product?.seller?.user_type !== "business" ? "grid-cols-2" : "grid-cols-1"} gap-3`}>
+            {product?.seller?.user_type !== "business" && (
               <Button
                 onClick={handleChatClick}
                 className="bg-blacky hover:bg-black text-white rounded-none h-[54px] text-sm font-medium w-full"
@@ -338,7 +338,7 @@ export default function Listing({ product }: ProductDetailsProps) {
 
           {/* Wishlist Button */}
           {
-            product.seller?.user_type === "vendor" &&
+            product.seller?.user_type === "business" &&
             <Button
               variant="outline"
               onClick={handleAddToCart}
@@ -353,9 +353,9 @@ export default function Listing({ product }: ProductDetailsProps) {
             <Image
               src="/details-banner1.png"
               alt="Finance Banner"
-              width={400}
+              width={480}
               height={80}
-              className="w-[400px] h-[80px]"
+              className="w-full h-[80px]"
               wrapperClassName="bg-transparent"
             />
           </div>
@@ -365,9 +365,10 @@ export default function Listing({ product }: ProductDetailsProps) {
             <Image
               src="/details-banner2.png"
               alt="Advertisement Banner"
-              width={400}
+              width={480}
               height={80}
-              className="w-[400px] h-[80px]"
+              className="w-full h-[80px]"
+              wrapperClassName="w-full bg-transparent"
             />
           </div>
         </div>

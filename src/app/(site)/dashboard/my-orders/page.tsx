@@ -48,7 +48,7 @@ export default function MyOrdersPage() {
     return (
         <div className="w-full">
             <div className="flex items-center justify-between mb-[10px] h-[40px]">
-                <h2 className="text-[20px] capitalize font-medium text-blacky">
+                <h2 className="text-[20px] capitalize font-medium text-black">
                     My Orders
                 </h2>
 
@@ -65,7 +65,7 @@ export default function MyOrdersPage() {
 
             <div className="bg-white border border-gray-200 overflow-x-auto">
                 <div className="min-w-[1000px]">
-                    <div className="grid grid-cols-12 gap-4 p-4 border-b border-gray-200 text-[14px] font-bold text-blacky uppercase tracking-wide">
+                    <div className="grid grid-cols-12 gap-4 p-4 border-b border-gray-200 text-[14px] font-bold text-black uppercase tracking-wide">
                         <div className="col-span-1">ID</div>
                         <div className="col-span-3">Product</div>
                         <div className="col-span-2">Total Amount</div>
@@ -122,7 +122,7 @@ export default function MyOrdersPage() {
                                     </div>
 
                                     <div className="col-span-2">
-                                        <p className="text-sm font-bold text-blacky">
+                                        <p className="text-sm font-bold text-black">
                                             AED {parseFloat(order.order_amount).toLocaleString()}
                                         </p>
                                     </div>

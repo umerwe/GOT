@@ -75,7 +75,7 @@ export default function ListCard({
                                     </h1>
                                 </Link>
 
-                                <h4 className="text-[14px] text-blacky line-clamp-3">
+                                <h4 className="text-[14px] text-black line-clamp-3">
                                     {product.description || "No description available for this bike."}
                                 </h4>
                                 <h2 className="text-[16px] font-semibold lg:font-normal mt-[4px]">

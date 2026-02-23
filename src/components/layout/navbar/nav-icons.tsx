@@ -31,7 +31,7 @@ const NavIcons = ({
             >
                 <ShoppingCart className={cn("w-[19.5px] h-[19.5px] stroke-[2.5]", textColor)} />
                 {mounted && cartCount > 0 && (
-                    <span className="absolute -top-1.5 -right-2 bg-[#E9A426] text-blacky text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                    <span className="absolute -top-1.5 -right-2 bg-[#E9A426] text-black text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
                         {cartCount}
                     </span>
                 )}
@@ -45,8 +45,8 @@ const NavIcons = ({
                     className={cn(
                         "absolute -top-1.5 -right-[9px] border-[2px] text-[7px] font-medium rounded-full w-4 h-4 flex items-center justify-center",
                         isHome
-                            ? "text-blacky border-blacky sm:text-white sm:border-white"
-                            : "text-blacky border-black"
+                            ? "text-black border-black sm:text-white sm:border-white"
+                            : "text-black border-black"
                     )}
                 >
                     3

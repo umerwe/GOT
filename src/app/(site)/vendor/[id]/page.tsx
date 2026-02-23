@@ -1,10 +1,10 @@
 import { Suspense } from "react";
-import Vendor from "@/components/pages/vendor/vendor";
+import Business from "@/components/pages/business/business";
 
 export default function Page() {
   return (
     <Suspense fallback={<div className="h-[400px]" />}>
-      <Vendor />
+      <Business />
     </Suspense>
   );
 }

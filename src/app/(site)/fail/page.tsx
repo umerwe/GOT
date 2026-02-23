@@ -21,7 +21,7 @@ function FailContent() {
       </div>
 
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold text-blacky">Payment Failed</h1>
+        <h1 className="text-3xl font-bold text-black">Payment Failed</h1>
         <p className="text-gray-500">We couldn&apos;t process your request. Please check your card details and try again.</p>
       </div>
 

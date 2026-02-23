@@ -26,7 +26,7 @@ const Navbar = () => {
   useEffect(() => setMounted(true), []);
   
   const isHome = pathname === "/";
-  const textColor = isHome ? "text-blacky sm:text-white" : "text-blacky";
+  const textColor = isHome ? "text-black sm:text-white" : "text-black";
   const showNavLinks = pathname.startsWith("/ads") || pathname.startsWith("/listing") || pathname.startsWith("/privacy") || pathname.startsWith("/terms");
 
   const handleProtectedAction = (path: string) => {
@@ -38,7 +38,7 @@ const Navbar = () => {
   return (
     <nav className={cn(
       "w-full top-0 md:px-[31px] md:pr-[50px] border-b-[2px] z-[500] transition-all",
-      isHome ? "bg-transparent border-transparent absolute" : "bg-white border-blacky-100 sticky"
+      isHome ? "bg-transparent border-transparent absolute" : "bg-white border-black-100 sticky"
     )}>
       <div className="flex items-start justify-between pr-4 md:pr-0">
         <Logo
@@ -66,8 +66,8 @@ const Navbar = () => {
           {mounted && isAuth && <UserMenu />}
           <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ?
-              <X className={isHome ? "text-white" : "text-blacky"} />
-              : <Menu className={isHome ? "text-white" : "text-blacky"}
+              <X className={isHome ? "text-white" : "text-black"} />
+              : <Menu className={isHome ? "text-white" : "text-black"}
               />
             }
           </button>
@@ -79,7 +79,7 @@ const Navbar = () => {
         <div className="sm:hidden bg-white p-4 flex flex-col gap-4 animate-in slide-in-from-top-2">
           <NavLinks
             isMobile
-            textColor="text-blacky"
+            textColor="text-black"
             onClose={() => setIsMenuOpen(false)}
           />
 
@@ -94,7 +94,7 @@ const Navbar = () => {
                 {...commonProps}
                 cartCount={cartCount}
                 isHome={false}
-                textColor="text-blacky"
+                textColor="text-black"
               />
             </div>
           </div>

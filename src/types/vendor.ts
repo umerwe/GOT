@@ -46,7 +46,7 @@ export interface Product {
   lng: number;
 }
 
-export interface Vendor {
+export interface Business {
   id: number;
   name: string;
   email: string;
@@ -57,6 +57,6 @@ export interface Vendor {
   products: Product[];
 }
 
-export interface VendorDataResponse {
-  data: Vendor[];
+export interface BusinessDataResponse {
+  data: Business[];
 }

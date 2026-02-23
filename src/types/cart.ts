@@ -4,7 +4,7 @@ export interface CartItem {
   price: number;
   image: string;
   quantity: number;
-  vendor: number;
+  business: number;
   details?: string[];
 }
 export interface OrderSummaryProps {
