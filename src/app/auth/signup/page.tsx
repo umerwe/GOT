@@ -216,7 +216,7 @@ export default function SignUpForm() {
           <div className="text-center mt-4">
             <p className="text-sm text-gray-500">Looking to list your business on our platform?</p>
             <Link
-              href="/auth/business-login"
+              href="/business-management/registration"
               className="text-sm font-medium text-black underline hover:no-underline"
             >
               Sign up as Business Account

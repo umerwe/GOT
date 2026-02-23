@@ -6,10 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { businessDetailsSchema, type BusinessDetailsValues } from "@/validations/business";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { useRegisterBusiness } from "@/hooks/useBusiness";
 
 export function BusinessDetailsForm() {
-    const router = useRouter();
+    const { mutate } = useRegisterBusiness();
 
     const {
         register,
@@ -24,19 +24,19 @@ export function BusinessDetailsForm() {
             email: "",
             password: "",
             address: "",
-            latitude: 0,
-            longitude: 0,
+            latitude: 33.6844,
+            longitude: 73.0479,
         },
     });
 
     const onSubmit = (data: BusinessDetailsValues) => {
         const finalData = {
             ...data,
-            latitude: 0,
-            longitude: 0,
+            latitude: 33.6844,
+            longitude: 73.0479,
         };
 
-        console.log("Form Data:", finalData);
+        mutate(finalData);
     };
 
     return (
@@ -119,7 +119,6 @@ export function BusinessDetailsForm() {
                         type="submit"
                         variant="default"
                         className="h-[42px] font-semibold"
-                        onClick={() => router.push("/business-management/verification")}
                     >
                         Continue to verification
                     </Button>

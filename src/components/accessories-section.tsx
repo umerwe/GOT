@@ -11,6 +11,7 @@ import { Business } from '@/types/business';
 
 const AccessoriesSection = () => {
     const { data: businessData, isLoading: businessLoading } = useGetBusinessProducts();
+    console.log(businessData)
 
     const [paginationMap, setPaginationMap] = useState<Record<number | string, number>>({});
 

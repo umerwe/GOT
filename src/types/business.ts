@@ -60,3 +60,9 @@ export interface Business {
 export interface BusinessDataResponse {
   data: Business[];
 }
+
+export interface BusinessDocumentForm {
+  document_id: string;
+  expire_date: string;
+  user_document: File;
+}
