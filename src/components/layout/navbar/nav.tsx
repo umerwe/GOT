@@ -33,7 +33,7 @@ const Navbar = () => {
     if (!isAuth) return setShowLoginDialog(true);
   };
 
-  const commonProps = { isAuth, mounted, textColor, handleProtectedAction };
+  const commonProps = { isAuth: !!isAuth, mounted, textColor, handleProtectedAction };
 
   return (
     <nav className={cn(
