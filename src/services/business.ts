@@ -4,7 +4,7 @@ import { BusinessDetailsValues } from "@/validations/business";
 
 export const registerBusiness = async (form: BusinessDetailsValues) => {
   const { data } = await api.post("/business-register", form);
-  return data;
+  return data.data;
 };
 
 export const getRequiredDocuments = async () => {

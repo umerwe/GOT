@@ -1,18 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import { getRequiredDocuments, registerBusiness, saveBusinessDocument } from "@/services/business";
-import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "@/components/ui/toast";
+import { useRouter } from "next/navigation";
 
 export const useRegisterBusiness = () => {
+    const router = useRouter();
   return useMutation({
     mutationFn: registerBusiness,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      localStorage.setItem("token", data.auth_token);
       toast({
         title: "Business Registration Successful"
       });
-      // router.push("/business-management/");
+      router.push("/business-management/verification");
     },
     onError: (err: any) => {
       console.log(err)

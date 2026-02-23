@@ -37,8 +37,8 @@ const Navbar = () => {
 
   return (
     <nav className={cn(
-      "w-full top-0 md:px-[31px] md:pr-[50px] border-b-[2px] z-[500] transition-all",
-      isHome ? "bg-transparent border-transparent absolute" : "bg-white border-black-100 sticky"
+      "w-full top-0 md:px-[31px] md:pr-[50px] z-[500] transition-all",
+      isHome ? "bg-transparent absolute" : "bg-white sticky"
     )}>
       <div className="flex items-start justify-between pr-4 md:pr-0">
         <Logo

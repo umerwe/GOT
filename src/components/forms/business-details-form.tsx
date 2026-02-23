@@ -110,18 +110,18 @@ export function BusinessDetailsForm() {
                 <div className="flex gap-4">
                     <Button
                         type="submit"
-                        variant="outline"
-                        className="font-semibold text-black h-[42px]"
+                        variant="default"
+                        className="font-semibold h-[42px]"
                     >
-                        Save Details
+                        Submit
                     </Button>
-                    <Button
-                        type="submit"
+                    {/* <Button
+                        type="button"
                         variant="default"
                         className="h-[42px] font-semibold"
                     >
                         Continue to verification
-                    </Button>
+                    </Button> */}
                 </div>
             </form>
         </div>
