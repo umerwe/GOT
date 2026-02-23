@@ -197,27 +197,31 @@ export default function SignUpForm() {
             </div>
           </div>
 
-          {/* Google Button */}
           {configData?.google_login && (
             <div className="grid grid-cols-1">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => signIn("google")}
-                className="w-full text-[12px] flex items-center justify-center gap-2 h-[36px]
-                         border border-[#D0D5DD] bg-white text-black hover:bg-gray-50
-                         rounded-none font-normal"
+                className="w-full h-11 flex items-center justify-center gap-2
+                 border border-gray-300 bg-white text-black hover:bg-gray-50
+                 rounded-none font-normal text-base"
               >
-                <Image
-                  src="/google-logo.png"
-                  alt="Google"
-                  width={16}
-                  height={16}
-                />
+                <FcGoogle className="w-4 h-4" />
                 Google
               </Button>
             </div>
           )}
+
+          <div className="text-center mt-4">
+            <p className="text-sm text-gray-500">Looking to list your business on our platform?</p>
+            <Link
+              href="/auth/business-login"
+              className="text-sm font-medium text-black underline hover:no-underline"
+            >
+              Sign up as Business Account
+            </Link>
+          </div>
 
           {/* Footer Link */}
           <div className="text-[#000000] text-center mt-[32px]">

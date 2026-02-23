@@ -240,11 +240,11 @@ export default function Listing({ product }: ProductDetailsProps) {
           {/* Tags & Wishlist Icon */}
           <div className="flex justify-between items-center py-[5px]">
             <div className="flex gap-2">
-              <span className="bg-[#E9A426] text-blacky px-3 h-[22px] flex items-center justify-center text-xs rounded">
+              <span className="bg-[#E9A426] text-black px-3 h-[22px] flex items-center justify-center text-xs rounded">
                 Featured
               </span>
 
-              <span className="bg-[#E9A426] text-blacky px-3 h-[22px] flex items-center justify-center text-xs rounded">
+              <span className="bg-[#E9A426] text-black px-3 h-[22px] flex items-center justify-center text-xs rounded">
                 Verified
               </span>
             </div>
@@ -260,7 +260,7 @@ export default function Listing({ product }: ProductDetailsProps) {
 
           {/* Title Header */}
           <div className="space-y-[6px]">
-            <h3 className="text-[22px] font-bold leading-[1.2] tracking-tight text-blacky">
+            <h3 className="text-[22px] font-bold leading-[1.2] tracking-tight text-black">
               {capitalizeWords(product?.title)}
             </h3>
 
@@ -280,7 +280,7 @@ export default function Listing({ product }: ProductDetailsProps) {
 
           {/* Price */}
           <div className="flex justify-between items-baseline border-t border-gray-100 pt-[15px]">
-            <h1 className="text-[24px] font-bold text-blacky">
+            <h1 className="text-[24px] font-bold text-black">
               AED {product.price.toLocaleString()}
             </h1>
             <span className="text-[#C17C00] font-medium text-sm cursor-pointer underline underline-offset-2">Need financing?</span>
@@ -289,8 +289,8 @@ export default function Listing({ product }: ProductDetailsProps) {
           {/* Seller Info */}
           <div className="text-sm flex items-center justify-between">
             <div>
-              <span className="text-blacky font-semibold">Seller: </span>
-              <span className="text-blacky font-semibold cursor-pointe">
+              <span className="text-black font-semibold">Seller: </span>
+              <span className="text-black font-semibold cursor-pointe">
                 {product.seller?.name}
               </span>
             </div>
@@ -310,7 +310,7 @@ export default function Listing({ product }: ProductDetailsProps) {
             {product?.seller?.user_type !== "business" && (
               <Button
                 onClick={handleChatClick}
-                className="bg-blacky hover:bg-black text-white rounded-none h-[54px] text-sm font-medium w-full"
+                className="bg-black hover:bg-black text-white rounded-none h-[54px] text-sm font-medium w-full"
               >
                 <BsChatDotsFill className="w-[18.5px] h-[17px] mr-2" />
                 Chat with seller
@@ -319,7 +319,7 @@ export default function Listing({ product }: ProductDetailsProps) {
 
             <Button
               variant="default"
-              className="bg-blacky hover:bg-black text-white rounded-none h-[54px] text-sm font-medium w-full"
+              className="bg-black hover:bg-black text-white rounded-none h-[54px] text-sm font-medium w-full"
               onClick={handleContactClick}
             >
               <Phone size={20} className="mr-2" fill="white" />
@@ -389,7 +389,7 @@ function SpecBox({ label, value }: { label: string; value?: string | number | nu
       <span className="text-xs font-normal text-gray-500 tracking-wide uppercase">
         {label}
       </span>
-      <h1 className="text-[16px] font-semibold text-blacky truncate">
+      <h1 className="text-[16px] font-semibold text-black truncate">
         {value || "-"}
       </h1>
     </div>
