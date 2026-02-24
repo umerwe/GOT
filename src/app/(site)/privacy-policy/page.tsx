@@ -1,13 +1,18 @@
 'use client'
+import Loader from '@/common/loader'
 import Container from '@/components/container'
 import Breadcrumb from '@/components/ui/breadcrumb'
-import { useAppSelector } from '@/store/hooks'
+import { useGetConfig } from '@/hooks/useConfig'
 import React from 'react'
 
 const PrivacyPolicy = () => {
-  const configData = useAppSelector((state) => state.config.data)
+  const { data, isLoading } = useGetConfig()
 
-  const privacyData = configData?.privacy_policy || ''
+  const privacyData = data?.privacy_policy || ''
+
+  if (isLoading) {
+    return <Loader />
+  }
 
   return (
     <>

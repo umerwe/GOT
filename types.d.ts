@@ -121,3 +121,24 @@ interface EditProductForm {
   price: string
   product_image: FileList | null
 }
+
+interface ProfileProps {
+  id: number;
+  first_name: string;
+  last_name: string;
+  name: string;
+  email: string;
+  status: number;
+  phoneNumber: string;
+  profile_image: string;
+  dob: string | null;
+  blood: string | null;
+  emergencyContact: string | null;
+  medicalCondition: string | null;
+  bikeType: string | null;
+  mileage: string | null;
+  auth_token: string;
+  created_at: string;
+  updated_at: string;
+  user_type?: string;
+}

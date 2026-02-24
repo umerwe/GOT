@@ -1,14 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit"
 import authReducer from "./slices/AuthSlice"
 import chatCountReducer from "./slices/ChatSlice"
-import configReducer from "./slices/ConfigSlice"
 import cartReducer from "./slices/CartSlice"
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     chatCount: chatCountReducer,
-    config: configReducer,
     cart: cartReducer,
   },
 })

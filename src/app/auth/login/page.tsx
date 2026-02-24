@@ -4,20 +4,19 @@ import { useState } from "react"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { FaEye, FaEyeSlash } from "react-icons/fa"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { type Login, LoginSchema } from "@/validations/auth"
 import { useLogin } from "@/hooks/useAuth"
 import { signIn } from "next-auth/react"
-import { useAppSelector } from "@/store/hooks"
-import Image from "next/image"
 import { Eye, EyeOff } from "lucide-react"
 import { FcGoogle } from "react-icons/fc"
+import { useGetConfig } from "@/hooks/useConfig"
 
 
 export default function LoginForm() {
-  const configData = useAppSelector((state) => state.config.data)
+  const { data : configData } = useGetConfig();
+
   const [showPassword, setShowPassword] = useState(false)
 
   const {

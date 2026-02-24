@@ -1,17 +1,17 @@
 import BusinessHeader from "@/components/business-header";
 import Container from "@/components/container";
-import { BusinessDetailsForm } from "@/components/forms/business-details-form";
+import BusinessProfileForm from "@/components/forms/business-profile-form";
 
-export default function BusinessSetupPage() {
+export default function BusinessProfilePage() {
   return (
     <div className="py-10 bg-gray-50 min-h-screen">
       <Container>
         <div className="max-w-4xl mx-auto">
           <BusinessHeader
-            title="Register your business"
-            description="Create your seller account to list motorcycles, gear, and services in Dubai."
+            title="Business Profile"
+            description="Update business information, contacts, and payout details"
           />
-          <BusinessDetailsForm />
+          <BusinessProfileForm />
         </div>
       </Container>
     </div>

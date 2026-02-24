@@ -4,7 +4,7 @@ import ReactCountryFlag from "react-country-flag";
 import { NavIconsProps } from "@/types/navbar";
 
 const NavIcons = ({
-    mounted,
+    isLoading,
     cartCount,
     textColor,
     isHome,
@@ -30,7 +30,7 @@ const NavIcons = ({
                 className="relative cursor-pointer hover:opacity-80"
             >
                 <ShoppingCart className={cn("w-[19.5px] h-[19.5px] stroke-[2.5]", textColor)} />
-                {mounted && cartCount > 0 && (
+                {!isLoading && cartCount > 0 && (
                     <span className="absolute -top-1.5 -right-2 bg-[#E9A426] text-black text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
                         {cartCount}
                     </span>

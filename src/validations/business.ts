@@ -8,10 +8,16 @@ export const businessDetailsSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
   address: z.string().min(1, "Address is required"),
-
-  // 👇 Make them simple numbers (no coerce)
   latitude: z.number(),
   longitude: z.number(),
 });
 
+export const businessProfileSchema = z.object({
+  first_name: z.string(),
+  last_name: z.string(),
+  phone: z.string(),
+  address: z.string()
+});
+
 export type BusinessDetailsValues = z.infer<typeof businessDetailsSchema>;
+export type BusinessProfileValues = z.infer<typeof businessProfileSchema>;

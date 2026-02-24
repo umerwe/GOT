@@ -12,7 +12,9 @@ export const getRequiredDocuments = async () => {
   return data.data;
 };
 
-export const saveBusinessDocument = async (form: BusinessDocumentForm) => {
-  const { data } = await api.post("/user-document-save", form);
+export const saveBusinessDocument = async (form: FormData) => {
+  const { data } = await api.post("/user-document-save", form, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
   return data;
 };

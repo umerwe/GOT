@@ -4,18 +4,30 @@ import { useGetBusinessProducts } from '@/hooks/useProduct'
 import React, { useState } from 'react'
 import { Button } from '@/components/ui/button';
 import GridCard from './cards/grid-card';
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader, Star } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Business } from '@/types/business';
+import NotFoundWrapper from '@/common/not-found';
 
 const AccessoriesSection = () => {
-    const { data: businessData, isLoading: businessLoading } = useGetBusinessProducts();
-    console.log(businessData)
+    const { data, isLoading: businessLoading } = useGetBusinessProducts();
+    const businessData = data?.data;
 
     const [paginationMap, setPaginationMap] = useState<Record<number | string, number>>({});
 
-    if (businessLoading) return <div className="py-10 text-center">Loading Accessories...</div>;
+    if (businessLoading) return (
+        <div className="flex items-center justify-center h-[20vh]">
+            <Loader className='animate-spin' />
+        </div>
+    );
+
+    if (!businessLoading && businessData?.length === 0) {
+        return <div>
+            <h2>Accessories</h2>
+            <NotFoundWrapper />
+        </div>
+    }
 
     const handleScroll = (businessId: number | string, direction: 'next' | 'prev', totalProducts: number) => {
         const currentIndex = paginationMap[businessId] || 0;
@@ -40,14 +52,13 @@ const AccessoriesSection = () => {
 
     return (
         <div className="space-y-[60px]">
-            {businessData?.data?.map((business: Business) => {
+            {businessData?.map((business: Business) => {
                 const currentIndex = paginationMap[business.id] || 0;
                 const visibleProducts = business.products?.slice(currentIndex, currentIndex + 4) || [];
                 const totalProducts = business.products?.length || 0;
 
                 return (
                     <div key={business.id}>
-                        {/* Header Section */}
                         <div className="flex items-center justify-between mb-[15.5px]">
                             <h2>Accessories</h2>
 
@@ -74,7 +85,6 @@ const AccessoriesSection = () => {
                         </div>
 
                         <div className='bg-[#F5F5F5] pt-[19px] px-[14px] pb-[30px] rounded-none'>
-                            {/* Seller Info Bar */}
                             <Link
                                 href={`/business/${business.id}`}
                                 className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-[23px]">
@@ -103,12 +113,6 @@ const AccessoriesSection = () => {
                                 </div>
 
                                 <div className="flex items-center gap-4">
-                                    {/* <div className="flex items-center gap-1 text-sm text-black">
-                                        <div className="bg-black text-white w-[22px] h-[22px] rounded-full flex items-center justify-center">
-                                            <FiMapPin size={11} />
-                                        </div>
-                                        <span className="font-medium max-w-[100px] truncate">{business.address}</span>
-                                    </div> */}
 
                                     <div className="flex items-center gap-2 bg-[#E9A426] px-3 h-[30px] rounded-full">
                                         <div className="bg-black rounded-full p-0.5">
@@ -131,7 +135,6 @@ const AccessoriesSection = () => {
                                 </div>
                             </Link>
 
-                            {/* Grid Content - Shows only sliced products */}
                             <div>
                                 <GridCard
                                     businessLogo={business?.logo}

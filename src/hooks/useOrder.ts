@@ -8,21 +8,19 @@ import { useAppDispatch } from "@/store/hooks";
 import { clearCart } from "@/store/slices/CartSlice";
 
 export const useGetOrderList = (currentPage: number = 1) => {
-  return useQuery({
-    queryKey: ["order-list", currentPage],
-    queryFn: () => getOrderList(currentPage),
-  });
+    return useQuery({
+        queryKey: ["order-list", currentPage],
+        queryFn: () => getOrderList(currentPage),
+    });
 };
+
 export const useSaveOrder = () => {
     const queryClient = useQueryClient()
-const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
     return useMutation({
         mutationFn: saveOrder,
-        onSuccess: async (data) => {
-
-         
-dispatch(clearCart());
-            // Redirect immediately
+        onSuccess: async () => {
+            dispatch(clearCart());
             queryClient.invalidateQueries({ queryKey: ["order-list"] })
         },
 

@@ -63,6 +63,7 @@ export interface BusinessDataResponse {
 
 export interface BusinessDocumentForm {
   document_id: string;
+  document : string;
   expire_date: string;
   user_document: File;
 }

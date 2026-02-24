@@ -5,10 +5,13 @@ import { getPusherClient } from "@/lib/pusher-client"
 import { useAppSelector, useAppDispatch } from "@/store/hooks"
 import { addMessage, setChatCount } from "@/store/slices/ChatSlice"
 import { Message } from "@/types/chat"
+import { useGetProfile } from "@/hooks/useProfile"
 
 const ChatListener = () => {
-    const dispatch = useAppDispatch()
-    const userId = useAppSelector((state) => state.auth.userId)
+    const { data: profileData } = useGetProfile();
+    
+    const userId = profileData?.id;
+    const dispatch = useAppDispatch();
     const chatCount = useAppSelector((state) => state.chatCount.counts)
 
     useEffect(() => {

@@ -10,6 +10,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "new.getoutthere-app.com",
+        port: "",
+        pathname: "/storage/**",
+      },
+      {
+        protocol: "https",
         hostname: "maps.googleapis.com",
         pathname: "/**",
       },

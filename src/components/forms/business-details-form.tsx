@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useRegisterBusiness } from "@/hooks/useBusiness";
 
 export function BusinessDetailsForm() {
-    const { mutate } = useRegisterBusiness();
+    const { mutate, isPending } = useRegisterBusiness();
 
     const {
         register,
@@ -112,8 +112,9 @@ export function BusinessDetailsForm() {
                         type="submit"
                         variant="default"
                         className="font-semibold h-[42px]"
+                        disabled={isPending}
                     >
-                        Submit
+                        {isPending ? "Submitting..." : "Submit"}
                     </Button>
                     {/* <Button
                         type="button"

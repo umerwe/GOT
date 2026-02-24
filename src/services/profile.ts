@@ -5,7 +5,7 @@ export const getProfile = async () => {
   return data.data;
 };
 
-export const updateProfile = async (formData: FormData) => {
+export const updateProfile = async (formData: ProfileProps) => {
   const { data } = await api.post("/update-profile", formData, {
     headers: {
       "Content-Type": "multipart/form-data",

@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SignUp, SignUpSchema } from "@/validations/auth";
@@ -13,13 +12,12 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
-import { useAppSelector } from "@/store/hooks";
-import Image from "next/image";
-import { Eye, EyeClosed, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useGetConfig } from "@/hooks/useConfig";
 
 export default function SignUpForm() {
-  const configData = useAppSelector((state) => state.config.data);
+  const { data : configData } = useGetConfig();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 

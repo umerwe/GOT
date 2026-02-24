@@ -12,14 +12,17 @@ import MessagesList from "@/components/chat/message-list"
 import AuthGuard from "@/common/auth-guard"
 import api from "@/lib/axios"
 import { resetChatCount } from "@/store/slices/ChatSlice"
+import { useGetProfile } from "@/hooks/useProfile"
 
 const ConversationPage = () => {
-  const { id } = useParams()
+  const { data: profileData } = useGetProfile()
+
+  const { id } = useParams();
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
   const conversationId = searchParams.get("conversation_id")
-  const userId = useAppSelector((state) => state.auth.userId)
+  const userId = profileData?.id;
   const dispatch = useAppDispatch()
   const { data: inboxDataRaw = [], isLoading: isInboxLoading } = useGetChatInbox()
   const { data: messagesDataRaw = [], isLoading: isMessagesLoading } = useGetMessages(id as string)

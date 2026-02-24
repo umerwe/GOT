@@ -1,13 +1,19 @@
 'use client'
+
+import Loader from '@/common/loader'
 import Container from '@/components/container'
 import Breadcrumb from '@/components/ui/breadcrumb'
-import { useAppSelector } from '@/store/hooks'
+import { useGetConfig } from '@/hooks/useConfig'
 import React from 'react'
 
 const TermsAndCondition = () => {
-  const configData = useAppSelector((state) => state.config.data)
+  const { data, isLoading } = useGetConfig()
 
-  const termsData = configData?.terms_condition || ''
+  const termsData = data?.terms_condition || ''
+
+  if (isLoading) {
+    return <Loader />
+  }
 
   return (
     <>
