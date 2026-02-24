@@ -76,7 +76,18 @@ export default function BusinessProfileForm() {
     };
 
     const onSubmit = (formData: BusinessProfileValues) => {
-        mutate({ ...formData, profile_image: logoFile ?? undefined });
+        const payload = new FormData();
+
+        payload.append("first_name", formData.first_name);
+        payload.append("last_name", formData.last_name);
+        payload.append("phone", formData.phone);
+        payload.append("address", formData.address);
+
+        if (logoFile) {
+            payload.append("profile_image", logoFile);
+        }
+
+        mutate(payload);
         setOpen(false);
     };
 

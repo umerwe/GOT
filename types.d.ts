@@ -130,7 +130,7 @@ interface ProfileProps {
   email: string;
   status: number;
   phoneNumber: string;
-  profile_image: string;
+  profile_image: string | undefined;
   dob: string | null;
   blood: string | null;
   emergencyContact: string | null;
