@@ -6,18 +6,18 @@ import { Search } from "lucide-react";
 import GoogleMapsLoader from "@/utils/googleMapsLoader";
 import { BusinessDetailsValues } from "@/validations/business";
 import { toast } from "./ui/toast";
+import { UseFormSetValue, FieldErrors } from "react-hook-form";
 
 interface LocationInputProps {
-  // Using 'any' here to allow this to work for both Registration and Profile forms
-  setValue: (name: any, value: any, options?: any) => void;
-  errors: any;
+  setValue: UseFormSetValue<BusinessDetailsValues>;
+  errors: FieldErrors<BusinessDetailsValues>;
   isPending: boolean;
 }
 
 export function BusinessLocationInput({ setValue, errors, isPending }: LocationInputProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isMapReady, setIsMapReady] = useState(false);
-  
+
   const inputRef = useRef<HTMLInputElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<google.maps.Map | null>(null);
@@ -83,7 +83,7 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
 
     autocomplete.addListener("place_changed", () => {
       const place = autocomplete.getPlace();
-      
+
       if (place.geometry?.location) {
         const lat = place.geometry.location.lat();
         const lng = place.geometry.location.lng();
@@ -100,15 +100,15 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
 
     // Prevent form submission when pressing Enter on a suggestion
     const preventSubmit = (e: KeyboardEvent) => {
-        if (e.key === "Enter") e.preventDefault();
+      if (e.key === "Enter") e.preventDefault();
     };
     inputRef.current.addEventListener("keydown", preventSubmit);
 
     return () => {
-        if (inputRef.current) {
-            inputRef.current.removeEventListener("keydown", preventSubmit);
-        }
-        window.google?.maps?.event?.clearInstanceListeners(autocomplete);
+      if (inputRef.current) {
+        inputRef.current.removeEventListener("keydown", preventSubmit);
+      }
+      window.google?.maps?.event?.clearInstanceListeners(autocomplete);
     };
   }, [isMapReady, updateMap]);
 
@@ -118,12 +118,12 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
       const data = await res.json();
       if (data.results[0]) {
         const addr = data.results[0].formatted_address;
-        
+
         // Update input UI
         if (inputRef.current) {
           inputRef.current.value = addr;
         }
-        
+
         updateMap(lat, lng, addr);
       }
     } catch (error) {
@@ -133,8 +133,8 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
 
   const handleUseCurrentLocation = () => {
     if (!navigator.geolocation) {
-        toast({ title: "Not Supported", description: "Geolocation is not supported by your browser." });
-        return;
+      toast({ title: "Not Supported", description: "Geolocation is not supported by your browser." });
+      return;
     }
     setIsLoading(true);
     navigator.geolocation.getCurrentPosition(
@@ -171,9 +171,9 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
         {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>}
       </div>
 
-      <div 
-        ref={mapRef} 
-        className="w-full h-[300px] border border-gray-200 bg-gray-50 rounded-md overflow-hidden" 
+      <div
+        ref={mapRef}
+        className="w-full h-[300px] border border-gray-200 bg-gray-50 rounded-md overflow-hidden"
       />
 
       <button
@@ -183,7 +183,7 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
         className="w-full bg-black text-white h-[48px] text-sm font-semibold hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
       >
         {isLoading ? (
-            <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
+          <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
         ) : null}
         {isLoading ? "Locating..." : "Use Current Location"}
       </button>
