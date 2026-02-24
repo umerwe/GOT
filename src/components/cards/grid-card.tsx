@@ -21,7 +21,7 @@ interface GridCardProps {
 export default function GridCard({
   products = [],
   isLoading = false,
-  count = 4,
+  count = 6,
   isAdsPage = false,
   businessLogo
 }: GridCardProps) {
@@ -36,7 +36,7 @@ export default function GridCard({
   }
 
   return (
-    <div className={`grid grid-cols-2 sm:grid-cols-2 gap-[10px] ${isAdsPage ? 'md:grid-cols-3' : 'md:grid-cols-4'}`}>
+    <div className={`grid grid-cols-2 sm:grid-cols-2 gap-[10px] ${isAdsPage ? 'md:grid-cols-3' : 'md:grid-cols-6'}`}>
       {products.map((product) => (
         <Link key={product.id} href={`/listing/${product.id}`}>
           <Card className="overflow-hidden rounded-none shadow-none border-none cursor-pointer h-full">

@@ -54,7 +54,7 @@ const AccessoriesSection = () => {
         <div className="space-y-[60px]">
             {businessData?.map((business: Business) => {
                 const currentIndex = paginationMap[business.id] || 0;
-                const visibleProducts = business.products?.slice(currentIndex, currentIndex + 4) || [];
+                const visibleProducts = business.products?.slice(currentIndex, currentIndex + 6) || [];
                 const totalProducts = business.products?.length || 0;
 
                 return (

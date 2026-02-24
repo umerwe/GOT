@@ -25,7 +25,7 @@ const SkeletonLoader = ({ type, count = 4 }: SkeletonLoaderProps) => {
 
         case "products":
             return (
-                <div className={`grid grid-cols-2 sm:grid-cols-2 gap-[10px] md:grid-cols-4`}>
+                <div className={`grid grid-cols-2 sm:grid-cols-2 gap-[10px] md:grid-cols-6`}>
                     {Array.from({ length: count }).map((_, i) => (
                         <Card
                             key={i}
