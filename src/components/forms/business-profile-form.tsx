@@ -14,7 +14,6 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import MyImage from "../custom/MyImage";
-import { BusinessLocationInput } from "../business-location-input";
 
 function ReadOnlyField({ label, value, className }: { label: string; value: string; className?: string }) {
     return (
@@ -168,13 +167,13 @@ export default function BusinessProfileForm() {
                         </div>
 
                         {/* Integrated Map Component for Address */}
-                        <div className="md:col-span-2 space-y-2">
+                        {/* <div className="md:col-span-2 space-y-2">
                             <BusinessLocationInput
                                 setValue={setValue} 
                                 errors={errors} 
                                 isPending={isPending} 
                             />
-                        </div>
+                        </div> */}
 
                         <div className="flex justify-end mt-8">
                             <Button
