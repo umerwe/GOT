@@ -15,7 +15,7 @@ export default function BusinessAuthPrivate({ children }: BusinessAuthPrivatePro
 
     useEffect(() => {
     if (!isLoading) {
-      if (!data || !data.user_type) {
+      if (!data ) {
         router.back();
       }
     }
