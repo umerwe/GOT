@@ -6,26 +6,24 @@ import { useGetProfile } from "@/hooks/useProfile";
 import Loader from "@/common/loader";
 
 interface BusinessAuthPrivateProps {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 export default function BusinessAuthPrivate({ children }: BusinessAuthPrivateProps) {
-    const router = useRouter();
-    const { data, isLoading } = useGetProfile();
+  const router = useRouter();
+  const { data, isLoading } = useGetProfile();
 
-    useEffect(() => {
-    if (!isLoading) {
-      if (!data ) {
-        router.back();
-      }
+  useEffect(() => {
+    if (!isLoading && !data) {
+      router.back();
     }
   }, [data, isLoading, router]);
 
-    if (isLoading || !data) {
-        return (
-            <Loader />
-        );
-    }
+  if (isLoading || !data) {
+    return (
+      <Loader />
+    );
+  }
 
-    return <>{children}</>;
+  return <>{children}</>;
 }

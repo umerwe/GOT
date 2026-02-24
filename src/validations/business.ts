@@ -16,7 +16,9 @@ export const businessProfileSchema = z.object({
   first_name: z.string(),
   last_name: z.string(),
   phone: z.string(),
-  address: z.string()
+  address: z.string(),
+  latitude: z.number(),
+  longitude: z.number(),
 });
 
 export type BusinessDetailsValues = z.infer<typeof businessDetailsSchema>;

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAppSelector } from "@/store/hooks";
 import { cn } from "@/lib/utils";
 import { UserMenu } from "../../user-menu";
@@ -17,8 +17,9 @@ import { useGetConfig } from "@/hooks/useConfig";
 
 const Navbar = () => {
   const { data, isLoading } = useGetProfile();
-  const { data : configData } = useGetConfig();
-  
+  const { data: configData } = useGetConfig();
+  const router = useRouter();
+
   const isAuth = data?.email;
   const isBusiness = data?.user_type === "business";
 
@@ -33,9 +34,13 @@ const Navbar = () => {
   const showNavLinks = pathname.startsWith("/ads") || pathname.startsWith("/listing") || pathname.startsWith("/privacy") || pathname.startsWith("/terms");
 
   const handleProtectedAction = (path: string) => {
-    if (!isAuth) return setShowLoginDialog(true);
-  };
+    if (!isAuth) {
+      setShowLoginDialog(true);
+      return;
+    }
 
+    router.push(path);   // ✅ THIS WAS MISSING
+  };
   const commonProps = { isAuth: !!isAuth, isLoading, isBusiness, textColor, handleProtectedAction };
 
   return (

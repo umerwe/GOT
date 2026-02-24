@@ -14,6 +14,7 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import MyImage from "../custom/MyImage";
+import { BusinessLocationInput } from "../business-location-input";
 
 function ReadOnlyField({ label, value, className }: { label: string; value: string; className?: string }) {
     return (
@@ -41,6 +42,7 @@ export default function BusinessProfileForm() {
         register,
         handleSubmit,
         reset,
+        setValue,
         formState: { errors },
     } = useForm<BusinessProfileValues>({
         resolver: zodResolver(businessProfileSchema),
@@ -49,6 +51,8 @@ export default function BusinessProfileForm() {
             last_name: "",
             phone: "",
             address: "",
+            latitude: 0,
+            longitude: 0,
         },
     });
 
@@ -59,6 +63,8 @@ export default function BusinessProfileForm() {
                 last_name: data.last_name || "",
                 phone: data.phoneNumber || "",
                 address: data.address || "",
+                latitude: data.latitude || 0,
+                longitude: data.longitude || 0,
             });
             if (data.logo) {
                 setLogoPreview(data.logo);
@@ -82,6 +88,9 @@ export default function BusinessProfileForm() {
         payload.append("last_name", formData.last_name);
         payload.append("phone", formData.phone);
         payload.append("address", formData.address);
+        // Append coordinates to the FormData
+        payload.append("latitude", String(formData.latitude));
+        payload.append("longitude", String(formData.longitude));
 
         if (logoFile) {
             payload.append("profile_image", logoFile);
@@ -104,7 +113,7 @@ export default function BusinessProfileForm() {
                 <ReadOnlyField label="Phone" value={data?.phoneNumber || ""} />
                 <ReadOnlyField label="Email" value={data?.email || ""} className="normal-case" />
                 <div className="md:col-span-2">
-                    <ReadOnlyField label="Address" value={data?.address || ""} className="uppercase:first-letter" />
+                    <ReadOnlyField label="Address" value={data?.address || ""} className="normal-case" />
                 </div>
             </div>
 
@@ -121,96 +130,50 @@ export default function BusinessProfileForm() {
 
             {/* Edit Dialog */}
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent className="sm:max-w-[600px] gap-0 p-0 overflow-hidden">
+                <DialogContent className="sm:max-w-[650px] mt-20 gap-0 p-0 overflow-hidden">
                     <DialogHeader className="p-6 pb-2">
                         <DialogTitle className="text-xl font-bold">
                             Edit Business Information
                         </DialogTitle>
                     </DialogHeader>
 
+                    {/* scrollable area if map makes it too tall */}
                     <form
                         onSubmit={handleSubmit(onSubmit)}
-                        className="p-6 -mt-4 space-y-4"
+                        className="p-6 -mt-4 space-y-4 max-h-[85vh] overflow-y-auto"
                     >
-                        {/* Logo Upload */}
+                        {/* Logo Upload Section - Keep as is */}
                         <div className="flex flex-col gap-1.5">
-                            <span className="text-sm font-medium text-gray-700">
-                                Business Logo
-                            </span>
-                            <div className="flex items-center gap-4 p-4 rounded-lg border border-dashed border-gray-300 bg-gray-50">
-                                {/* Preview */}
-                                <div
-                                    className="w-16 h-16 rounded-full border-2 border-gray-200 flex items-center justify-center bg-white overflow-hidden shrink-0 cursor-pointer hover:border-gray-400 transition-colors"
-                                    onClick={() => fileInputRef.current?.click()}
-                                >
-                                    <MyImage
-                                        src={logoPreview || ""}
-                                        alt="Logo preview"
-                                        width={64}
-                                        height={64}
-                                        className="w-full h-full object-cover"
-                                    />
+                             <span className="text-sm font-medium text-gray-700">Business Logo</span>
+                             <div className="flex items-center gap-4 p-4 rounded-lg border border-dashed border-gray-300 bg-gray-50">
+                                <div className="w-16 h-16 rounded-full border-2 border-gray-200 flex items-center justify-center bg-white overflow-hidden shrink-0 cursor-pointer hover:border-gray-400 transition-colors"
+                                     onClick={() => fileInputRef.current?.click()}>
+                                    <MyImage src={logoPreview || ""} alt="Logo preview" width={64} height={64} className="w-full h-full object-cover" />
                                 </div>
-
-                                {/* Actions */}
                                 <div className="flex flex-col gap-1">
-                                    <p className="text-sm font-medium text-gray-700">
-                                        {logoPreview ? "Logo selected" : "Upload your business logo"}
-                                    </p>
-                                    <p className="text-xs text-gray-400 mb-2">
-                                        PNG, JPG or SVG · Max 2MB
-                                    </p>
-                                    <div className="flex items-center gap-2">
-                                        <button
-                                            type="button"
-                                            onClick={() => fileInputRef.current?.click()}
-                                            className="text-xs font-medium text-gray-800 border border-gray-300 px-3 py-1.5 hover:bg-white transition-colors bg-white shadow-sm"
-                                        >
-                                            Change
-                                        </button>
-                                    </div>
+                                    <p className="text-sm font-medium text-gray-700">{logoPreview ? "Logo selected" : "Upload your business logo"}</p>
+                                    <button type="button" onClick={() => fileInputRef.current?.click()} className="text-xs font-medium text-gray-800 border border-gray-300 px-3 py-1.5 bg-white">Change</button>
                                 </div>
-                            </div>
-
-                            {/* Hidden file input */}
-                            <input
-                                ref={fileInputRef}
-                                type="file"
-                                accept="image/png,image/jpeg,image/svg+xml,image/webp"
-                                className="hidden"
-                                onChange={handleLogoChange}
-                            />
+                             </div>
+                             <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleLogoChange} />
                         </div>
 
-                        {/* Text fields */}
+                        {/* Name and Phone Fields */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <Input
-                                id="first_name"
-                                label="First Name"
-                                {...register("first_name")}
-                                error={errors.first_name?.message}
-                            />
-                            <Input
-                                id="last_name"
-                                label="Last Name"
-                                {...register("last_name")}
-                                error={errors.last_name?.message}
-                            />
-                            <Input
-                                id="phone"
-                                label="Phone"
-                                {...register("phone")}
-                                error={errors.phone?.message}
-                            />
-
+                            <Input id="first_name" label="First Name" {...register("first_name")} error={errors.first_name?.message} />
+                            <Input id="last_name" label="Last Name" {...register("last_name")} error={errors.last_name?.message} />
                             <div className="md:col-span-2">
-                                <Input
-                                    id="address"
-                                    label="Address"
-                                    {...register("address")}
-                                    error={errors.address?.message}
-                                />
+                                <Input id="phone" label="Phone" {...register("phone")} error={errors.phone?.message} />
                             </div>
+                        </div>
+
+                        {/* Integrated Map Component for Address */}
+                        <div className="md:col-span-2 space-y-2">
+                            <BusinessLocationInput
+                                setValue={setValue} 
+                                errors={errors} 
+                                isPending={isPending} 
+                            />
                         </div>
 
                         <div className="flex justify-end mt-8">

@@ -109,14 +109,14 @@ export function VerificationForm({ documents }: VerificationFormProps) {
         </div>
 
         <div className="flex gap-4">
-          <Button
+          {/* <Button
             type="button"
             variant="outline"
             className="font-semibold text-black h-[42px]"
             onClick={() => router.back()}
           >
             Back to registration
-          </Button>
+          </Button> */}
           <Button
             type="button"
             variant="default"
