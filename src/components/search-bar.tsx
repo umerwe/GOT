@@ -32,8 +32,8 @@ const SearchBar = () => {
               key={loc}
               onClick={() => setActiveLocation(loc)}
               className={`mr-6 pb-1.5 text-[15px] transition-all font-medium whitespace-nowrap ${activeLocation === loc
-                  ? "border-b-4 border-yellow-500 text-black"
-                  : "border-b-4 border-transparent"
+                ? "border-b-4 border-yellow-500 text-black"
+                : "border-b-4 border-transparent"
                 }`}
             >
               {loc}
@@ -60,12 +60,13 @@ const SearchBar = () => {
           </div>
 
           {/* Search Button */}
-          <button
+          <Button
             onClick={handleSearch}
-            className="w-full sm:w-auto px-12 bg-[#F2A416] hover:bg-[#e0941a] transition-colors text-black font-medium text-lg shrink-0 flex items-center justify-center min-h-[40px] font-['DM_Sans',sans-serif]"
+            variant="primary"
+            className="px-12 text-lg py-8.5"
           >
             Search
-          </button>
+          </Button>
         </div>
       </div>
     </div>
