@@ -33,7 +33,7 @@ export interface Order {
         name: string;
         email: string;
     };
-    vendor: {
+    business: {
         id: number;
         name: string | null;
         email: string;

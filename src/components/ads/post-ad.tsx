@@ -5,7 +5,7 @@ import { useAddProduct } from "@/hooks/useProduct"
 import { useGetBrands } from "@/hooks/useBrand"
 import AdsTable from "@/components/current-ads"
 import AuthGuard from "@/common/auth-guard"
-import { AdForm } from "@/components/forms/post-ad"
+import { AdForm } from "@/components/forms/post-ad-form"
 
 export default function PostAd() {
   const { data: categories = [], isLoading: isCategoriesLoading } = useGetCategories()

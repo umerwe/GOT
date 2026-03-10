@@ -10,7 +10,6 @@ const PostAddCategories = () => {
 
     const handleItemClick = (item: Category) => {
         setActiveItem(item);
-        console.log(`Navigating to: ${item}`);
     };
     return (
         <div>

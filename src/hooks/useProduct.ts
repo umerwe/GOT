@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getProducts, getUserProducts, getProduct, addProduct, updateUserProduct, deleteUserProduct, getVendorProducts, getVendorProduct } from "@/services/products";
+import { getProducts, getUserProducts, getProduct, addProduct, updateUserProduct, deleteUserProduct, getBusinessProducts, getBusinessProduct } from "@/services/products";
 import { toast } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
@@ -15,24 +15,24 @@ export const useGetProducts = (
   })
 }
 
-export const useGetVendorProducts = (
+export const useGetBusinessProducts = (
   filters?: ProductFilters,
   options?: { enabled?: boolean }
 ) => {
   return useQuery({
-    queryKey: ["vendorProducts", filters],
-    queryFn: () => getVendorProducts(filters),
+    queryKey: ["businessProducts", filters],
+    queryFn: () => getBusinessProducts(filters),
     enabled: options?.enabled ?? true,
   })
 }
 
-export const useGetVendorProduct = (
+export const useGetBusinessProduct = (
   id: string,
   options?: { enabled?: boolean }
 ) => {
   return useQuery({
-    queryKey: ["vendorProduct", id],
-    queryFn: () => getVendorProduct(id),
+    queryKey: ["businessProduct", id],
+    queryFn: () => getBusinessProduct(id),
     enabled: options?.enabled ?? true,
   })
 }

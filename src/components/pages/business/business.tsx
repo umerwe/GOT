@@ -2,22 +2,22 @@
 
 import { useParams, useSearchParams } from "next/navigation";
 import Container from "@/components/container";
-import Hero from "@/components/pages/vendor/hero";
-import Tabs from "@/components/pages/vendor/tabs";
+import Hero from "@/components/pages/business/hero";
+import Tabs from "@/components/pages/business/tabs";
 import Footer from "@/components/layout/footer";
-import { useGetVendorProduct } from "@/hooks/useProduct";
+import { useGetBusinessProduct } from "@/hooks/useProduct";
 import GridCard from "@/components/cards/grid-card";
 import { useMemo } from "react";
-import { Product } from "@/types/vendor";
+import { Product } from "@/types/business";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function Vendor() {
+export default function Business() {
   const params = useParams();
   const searchParams = useSearchParams();
 
   const activeTab = searchParams.get("tab")?.toLowerCase() || "motorcycles";
 
-  const { data, isLoading } = useGetVendorProduct(params?.id as string);
+  const { data, isLoading } = useGetBusinessProduct(params?.id as string);
 
   const filteredProducts = useMemo(() => {
     const products = data?.products || [];
@@ -31,7 +31,7 @@ export default function Vendor() {
   return (
     <section>
       {isLoading ? (
-        <VendorHeroSkeleton />
+        <BusinessHeroSkeleton />
       ) : (
         <Hero
           logo={data?.logo}
@@ -44,7 +44,7 @@ export default function Vendor() {
 
       <Container className="pt-[40px] pb-[198px]">
         <div className="mb-[30px]">
-          <h2 className="text-[24px] font-bold text-blacky">
+          <h2 className="text-[24px] font-bold text-black">
             Active Listings
           </h2>
         </div>
@@ -63,8 +63,8 @@ export default function Vendor() {
   );
 }
 
-// Custom Skeleton for the Hero Section to match VendorHero design
-function VendorHeroSkeleton() {
+// Custom Skeleton for the Hero Section to match BusinessHero design
+function BusinessHeroSkeleton() {
   return (
     <div className="bg-white pt-12 pb-[30px] flex flex-col items-center">
       {/* Circle Logo Skeleton */}

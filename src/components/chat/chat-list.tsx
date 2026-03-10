@@ -8,6 +8,7 @@ import ChatItem from "./chat-item"
 import type { Chat } from "@/types/chat"
 import { ArrowLeft } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { useGetProfile } from "@/hooks/useProfile"
 
 interface ChatListProps {
   onChatSelect?: (receiverId: number, chatId: number) => void
@@ -31,7 +32,8 @@ const ChatList = ({
   inboxData = [],
   isInboxLoading = false,
 }: ChatListProps) => {
-  const userId = useAppSelector((state) => state.auth.userId)
+  const { data: profileData } = useGetProfile()
+  const userId = profileData?.id;
   const [searchQuery, setSearchQuery] = useState("")
   const router = useRouter()
 

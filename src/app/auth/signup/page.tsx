@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SignUp, SignUpSchema } from "@/validations/auth";
@@ -13,13 +12,12 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
-import { useAppSelector } from "@/store/hooks";
-import Image from "next/image";
-import { Eye, EyeClosed, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useGetConfig } from "@/hooks/useConfig";
 
 export default function SignUpForm() {
-  const configData = useAppSelector((state) => state.config.data);
+  const { data : configData } = useGetConfig();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -197,27 +195,31 @@ export default function SignUpForm() {
             </div>
           </div>
 
-          {/* Google Button */}
           {configData?.google_login && (
             <div className="grid grid-cols-1">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => signIn("google")}
-                className="w-full text-[12px] flex items-center justify-center gap-2 h-[36px]
-                         border border-[#D0D5DD] bg-white text-black hover:bg-gray-50
-                         rounded-none font-normal"
+                className="w-full h-11 flex items-center justify-center gap-2
+                 border border-gray-300 bg-white text-black hover:bg-gray-50
+                 rounded-none font-normal text-base"
               >
-                <Image
-                  src="/google-logo.png"
-                  alt="Google"
-                  width={16}
-                  height={16}
-                />
+                <FcGoogle className="w-4 h-4" />
                 Google
               </Button>
             </div>
           )}
+
+          <div className="text-center mt-4">
+            <p className="text-sm text-gray-500">Looking to list your business on our platform?</p>
+            <Link
+              href="/business-management/registration"
+              className="text-sm font-medium text-black underline hover:no-underline"
+            >
+              Sign up as Business Account
+            </Link>
+          </div>
 
           {/* Footer Link */}
           <div className="text-[#000000] text-center mt-[32px]">

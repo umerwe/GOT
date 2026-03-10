@@ -21,16 +21,15 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     const status = error.response?.status;
+    if (status === 401 && error?.message === "Request failed with status code 401") {
+      // toast({
+      //   title: "Token Expired",
+      //   variant: "destructive",
+      // });
 
-    if (status === 401) {
-      toast({
-        title: "Token Expired",
-        variant: "destructive",
-      });
-
-      if (typeof window !== "undefined") {
-        window.dispatchEvent(new Event("unauthorized"));
-      }
+      // if (typeof window !== "undefined") {
+      //   window.dispatchEvent(new Event("unauthorized"));
+      // }
     }
 
     if (status === 429) {

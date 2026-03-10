@@ -11,7 +11,7 @@ const FeauredAdsSection = () => {
 
   const { data, isLoading } = useGetProducts({
     page: page,
-    per_page: 4
+    per_page: 6
   });
   
   const products = data?.data || [];

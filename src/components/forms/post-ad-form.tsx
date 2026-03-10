@@ -20,6 +20,7 @@ import {
   type PostAdFormData,
 } from "@/validations/ads"
 import { LocationInput } from "../ui/location"
+import { useGetConfig } from "@/hooks/useConfig"
 
 interface Category {
   id: number
@@ -49,12 +50,13 @@ export function AdForm({
   addProduct,
   isPending,
 }: AdFormProps) {
+  const { data } = useGetConfig();
+  const configData = data as ConfigData;
+
   const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0)
   const [uploadedImages, setUploadedImages] = useState<{ file: File; preview: string }[]>([])
   const [guidelinesChecked, setGuidelinesChecked] = useState(false)
 
-  // Access configData with proper typing
-  const configData = useAppSelector((state: { config: { data: ConfigData | null } }) => state.config.data)
 
   const subcategories = useMemo(() => {
     if (!selectedCategoryId || !categories) return []
@@ -470,13 +472,13 @@ export function AdForm({
                 </Button>
               </Link>
 
-                <Button
-                  type="submit"
-                  className="w-full sm:flex-1 bg-black hover:bg-black/80 text-white text-sm h-[48px] font-medium rounded-none"
-                  disabled={isPending || !guidelinesChecked}
-                >
-                  {isPending ? "Submitting..." : "Submit Ad"}
-                </Button>
+              <Button
+                type="submit"
+                className="w-full sm:flex-1 bg-black hover:bg-black/80 text-white text-sm h-[48px] font-medium rounded-none"
+                disabled={isPending || !guidelinesChecked}
+              >
+                {isPending ? "Submitting..." : "Submit Ad"}
+              </Button>
             </div>
           </div>
         </div>

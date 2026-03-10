@@ -15,15 +15,15 @@ interface GridCardProps {
   isLoading?: boolean
   count?: number
   isSecond?: boolean
-  vendorLogo?: string
+  businessLogo?: string
 }
 
 export default function GridCard({
   products = [],
   isLoading = false,
-  count = 4,
+  count = 6,
   isAdsPage = false,
-  vendorLogo
+  businessLogo
 }: GridCardProps) {
   if (isLoading) {
     return <SkeletonLoader type="products" count={count} />
@@ -36,7 +36,7 @@ export default function GridCard({
   }
 
   return (
-    <div className={`grid grid-cols-2 sm:grid-cols-2 gap-[10px] ${isAdsPage ? 'md:grid-cols-3' : 'md:grid-cols-4'}`}>
+    <div className={`grid grid-cols-2 sm:grid-cols-2 gap-[10px] ${isAdsPage ? 'md:grid-cols-3' : 'md:grid-cols-6'}`}>
       {products.map((product) => (
         <Link key={product.id} href={`/listing/${product.id}`}>
           <Card className="overflow-hidden rounded-none shadow-none border-none cursor-pointer h-full">
@@ -84,11 +84,11 @@ export default function GridCard({
                 </div>
 
                 {/* BRAND IMAGE ON RIGHT */}
-                {(vendorLogo) && (
+                {(businessLogo) && (
                   <div className="flex-shrink-0 w-[55px] h-[50px]">
                     <Image
-                      src={vendorLogo}
-                      alt="Vendor"
+                      src={businessLogo}
+                      alt="Business"
                       width={55}
                       height={50}
                       className="w-full h-full object-cover"
