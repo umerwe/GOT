@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useCallback, useMemo } from "react"
-import { useForm } from "react-hook-form"
+import { useForm, Resolver } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -42,6 +42,8 @@ const NON_ACCESSORIES_FIELDS = [
   "mileage", "mileage_unit", "final_drive_system", "wheels", "engine_size", "brand_id"
 ] as const
 
+type NonAccessoriesField = typeof NON_ACCESSORIES_FIELDS[number]
+
 export function AdForm({
   categories,
   isCategoriesLoading,
@@ -67,7 +69,7 @@ export function AdForm({
   }, [selectedCategoryId, categories])
 
   const form = useForm<PostAdFormData>({
-    resolver: zodResolver(postAdSchema) as any,
+    resolver: zodResolver(postAdSchema) as Resolver<PostAdFormData>,
     defaultValues: {
       category_id: 0,
       subcategory_id: 0,
@@ -106,8 +108,8 @@ export function AdForm({
 
     // Clear non-accessories fields when switching to accessories
     if (newType === "accessories") {
-      NON_ACCESSORIES_FIELDS.forEach((field) => {
-        setValue(field as any, undefined as any)
+      NON_ACCESSORIES_FIELDS.forEach((field: NonAccessoriesField) => {
+        setValue(field, undefined as never)
       })
     }
   }
@@ -183,7 +185,7 @@ export function AdForm({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit , (errors) => console.log(errors))} className="space-y-8">
+    <form onSubmit={handleSubmit(onSubmit, (errs) => console.log(errs))} className="space-y-8">
       {/* Photos Section */}
       <div>
         <h4 className="text-[16px] mb-[2.5px]">Photos</h4>
