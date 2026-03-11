@@ -2,13 +2,9 @@ import { PostAdFormData } from "@/validations/ads"
 import { useEffect, useRef, useState, useCallback } from "react"
 import { Label } from "@/components/ui/label"
 import { useForm } from "react-hook-form"
-import { Search } from "lucide-react"
+import { MapPin, Search } from "lucide-react"
 import { toast } from "./toast"
 import GoogleMapsLoader from "@/utils/googleMapsLoader"
-
-interface PlaceAutocompleteElement extends HTMLElement {
-  place?: google.maps.places.PlaceResult
-}
 
 export function LocationInput({
   setValue,
@@ -20,153 +16,117 @@ export function LocationInput({
   errors: ReturnType<typeof useForm<PostAdFormData>>["formState"]["errors"]
   isPending: boolean
 }) {
-  const [location, setLocation] = useState<string>("")
   const [lat, setLat] = useState<number | null>(null)
-  const [lng, setLng] = useState<number | null>(null)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [isMapReady, setIsMapReady] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isMapReady, setIsMapReady] = useState(false)
 
-  const autocompleteRef = useRef<PlaceAutocompleteElement | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const mapRef = useRef<HTMLDivElement>(null)
-
   const mapInstance = useRef<google.maps.Map | null>(null)
   const markerInstance = useRef<google.maps.Marker | null>(null)
 
   const mapsLoader = GoogleMapsLoader.getInstance()
 
-  // Keep form values synced
+  // Load Google Maps API
   useEffect(() => {
-    setValue("address", location)
-    setValue("lat", lat !== null ? lat.toString() : "")
-    setValue("lng", lng !== null ? lng.toString() : "")
-  }, [location, lat, lng, setValue])
-
-  // Initialize Google Maps API
-  useEffect(() => {
-    const initializeMaps = async () => {
+    const init = async () => {
       try {
         await mapsLoader.load()
         setIsMapReady(true)
-      } catch {
-        console.error("Failed to load Google Maps")
+      } catch (err) {
+        console.error("Map load error:", err)
       }
     }
-    initializeMaps()
+    init()
   }, [mapsLoader])
 
-  // Update map & marker
+  // Update map, marker & form values
   const updateMap = useCallback(
-    (latitude: number, longitude: number) => {
-      if (!mapRef.current || !mapsLoader.isApiLoaded()) return
+    (latitude: number, longitude: number, address: string) => {
+      if (!mapRef.current || !window.google) return
+
+      setValue("address", address)
+      setValue("lat", latitude.toString())
+      setValue("lng", longitude.toString())
+      setLat(latitude)
+
+      const coords = { lat: latitude, lng: longitude }
 
       if (!mapInstance.current) {
         mapInstance.current = new window.google.maps.Map(mapRef.current, {
-          center: { lat: latitude, lng: longitude },
-          zoom: 14,
+          center: coords,
+          zoom: 15,
+        })
+        markerInstance.current = new window.google.maps.Marker({
+          position: coords,
+          map: mapInstance.current,
+          draggable: true,
         })
 
-        markerInstance.current = new window.google.maps.Marker({
-          position: { lat: latitude, lng: longitude },
-          map: mapInstance.current,
+        // Allow dragging marker to update address
+        markerInstance.current.addListener("dragend", () => {
+          const newPos = markerInstance.current?.getPosition()
+          if (newPos) {
+            handleReverseGeocode(newPos.lat(), newPos.lng())
+          }
         })
       } else {
-        mapInstance.current.setCenter({ lat: latitude, lng: longitude })
-        markerInstance.current?.setPosition({ lat: latitude, lng: longitude })
+        mapInstance.current.setCenter(coords)
+        markerInstance.current?.setPosition(coords)
       }
     },
-    [mapsLoader]
+    [setValue]
   )
 
-  // Setup Google Autocomplete
+  // Setup native Google Autocomplete
   useEffect(() => {
-    if (!isMapReady || !inputRef.current || autocompleteRef.current) return
+    if (!isMapReady || !inputRef.current || !window.google) return
 
-    const setupAutocomplete = () => {
-      if (typeof window.google === "undefined") return
+    const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, {
+      types: ["geocode"],
+      fields: ["formatted_address", "geometry"],
+    })
 
-      const autocompleteContainer = document.createElement("place-autocomplete-element")
-      autocompleteContainer.setAttribute("types", '["geocode"]')
-      inputRef.current!.parentElement?.insertBefore(autocompleteContainer, inputRef.current)
-      autocompleteContainer.appendChild(inputRef.current!)
+    autocomplete.addListener("place_changed", () => {
+      const place = autocomplete.getPlace()
+      if (place.geometry?.location) {
+        const newLat = place.geometry.location.lat()
+        const newLng = place.geometry.location.lng()
+        const address = place.formatted_address || ""
 
-      autocompleteRef.current = autocompleteContainer as PlaceAutocompleteElement
+        if (inputRef.current) inputRef.current.value = address
+        updateMap(newLat, newLng, address)
+      }
+    })
 
-      autocompleteRef.current.addEventListener("place-changed", () => {
-        const place = autocompleteRef.current?.place
-        if (place?.geometry?.location) {
-          const newLat = place.geometry.location.lat()
-          const newLng = place.geometry.location.lng()
-          setLocation(place.formatted_address ?? "")
-          setLat(newLat)
-          setLng(newLng)
-          updateMap(newLat, newLng)
-        }
-      })
+    // Prevent form submit on Enter key inside autocomplete
+    const preventSubmit = (e: KeyboardEvent) => {
+      if (e.key === "Enter") e.preventDefault()
     }
+    inputRef.current.addEventListener("keydown", preventSubmit)
 
-    if (mapsLoader.isApiLoaded()) {
-      setupAutocomplete()
-    } else {
-      mapsLoader.onLoad(setupAutocomplete)
+    return () => {
+      if (inputRef.current) {
+        inputRef.current.removeEventListener("keydown", preventSubmit)
+      }
+      window.google?.maps?.event?.clearInstanceListeners(autocomplete)
     }
-  }, [isMapReady, mapsLoader, updateMap])
+  }, [isMapReady, updateMap])
 
-  // Manual search
-  const handleManualSearch = async (searchLocation: string) => {
-    if (!searchLocation.trim()) return
-    setIsLoading(true)
-
+  // Reverse geocode lat/lng → address
+  const handleReverseGeocode = async (latitude: number, longitude: number) => {
     try {
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-          searchLocation
-        )}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY}`
+      const res = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY}`
       )
-      const data = await response.json()
-
-      if (data.results && data.results[0]) {
-        const result = data.results[0]
-        const newLat = result.geometry.location.lat
-        const newLng = result.geometry.location.lng
-
-        setLocation(result.formatted_address)
-        setLat(newLat)
-        setLng(newLng)
-        updateMap(newLat, newLng)
-
-        if (inputRef.current) {
-          inputRef.current.value = result.formatted_address
-        }
-      } else {
-        toast({
-          title: "Location not found",
-          description: "Please try a different search term.",
-          variant: "destructive",
-        })
+      const data = await res.json()
+      if (data.results[0]) {
+        const address = data.results[0].formatted_address
+        if (inputRef.current) inputRef.current.value = address
+        updateMap(latitude, longitude, address)
       }
     } catch {
-      toast({
-        title: "Search failed",
-        description: "Error searching location. Please try again.",
-        variant: "destructive",
-      })
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleSearchClick = () => {
-    const searchValue = inputRef.current?.value || location
-    if (searchValue) {
-      handleManualSearch(searchValue)
-    }
-  }
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      e.preventDefault()
-      handleSearchClick()
+      toast({ title: "Error", description: "Failed to get address", variant: "destructive" })
     }
   }
 
@@ -174,8 +134,8 @@ export function LocationInput({
   const handleUseCurrentLocation = () => {
     if (!navigator.geolocation) {
       toast({
-        title: "Geolocation not supported",
-        description: "Your browser does not support location access.",
+        title: "Not Supported",
+        description: "Geolocation is not supported by your browser.",
         variant: "destructive",
       })
       return
@@ -183,47 +143,32 @@ export function LocationInput({
 
     setIsLoading(true)
     navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const currentLat = position.coords.latitude
-        const currentLng = position.coords.longitude
-
-        try {
-          const response = await fetch(
-            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentLat},${currentLng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY}`
-          )
-          const data = await response.json()
-
-          if (data.results[0]) {
-            const address = data.results[0].formatted_address || ""
-            setLocation(address)
-            setLat(currentLat)
-            setLng(currentLng)
-
-            if (inputRef.current) {
-              inputRef.current.value = address
-            }
-            updateMap(currentLat, currentLng)
-          }
-        } catch {
-          toast({
-            title: "Error getting address",
-            description: "We could not fetch your address. Using coordinates instead.",
-            variant: "destructive",
-          })
-          setLat(currentLat)
-          setLng(currentLng)
-          updateMap(currentLat, currentLng)
-        } finally {
-          setIsLoading(false)
-        }
-      },
-      () => {
+      (pos) => {
+        handleReverseGeocode(pos.coords.latitude, pos.coords.longitude)
         setIsLoading(false)
-        toast({
-          title: "Location error",
-          description: "Could not get your current location.",
-          variant: "destructive",
-        })
+      },
+      (error) => {
+        setIsLoading(false)
+
+        let errorTitle = "Location Error"
+        let errorDescription = "Could not get your current location."
+
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            errorTitle = "Permission Denied"
+            errorDescription = "Please enable location access in your browser settings."
+            break
+          case error.POSITION_UNAVAILABLE:
+            errorTitle = "Location Unavailable"
+            errorDescription = "Location information is unavailable. Ensure GPS is turned on."
+            break
+          case error.TIMEOUT:
+            errorTitle = "Request Timeout"
+            errorDescription = "The request to get your location timed out. Please try again."
+            break
+        }
+
+        toast({ title: errorTitle, description: errorDescription, variant: "destructive" })
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
     )
@@ -232,7 +177,6 @@ export function LocationInput({
   return (
     <>
       <div className="w-full">
-        {/* Label matched to other components */}
         <Label htmlFor="address">Address</Label>
 
         <div className="relative mt-1">
@@ -242,54 +186,47 @@ export function LocationInput({
             type="text"
             placeholder="Enter location"
             disabled={isLoading || isPending}
-            onChange={(e) => setLocation(e.target.value)}
-            onKeyPress={handleKeyPress}
+            autoComplete="off"
             className="flex h-[48px] w-full border-[#C7CBD2] border-[2px] bg-white pl-3 pr-12 text-sm shadow-xs transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:ring-[1px] focus-visible:ring-gray-500 focus-visible:border-gray-500 disabled:cursor-not-allowed disabled:opacity-50"
           />
-
-          {/* Button positioned inside the 48px input */}
-          <button
-            type="button"
-            onClick={handleSearchClick}
-            disabled={isLoading || isPending}
-            className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-gray-500 hover:text-gray-700 disabled:opacity-50 transition-colors"
-          >
-            {isLoading ? (
-              <div className="animate-spin h-5 w-5 border-2 border-gray-300 border-t-gray-600 rounded-full"></div>
-            ) : (
-              <Search className="w-5 h-5 text-gray-500" />
-            )}
-          </button>
+          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+            <MapPin className="w-5 h-5 text-gray-400" />
+          </div>
         </div>
 
-        {/* Error message matched to text-sm and mt-1.5 */}
         {errors.address && (
           <p className="text-red-500 text-sm mt-1.5">{errors.address.message}</p>
         )}
       </div>
 
-      <div ref={mapRef} className="w-full h-[346px] border bg-gray-100 mt-4">
-        {!isMapReady && (
-          <div className="flex items-center justify-center h-full text-gray-500">
-            Loading map...
-          </div>
-        )}
+      <div className="w-full mt-4">
+        {/* Placeholder — always render map div so mapRef is never null */}
+        <div
+          className={`w-full h-[346px] border-2 border-dashed border-gray-300 bg-gray-50 flex flex-col items-center justify-center text-center gap-2 ${
+            lat !== null ? "hidden" : ""
+          }`}
+        >
+          <MapPin className="w-8 h-8 text-gray-400" />
+          <p className="text-sm text-gray-500 font-medium">No location selected</p>
+          <p className="text-xs text-gray-400">Search for an address or use your current location</p>
+        </div>
+
+        <div
+          ref={mapRef}
+          className={`w-full h-[346px] border bg-gray-100 ${lat === null ? "hidden" : ""}`}
+        />
       </div>
 
       <button
         type="button"
         onClick={handleUseCurrentLocation}
         disabled={isLoading || isPending}
-        className="w-full text-sm bg-black text-white h-[48px] font-normal hover:bg-gray-900 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center mt-[18px]"
+        className="w-full text-sm bg-black text-white h-[48px] font-normal hover:bg-gray-900 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-[18px]"
       >
-        {isLoading ? (
-          <>
-            <div className="animate-spin h-4 w-4 border-2 border-black border-t-transparent rounded-full mr-2"></div>
-            Getting Location...
-          </>
-        ) : (
-          <>Use Current Location</>
+        {isLoading && (
+          <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
         )}
+        {isLoading ? "Getting Location..." : "Use Current Location"}
       </button>
     </>
   )

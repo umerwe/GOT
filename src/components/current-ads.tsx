@@ -95,17 +95,17 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
 
   useEffect(() => {
     setCurrentPage(1)
-  } , [selectedStatus])
+  }, [selectedStatus])
 
 
   return (
     <div className="w-full">
       {/* Container with horizontal scroll enabled */}
       <div className={`bg-white ${type === "post-ad" ? "border-[2px]" : "border"} border-gray-200 overflow-x-auto`}>
-        
+
         {/* Fixed minimum width ensures columns don't squash and triggers scrolling */}
         <div className="min-w-[1000px]">
-          
+
           {/* --- Table Header --- */}
           {/* Removed 'hidden sm:grid' and forced 'grid' always */}
           <div className="grid grid-cols-12 gap-4 p-4 border-b border-gray-200 text-[14px] font-bold text-black uppercase tracking-wide">
@@ -190,15 +190,24 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
                         <Button
                           variant="ghost"
                           className="h-8 w-8 p-0 text-gray-600 hover:text-gray-600 bg-transparent hover:bg-transparent"
+                          onClick={(e) => e.stopPropagation()}
                         >
                           <MoreVertical className="w-4 h-4" />
                         </Button>
                       </DropdownMenuTrigger>
+
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => viewAd(ad.id as number)}>
                           <Eye className="w-4 h-4 mr-2" /> View Ad
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => confirmDelete(ad.id as number)} className="text-black focus:text-red-600">
+
+                        <DropdownMenuItem
+                          className="text-black focus:text-red-600"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            confirmDelete(ad.id as number);
+                          }}
+                        >
                           <Trash2 className="w-4 h-4 mr-2" /> Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>

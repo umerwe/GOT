@@ -23,25 +23,24 @@ export const UserMenu = () => {
   const queryClient = useQueryClient();
 
   const handleLogout = async () => {
-    console.log("Logout clicked")
     dispatch(logout());
     router.replace('/auth/login');
     await signOut({ redirect: false });
     queryClient.clear();
   }
 
-  if (isLoading) return <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />;
+  if (isLoading) return <div className="w-7 h-7 rounded-full bg-gray-200 animate-pulse" />;
 
   const isBusiness = data?.user_type === "business";
 
   const ProfileAvatar = (
-    <div className="w-8 h-8 rounded-full overflow-hidden cursor-pointer">
+    <div className="w-7 h-7 rounded-full overflow-hidden cursor-pointer">
       <Image
         src={isBusiness ? data?.logo : data?.profile_image}
         alt="profile"
-        width={32}
-        height={32}
-        className="rounded-full object-cover w-full h-full"
+        width={24}
+        height={24}
+        className="rounded-full object-center w-full h-full"
       />
     </div>
   );

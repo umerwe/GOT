@@ -2,7 +2,6 @@
 
 import React, { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { LOCATIONS } from "@/constants/locations"
 
@@ -12,9 +11,9 @@ const SearchBar = () => {
   const router = useRouter()
 
   const handleSearch = () => {
-    if (searchText.trim() !== "") {
-      router.push(`/listing?title=${encodeURIComponent(searchText)}&location=${activeLocation}`)
-    }
+    // if (searchText.trim() !== "") {
+    //   router.push(`/listing?title=${encodeURIComponent(searchText)}&location=${activeLocation}`)
+    // }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {

@@ -31,7 +31,7 @@ interface ProductDetailsProps {
 
 export default function Listing({ product }: ProductDetailsProps) {
   const dispatch = useAppDispatch();
-  const cartItems = useAppSelector((state) => state.cart.items); // Accessing current cart items
+  const cartItems = useAppSelector((state) => state.cart.items);
   const [activeImage, setActiveImage] = useState<string | null>(
     product?.product_images?.[0] ?? null
   )
@@ -39,6 +39,8 @@ export default function Listing({ product }: ProductDetailsProps) {
 
   const { token } = useAppSelector((state) => state?.auth)
   const router = useRouter();
+
+  const isAccessories = product?.category?.type === "accessories"
 
   const handleChatClick = () => {
     if (!token) {
@@ -72,12 +74,10 @@ export default function Listing({ product }: ProductDetailsProps) {
       return;
     }
 
-    // Clean the phone number (remove +, spaces, dashes)
     const cleanNumber = phoneNumber.replace(/\D/g, "");
-
-    // Open WhatsApp in a new tab
     window.open(`https://wa.me/${cleanNumber}`, "_blank");
   };
+
   const handleNextImage = () => {
     if (!product.product_images) return
     const currentIndex = product.product_images.indexOf(activeImage || "")
@@ -101,7 +101,6 @@ export default function Listing({ product }: ProductDetailsProps) {
     }
     const currentBusinessId = product.seller?.id || 0;
 
-    // 1. Check for Duplicate Items
     const isDuplicate = cartItems.some(item => item.id === product.id);
     if (isDuplicate) {
       toast({
@@ -112,7 +111,6 @@ export default function Listing({ product }: ProductDetailsProps) {
       return;
     }
 
-    // 2. Check for Different Business
     const hasDifferentBusiness = cartItems.length > 0 && cartItems.some(item => item.business !== currentBusinessId);
     if (hasDifferentBusiness) {
       toast({
@@ -123,7 +121,6 @@ export default function Listing({ product }: ProductDetailsProps) {
       return;
     }
 
-    // 3. Prepare Item and Add to Cart
     const item: CartItem = {
       id: product.id || 0,
       name: product.title,
@@ -207,14 +204,20 @@ export default function Listing({ product }: ProductDetailsProps) {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-y-6 gap-x-4">
               <SpecBox label="Usage" value={product.usage ? capitalizeWords(product.usage) : "-"} />
               <SpecBox label="Condition" value={product.condition} />
-              <SpecBox
-                label="Mileage"
-                value={product.mileage ? `${product.mileage} ${product.mileage_unit || 'km'}` : "-"}
-              />
+              {!isAccessories && (
+                <SpecBox
+                  label="Mileage"
+                  value={product.mileage ? `${product.mileage} ${product.mileage_unit || 'km'}` : "-"}
+                />
+              )}
               <SpecBox label="Year" value={product.manufacturing_year} />
-              <SpecBox label="Final Drive" value={capitalizeWords(product?.final_drive_system)} />
-              <SpecBox label="Wheels" value={capitalizeWords(product?.wheels)} />
-              <SpecBox label="Engine Size" value={capitalizeWords(product.engine_size)} />
+              {!isAccessories && (
+                <>
+                  <SpecBox label="Final Drive" value={capitalizeWords(product?.final_drive_system)} />
+                  <SpecBox label="Wheels" value={capitalizeWords(product?.wheels)} />
+                  <SpecBox label="Engine Size" value={capitalizeWords(product.engine_size)} />
+                </>
+              )}
               <SpecBox label="Warranty" value={product.warranty ? "Yes" : "No"} />
             </div>
           </div>

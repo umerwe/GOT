@@ -17,7 +17,7 @@ const SkeletonLoader = ({ type, count = 4 }: SkeletonLoaderProps) => {
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
                     {Array.from({ length: count }).map((_, i) => (
                         <div key={i} className="flex flex-col items-center">
-                            <Skeleton className="w-full h-36 rounded-lg" />
+                            <Skeleton className="w-full h-36 rounded-none" />
                         </div>
                     ))}
                 </div>

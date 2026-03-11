@@ -1,8 +1,13 @@
+"use client";
+
 import AuthGuard from "@/common/auth-guard";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function ThankYouPage() {
+  const router = useRouter();
+
   return (
     <AuthGuard>
       <div className="bg-gray-50 py-8 flex items-center justify-center min-h-screen">
@@ -19,18 +24,17 @@ export default function ThankYouPage() {
             <Link href="/dashboard">
               <Button
                 size="lg"
-                className="bg-yellow-100 hover:bg-yellow-200 text-black">
+                className="bg-yellow-100 hover:bg-yellow-200 hover:text-black text-black">
                 View Ad
               </Button>
             </Link>
-            <Link href="/post-ad">
-              <Button
-                size="lg"
-                className="bg-black hover:bg-black/80 text-white font-normal"
-              >
-                Post Another Ad
-              </Button>
-            </Link>
+            <Button
+              size="lg"
+              className="bg-black hover:bg-black/80 text-white font-normal"
+              onClick={() => router.replace("/post-ad")}
+            >
+              Post Another Ad
+            </Button>
           </div>
         </div>
       </div>

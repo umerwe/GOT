@@ -28,6 +28,7 @@ interface Product {
     id: number;
     title: string;
     image: string;
+    type : string;
   };
   subcategory?: {
     id: number;

@@ -9,12 +9,14 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AuthGuard>
+    <>
+      {/* <AuthGuard> */}
       <Navbar />
       <div className="bg-[#F3F4F6] pt-[61.5px] pb-[132.5px] ">
         {children}
       </div>
       <Footer />
-    </AuthGuard>
+      {/* </AuthGuard> */}
+    </>
   );
 }
