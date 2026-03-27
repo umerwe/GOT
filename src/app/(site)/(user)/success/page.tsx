@@ -9,15 +9,13 @@ import { CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useSaveOrder } from "@/hooks/useOrder";
-import { clearCart } from "@/store/slices/CartSlice";
 
 function SuccessContent() {
-  const dispatch = useAppDispatch();
   const { mutate } = useSaveOrder();
   const cartItems = useAppSelector((state) => state.cart.items);
   const searchParams = useSearchParams();
   const transactionId = searchParams.get("tid") || "N/A";
-  
+
   const hasCalled = useRef(false);
 
   useEffect(() => {
@@ -59,7 +57,7 @@ function SuccessContent() {
 
     // We only want this to run once on mount when cartItems are present
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); 
+  }, []);
 
   return (
     <div className="max-w-[540px] w-full border border-gray-200 p-[30px] md:p-[50px] text-center space-y-8 bg-white shadow-sm mt-10 mb-20 mx-auto">

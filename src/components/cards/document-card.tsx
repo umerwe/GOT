@@ -32,6 +32,11 @@ interface DocumentCardProps {
   isSubmitting?: boolean;
 }
 
+const ALLOWED_TYPES = ["image/png", "image/jpeg", "image/jpg", "application/pdf"];
+const ALLOWED_EXTENSIONS = [".pdf", ".jpg", ".jpeg", ".png"];
+const MAX_SIZE_MB = 2;
+const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+
 export default function DocumentCard({
   document,
   onFileUpload,
@@ -39,10 +44,29 @@ export default function DocumentCard({
   onSubmit,
   isSubmitting,
 }: DocumentCardProps) {
-  
+  const [fileError, setFileError] = React.useState<string | null>(null);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file && onFileUpload) {
+    setFileError(null);
+
+    if (!file) return;
+
+    // Type check
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      setFileError("Only PNG, JPG, JPEG, or PDF files are allowed.");
+      e.target.value = "";
+      return;
+    }
+
+    // Size check
+    if (file.size > MAX_SIZE_BYTES) {
+      setFileError(`File size must be under ${MAX_SIZE_MB}MB.`);
+      e.target.value = "";
+      return;
+    }
+
+    if (onFileUpload) {
       onFileUpload(document.id, file);
     }
   };
@@ -64,10 +88,11 @@ export default function DocumentCard({
         {/* Status badge — only when already submitted */}
         {existingDoc && (
           <span
-            className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${isVerified
+            className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
+              isVerified
                 ? "bg-green-100 text-green-700"
                 : "bg-yellow-100 text-yellow-700"
-              }`}
+            }`}
           >
             {isVerified ? "Verified" : "Pending"}
           </span>
@@ -97,7 +122,7 @@ export default function DocumentCard({
           type="file"
           className="hidden"
           onChange={handleFileChange}
-          accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+          accept={ALLOWED_EXTENSIONS.join(",")}
         />
         <div
           className="w-full flex items-center justify-center text-[13px] text-gray-900
@@ -110,6 +135,16 @@ export default function DocumentCard({
               : "Choose file"}
         </div>
       </label>
+
+      {/* Validation error */}
+      {fileError && (
+        <p className="text-red-500 text-[12px] font-medium mt-1">{fileError}</p>
+      )}
+
+      {/* Allowed formats hint */}
+      <p className="text-[11px] text-gray-400 mt-1">
+        PNG, JPG, JPEG, PDF · Max {MAX_SIZE_MB}MB
+      </p>
 
       {/* Per-document submit — only shown when a new file is staged */}
       {uploadedFile && (

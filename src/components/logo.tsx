@@ -11,7 +11,7 @@ interface LogoProps {
 
 const Logo = ({ logo, className, navigate = true }: LogoProps) => {
     return (
-        <Link href={navigate ? "/" : "/business-management/verification"} className={`relative flex items-center justify-center w-[108px] h-[101px] ${className}`}>
+        <Link href={navigate ? "/" : "/business-management/verification"} className={`relative flex items-center justify-center w-[144px] h-[134px] ${className}`}>
             {logo ? (
                 <MyImage
                     src={logo}

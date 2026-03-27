@@ -99,7 +99,7 @@ export default function Listing({ product }: ProductDetailsProps) {
       setShowLoginDialog(true)
       return
     }
-    const currentBusinessId = product.seller?.id || 0;
+    const currentBusinessId = product.user?.id || 0;
 
     const isDuplicate = cartItems.some(item => item.id === product.id);
     if (isDuplicate) {
@@ -294,13 +294,13 @@ export default function Listing({ product }: ProductDetailsProps) {
             <div>
               <span className="text-black font-semibold">Seller: </span>
               <span className="text-black font-semibold cursor-pointe">
-                {product.seller?.name}
+                {product.user?.name}
               </span>
             </div>
             <div>
               <Image
-                src={product.seller?.profile_image || ""}
-                alt={product.seller?.name || ""}
+                src={product.user?.profile_image || ""}
+                alt={product.user?.name || ""}
                 width={55}
                 height={50}
                 className="w-[55px] h-[50px]"
@@ -309,8 +309,8 @@ export default function Listing({ product }: ProductDetailsProps) {
           </div>
 
           {/* Action Buttons */}
-          <div className={`grid ${product?.seller?.user_type !== "business" ? "grid-cols-2" : "grid-cols-1"} gap-3`}>
-            {product?.seller?.user_type !== "business" && (
+          <div className={`grid grid-cols-2 gap-3`}>
+            {/* {product?.seller?.user_type !== "business" && ( */}
               <Button
                 onClick={handleChatClick}
                 className="bg-black hover:bg-black text-white rounded-none h-[54px] text-sm font-medium w-full"
@@ -318,7 +318,7 @@ export default function Listing({ product }: ProductDetailsProps) {
                 <BsChatDotsFill className="w-[18.5px] h-[17px] mr-2" />
                 Chat with seller
               </Button>
-            )}
+            {/* )} */}
 
             <Button
               variant="default"

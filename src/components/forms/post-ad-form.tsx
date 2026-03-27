@@ -106,7 +106,6 @@ export function AdForm({
     setValue("category_id", categoryId, { shouldValidate: true })
     setValue("subcategory_id", 0)
 
-    // Clear non-accessories fields when switching to accessories
     if (newType === "accessories") {
       NON_ACCESSORIES_FIELDS.forEach((field: NonAccessoriesField) => {
         setValue(field, undefined as never)
