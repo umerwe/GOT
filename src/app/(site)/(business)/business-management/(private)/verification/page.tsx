@@ -7,7 +7,6 @@ import { VerificationForm } from "@/components/forms/verification-form";
 
 const VerificationPage = () => {
     const { data: requiredDocuments, isLoading, isFetching, error } = useGetRequiredDocuments();
-    console.log(requiredDocuments)
     const documents = requiredDocuments;
 
     if (isLoading || isFetching) {

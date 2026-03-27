@@ -1,29 +1,34 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useGetProfile } from "@/hooks/useProfile";
 import Loader from "@/common/loader";
 
 interface BusinessAuthCheckProps {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 export default function BusinessAuthCheck({ children }: BusinessAuthCheckProps) {
-    const router = useRouter();
-    const { data, isLoading } = useGetProfile();
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        if (!isLoading && data) {
-            router.back();
-        }
-    }, [data, isLoading, router]);
+  useEffect(() => {
+    const userType = localStorage.getItem("user_type") || "";
 
-    if (isLoading || data) {
-        return (
-            <Loader />
-        );
+    if (userType === "business") {
+      router.replace("/business-management/verification");
+    } else {
+      setLoading(false);
     }
+  }, [router]);
 
-    return <>{children}</>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader />
+      </div>
+    );
+  }
+
+  return <>{children}</>;
 }

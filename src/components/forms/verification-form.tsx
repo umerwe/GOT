@@ -39,6 +39,8 @@ export function VerificationForm({ documents }: VerificationFormProps) {
 
   const [uploadedFiles, setUploadedFiles] = useState<Record<number, File>>({});
   const [submittingIds, setSubmittingIds] = useState<Set<number>>(new Set());
+  // Track which doc IDs were successfully saved in this session
+  const [savedIds, setSavedIds] = useState<Set<number>>(new Set());
 
   const handleFileUpload = (documentId: number, file: File) => {
     setUploadedFiles((prev) => ({ ...prev, [documentId]: file }));
@@ -55,6 +57,10 @@ export function VerificationForm({ documents }: VerificationFormProps) {
     formData.append("document", file);
 
     saveDocument(formData, {
+      onSuccess: () => {
+        // Mark this doc as successfully saved via API
+        setSavedIds((prev) => new Set(prev).add(documentId));
+      },
       onSettled: () => {
         setSubmittingIds((prev) => {
           const next = new Set(prev);
@@ -69,17 +75,19 @@ export function VerificationForm({ documents }: VerificationFormProps) {
     const requiredDocs = documents.filter((doc) => doc.is_required === 1);
 
     const missingRequired = requiredDocs.some((doc) => {
-      const alreadyUploaded = !!doc.user_document;
+      // Accept if the API already has a user_document (uploaded in a previous session)
+      const previouslyUploaded = !!doc.user_document;
+      // Accept only if saved successfully via API in this session (not just file-selected)
+      const savedThisSession = savedIds.has(doc.id);
 
-      const newlyUploaded = !!uploadedFiles[doc.id];
-
-      return !alreadyUploaded && !newlyUploaded;
+      return !previouslyUploaded && !savedThisSession;
     });
 
     if (missingRequired) {
       toast({
         title: "Required Documents Missing",
-        description: "Please submit all required documents before continuing.",
+        description:
+          "Please upload and submit all required documents before continuing.",
         variant: "destructive",
       });
       return;
@@ -91,7 +99,9 @@ export function VerificationForm({ documents }: VerificationFormProps) {
   return (
     <div className="w-full bg-white px-8 py-6">
       <div className="mb-6">
-        <h2 className="text-xl font-bold text-gray-900">Business verification documents</h2>
+        <h2 className="text-xl font-bold text-gray-900">
+          Business verification documents
+        </h2>
       </div>
 
       <div className="space-y-6">
@@ -109,19 +119,12 @@ export function VerificationForm({ documents }: VerificationFormProps) {
         </div>
 
         <div className="flex gap-4">
-          {/* <Button
-            type="button"
-            variant="outline"
-            className="font-semibold text-black h-[42px]"
-            onClick={() => router.back()}
-          >
-            Back to registration
-          </Button> */}
           <Button
             type="button"
             variant="default"
             className="h-[42px] font-semibold"
-            onClick={handleContinue}>
+            onClick={handleContinue}
+          >
             Continue to review
           </Button>
         </div>
