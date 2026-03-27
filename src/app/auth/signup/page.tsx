@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 import { useGetConfig } from "@/hooks/useConfig";
 
 export default function SignUpForm() {
-  const { data : configData } = useGetConfig();
+  const { data: configData } = useGetConfig();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -86,7 +86,7 @@ export default function SignUpForm() {
             render={({ field }) => (
               <PhoneInput
                 {...field}
-                country="pk"
+                country="ae"
                 enableSearch
                 inputClass={cn(
                   "!w-full !h-[40px] !text-sm !bg-white !pl-12 !pr-3",

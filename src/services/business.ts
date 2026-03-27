@@ -1,5 +1,4 @@
 import api from "@/lib/axios";
-import { BusinessDocumentForm } from "@/types/business";
 import { BusinessDetailsValues } from "@/validations/business";
 
 export const registerBusiness = async (form: BusinessDetailsValues) => {

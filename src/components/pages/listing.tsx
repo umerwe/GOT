@@ -155,7 +155,7 @@ export default function Listing({ product }: ProductDetailsProps) {
                 src={activeImage || "/placeholder.svg"}
                 alt="Product Main"
                 fill
-                className="object-cover bg-gray-100"
+                className="object-contain bg-gray-100"
               />
 
               {/* Navigation Arrows */}

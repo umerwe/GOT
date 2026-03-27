@@ -1,4 +1,3 @@
-// app/layout.tsx
 import type { Metadata } from "next";
 import Providers from "@/providers/query-provider";
 

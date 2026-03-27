@@ -18,32 +18,30 @@ export default function AuthGuard({
   const pathname = usePathname();
 
   useEffect(() => {
-    const checkAuth = () => {
-      const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-      if (!token) {
-        if (pathname.startsWith("/auth")) {
-          setIsVerified(true);
-        } else {
-          router.back();
-        }
-        return;
-      }
-
+    if (!token) {
       if (pathname.startsWith("/auth")) {
-        router.back();
-        return;
+        setIsVerified(true);
+      } else {
+        redirectOnFail === "login"
+          ? router.replace("/auth/login")
+          : router.back();
       }
+      return;
+    }
 
-      setIsVerified(true);
-    };
+    if (pathname.startsWith("/auth")) {
+      router.replace("/");
+      return;
+    }
 
-    checkAuth();
+    setIsVerified(true);
   }, [pathname, router, redirectOnFail]);
 
-  if (!isVerified && !pathname.startsWith("/auth")) {
+  if (!isVerified) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center min-h-screen">
         <Loader />
       </div>
     );

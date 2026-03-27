@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Label } from "@/components/ui/label";
-import { Search } from "lucide-react";
+import { MapPin, Search } from "lucide-react";
 import GoogleMapsLoader from "@/utils/googleMapsLoader";
 import { BusinessDetailsValues } from "@/validations/business";
 import { toast } from "./ui/toast";
@@ -17,6 +17,7 @@ interface LocationInputProps {
 export function BusinessLocationInput({ setValue, errors, isPending }: LocationInputProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isMapReady, setIsMapReady] = useState(false);
+  const [hasLocation, setHasLocation] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
@@ -25,7 +26,6 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
 
   const mapsLoader = GoogleMapsLoader.getInstance();
 
-  // Load Google Maps API
   useEffect(() => {
     const init = async () => {
       try {
@@ -41,10 +41,10 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
   const updateMap = useCallback((latitude: number, longitude: number, address: string) => {
     if (!mapRef.current || !window.google) return;
 
-    // Update Form State and trigger validation to clear errors
     setValue("address", address, { shouldValidate: true });
     setValue("latitude", latitude);
     setValue("longitude", longitude);
+    setHasLocation(true);
 
     const coords = { lat: latitude, lng: longitude };
 
@@ -56,10 +56,9 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
       markerInstance.current = new window.google.maps.Marker({
         position: coords,
         map: mapInstance.current,
-        draggable: true
+        draggable: true,
       });
 
-      // Handle marker drag to update address
       markerInstance.current.addListener("dragend", async () => {
         const newPos = markerInstance.current?.getPosition();
         if (newPos) {
@@ -72,35 +71,45 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
     }
   }, [setValue]);
 
-  // Setup Autocomplete
+  const handleReverseGeocode = async (lat: number, lng: number) => {
+    try {
+      const res = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY}`
+      );
+      const data = await res.json();
+      if (data.results[0]) {
+        const addr = data.results[0].formatted_address;
+        if (inputRef.current) inputRef.current.value = addr;
+        updateMap(lat, lng, addr);
+      }
+    } catch {
+      toast({ title: "Error", description: "Failed to get address", variant: "destructive" });
+    }
+  };
+
   useEffect(() => {
     if (!isMapReady || !inputRef.current || !window.google) return;
 
     const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, {
       types: ["geocode"],
-      fields: ["formatted_address", "geometry"], // Optimized fields
+      fields: ["formatted_address", "geometry"],
     });
 
     autocomplete.addListener("place_changed", () => {
       const place = autocomplete.getPlace();
-
       if (place.geometry?.location) {
         const lat = place.geometry.location.lat();
         const lng = place.geometry.location.lng();
         const address = place.formatted_address || "";
-
-        // CRITICAL FIX: Manually update the input display value
-        if (inputRef.current) {
-          inputRef.current.value = address;
-        }
-
+        if (inputRef.current) inputRef.current.value = address;
         updateMap(lat, lng, address);
       }
     });
 
-    // Prevent form submission when pressing Enter on a suggestion
     const preventSubmit = (e: KeyboardEvent) => {
-      if (e.key === "Enter") e.preventDefault();
+      if (e.key === "Enter") {
+        e.preventDefault();
+      }
     };
     inputRef.current.addEventListener("keydown", preventSubmit);
 
@@ -111,25 +120,6 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
       window.google?.maps?.event?.clearInstanceListeners(autocomplete);
     };
   }, [isMapReady, updateMap]);
-
-  const handleReverseGeocode = async (lat: number, lng: number) => {
-    try {
-      const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY}`);
-      const data = await res.json();
-      if (data.results[0]) {
-        const addr = data.results[0].formatted_address;
-
-        // Update input UI
-        if (inputRef.current) {
-          inputRef.current.value = addr;
-        }
-
-        updateMap(lat, lng, addr);
-      }
-    } catch (error) {
-      toast({ title: "Error", description: "Failed to get address", variant: "destructive" });
-    }
-  };
 
   const handleUseCurrentLocation = () => {
     if (!navigator.geolocation) {
@@ -164,16 +154,26 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
             autoComplete="off"
             className="flex h-[48px] w-full border-[#C7CBD2] border-[2px] bg-white pl-3 pr-12 text-sm outline-none focus:border-gray-500 disabled:opacity-50 transition-all"
           />
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
-            <Search className="w-5 h-5 text-gray-400" />
+          <div
+            className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center"
+          >
+            <MapPin className="w-5 h-5 text-gray-400" />
           </div>
         </div>
         {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>}
       </div>
 
+      {/* Placeholder — shown when no location selected */}
+      <div className={`w-full h-[300px] border-2 border-dashed border-gray-300 bg-gray-50 flex flex-col items-center justify-center text-center gap-2 ${hasLocation ? "hidden" : ""}`}>
+        <MapPin className="w-8 h-8 text-gray-400" />
+        <p className="text-sm text-gray-500 font-medium">No location selected</p>
+        <p className="text-xs text-gray-400">Search for an address or use your current location</p>
+      </div>
+
+      {/* Map — shown when location is selected */}
       <div
         ref={mapRef}
-        className="w-full h-[300px] border border-gray-200 bg-gray-50 rounded-md overflow-hidden"
+        className={`w-full h-[300px] border border-gray-200 bg-gray-50 rounded-md overflow-hidden ${hasLocation ? "" : "hidden"}`}
       />
 
       <button

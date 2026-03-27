@@ -8,10 +8,9 @@ export const businessDetailsSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
   address: z.string().min(1, "Address is required"),
-  latitude: z.number(),
-  longitude: z.number(),
+  latitude: z.number({ message: "Please select a location on the map" }),
+  longitude: z.number({ message: "Please select a location on the map" }),
 });
-
 export const businessProfileSchema = z.object({
   first_name: z.string(),
   last_name: z.string(),

@@ -17,6 +17,7 @@ export const useRegisterBusiness = () => {
     onSuccess: (data) => {
       dispatch(setUserData(data));
       localStorage.setItem("token", data.auth_token);
+      localStorage.setItem("user_type", data.user_type);
       queryClient.invalidateQueries({ queryKey: ["profile"] })
       toast({
         title: "Business Registration Successful"

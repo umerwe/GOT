@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -39,7 +39,7 @@ const Navbar = () => {
       return;
     }
 
-    router.push(path);   // ✅ THIS WAS MISSING
+    router.push(path);
   };
   const commonProps = { isAuth: !!isAuth, isLoading, isBusiness, textColor, handleProtectedAction };
 
@@ -51,6 +51,7 @@ const Navbar = () => {
       <div className={`flex  justify-between pr-4 md:pr-0 ${isBusiness ? "items-center" : "items-start"}`}>
         <Logo
           logo={configData?.site_logo || ""}
+          navigate={isBusiness ? false : true}
         />
 
         <div className="mt-[45px]">

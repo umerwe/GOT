@@ -1,19 +1,13 @@
-import Navbar from "@/components/layout/navbar/nav";
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Home",
-};
-
 export default function MainLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  return (
-    <>
-      <Navbar/>
-      {children}
-    </>
-  );
+
+    return (
+        <>
+            {children}
+        </>
+    );
 }
+
