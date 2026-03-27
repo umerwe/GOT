@@ -24,6 +24,7 @@ export const useLogin = () => {
     onSuccess: async (data) => {
       dispatch(setUserData(data));
       localStorage.setItem("token", data.auth_token);
+      localStorage.setItem("user_type", "user");
 
       toast({
         title: "Login Successful",
