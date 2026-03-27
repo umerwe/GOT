@@ -20,7 +20,9 @@ const Navbar = () => {
   const { data: configData } = useGetConfig();
   const router = useRouter();
 
-  const isAuth = data?.email;
+  const token = useAppSelector((state: any) => state.auth.token);
+
+  const isAuth = !!token;
   const isBusiness = data?.user_type === "business";
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);

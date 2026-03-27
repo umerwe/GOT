@@ -23,10 +23,11 @@ export const UserMenu = () => {
   const queryClient = useQueryClient();
 
   const handleLogout = async () => {
-    dispatch(logout());
-    router.replace('/auth/login');
-    await signOut({ redirect: false });
+    queryClient.removeQueries({ queryKey: ["profile"] });
     queryClient.clear();
+    dispatch(logout());
+    window.location.href = '/auth/login';
+    await signOut({ redirect: false });
   }
 
   if (isLoading) return <div className="w-7 h-7 rounded-full bg-gray-200 animate-pulse" />;
