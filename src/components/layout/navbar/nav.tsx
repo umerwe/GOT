@@ -20,7 +20,7 @@ const Navbar = () => {
   const { data: configData } = useGetConfig();
   const router = useRouter();
 
-  const token = useAppSelector((state: any) => state.auth.token);
+  const token = useAppSelector((state) => state.auth.token);
 
   const isAuth = !!token;
   const isBusiness = data?.user_type === "business";
