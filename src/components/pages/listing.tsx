@@ -23,6 +23,7 @@ import FeaturesSection from "./listing/features-section"
 import { CartItem } from "@/types/cart"
 import { addToCart } from "@/store/slices/CartSlice"
 import { toast } from "../ui/toast"
+import { useGetProfile } from "@/hooks/useProfile"
 
 
 interface ProductDetailsProps {
@@ -31,13 +32,16 @@ interface ProductDetailsProps {
 
 export default function Listing({ product }: ProductDetailsProps) {
   const dispatch = useAppDispatch();
+
+  const { data, isLoading } = useGetProfile();
+
   const cartItems = useAppSelector((state) => state.cart.items);
   const [activeImage, setActiveImage] = useState<string | null>(
     product?.product_images?.[0] ?? null
   )
   const [showLoginDialog, setShowLoginDialog] = useState(false)
 
-  const { token } = useAppSelector((state) => state?.auth)
+  const { token } = useAppSelector((state) => state?.auth);
   const router = useRouter();
 
   const isAccessories = product?.category?.type === "accessories"
@@ -309,8 +313,8 @@ export default function Listing({ product }: ProductDetailsProps) {
           </div>
 
           {/* Action Buttons */}
-          <div className={`grid grid-cols-2 gap-3`}>
-            {product?.seller?.user_type !== "business" && (
+          <div className={`grid ${product?.seller?.user_type !== "business" && data?.id !== product?.seller?.id ? "grid-cols-2" : "grid-cols-1"} gap-3`}>
+            {(product?.seller?.user_type !== "business" && data?.id != product?.seller?.id) && (
               <Button
                 onClick={handleChatClick}
                 className="bg-black hover:bg-black text-white rounded-none h-[54px] text-sm font-medium w-full"

@@ -38,7 +38,7 @@ const MyImage = ({
       return (
         <div
           className={cn(
-            "flex items-center justify-center rounded-full bg-gray-200 text-gray-600 font-medium",
+            "flex items-center justify-center bg-gray-200 text-gray-600 font-medium",
             className
           )}
         >
@@ -51,7 +51,7 @@ const MyImage = ({
       <Image
         src={fallbackSrc}
         alt={alt}
-        className={cn("object-cover rounded-full", className)}
+        className={cn("object-cover", className)}
         {...rest}
       />
     );
