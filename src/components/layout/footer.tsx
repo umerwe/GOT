@@ -76,8 +76,6 @@ export default function Footer() {
                 width={256}
                 height={256}
                 className="w-[30px] h-[30px] object-contain hover:opacity-75 transition-opacity duration-300"
-                wrapperClassName="bg-transparent"
-                disableLoader={true}
               />
             </Link>
 
@@ -93,8 +91,6 @@ export default function Footer() {
                 width={256}
                 height={256}
                 className="w-[30px] h-[30px] object-contain hover:opacity-75 transition-opacity duration-300"
-                wrapperClassName="bg-transparent"
-                disableLoader={true}
               />
             </Link>
           </div>

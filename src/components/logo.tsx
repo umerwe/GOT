@@ -18,8 +18,6 @@ const Logo = ({ logo, className, navigate = true }: LogoProps) => {
                     alt="logo"
                     fill
                     className="object-contain -rotate-12"
-                    wrapperClassName="bg-transparent"
-                    disableLoader
                 />
             ) : <SpinnerLoader />}
         </Link>

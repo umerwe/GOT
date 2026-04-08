@@ -31,7 +31,6 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
   const [isEditProductOpen, setIsEditProductOpen] = useState(false)
   const [editProductId, setEditProductId] = useState<number | null>(null)
   const [deleteId, setDeleteId] = useState<number | null>(null)
-  const [selectedProductImage, setSelectedProductImage] = useState<File | null>(null);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
 
   const {
@@ -82,7 +81,6 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
       {
         onSuccess: () => {
           setIsEditProductOpen(false)
-          setSelectedProductImage(null)
           resetProduct({ title: "", price: "", product_image: null })
         },
       },
@@ -134,8 +132,8 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
                       <Image
                         src={ad.product_images?.[0] || "/placeholder.svg"}
                         alt={ad.title}
-                        width={48}
-                        height={48}
+                        width={256}
+                        height={256}
                         className="object-cover w-full h-full"
                       />
                     </div>

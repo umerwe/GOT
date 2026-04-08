@@ -7,7 +7,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import Image from "next/image";
+import Image from "@/components/custom/MyImage";
 import { cn } from "@/lib/utils";
 import { useState, useMemo } from "react";
 import Pagination from "@/components/ui/pagination";

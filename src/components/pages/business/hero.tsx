@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/custom/MyImage";
 import { Star, Share2, Check } from "lucide-react";
 import { FiMapPin } from "react-icons/fi";
 import {

@@ -1,75 +1,75 @@
-"use client"
+"use client";
 
-import Image, { ImageProps } from "next/image"
-import { useState, useCallback } from "react"
-import { ImageOff } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+import Image, { ImageProps, StaticImageData } from "next/image";
 
-interface MyImageProps extends Omit<ImageProps, "onLoad" | "onError"> {
-    wrapperClassName?: string
-    loaderClassName?: string
-    disableLoader?: boolean
+interface MyImageProps extends Omit<ImageProps, "src"> {
+  src?: string | StaticImageData | File | null;
+  alt: string;
+  className?: string;
+  fallbackSrc?: string;
+  fallbackText?: string;
 }
 
-export default function MyImage({
-    src,
-    alt,
-    className,
-    wrapperClassName,
-    loaderClassName,
-    disableLoader = false,
-    fill,
-    width,
-    height,
-    ...rest
-}: MyImageProps) {
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(false)
+const normalizeUrl = (url: string) => {
+  return url.replace(/([^:]\/)\/+/g, "$1");
+};
 
-    const handleLoad = useCallback(() => setLoading(false), [])
-    const handleError = useCallback(() => {
-        setError(true)
-        setLoading(false)
-    }, [])
+const MyImage = ({
+  src,
+  alt,
+  className,
+  fallbackSrc = "/fallback.png",
+  fallbackText,
+  ...rest
+}: MyImageProps) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(!src);
+
+  let resolvedSrc = src;
+
+  if (typeof resolvedSrc === "string") {
+    resolvedSrc = normalizeUrl(resolvedSrc);
+  }
+
+  if (isError || !resolvedSrc) {
+    if (fallbackText) {
+      return (
+        <div
+          className={cn(
+            "flex items-center justify-center rounded-full bg-gray-200 text-gray-600 font-medium",
+            className
+          )}
+        >
+          {fallbackText}
+        </div>
+      );
+    }
 
     return (
-        <div className={cn("relative overflow-hidden w-full h-full bg-gray-100", wrapperClassName)}>
-            {/* Shimmer loader */}
-            {!disableLoader && loading && !error && (
-                <div
-                    className={cn(
-                        "absolute inset-0 z-10 animate-pulse bg-gray-200",
-                        loaderClassName
-                    )}
-                />
-            )}
+      <Image
+        src={fallbackSrc}
+        alt={alt}
+        className={cn("object-cover rounded-full", className)}
+        {...rest}
+      />
+    );
+  }
 
-            {error || !src ? (
-                <div
-                    className={cn(
-                        "flex flex-col items-center justify-center w-full h-full text-gray-400 gap-2",
-                        className
-                    )}
-                >
-                    <ImageOff className="h-5 w-5" strokeWidth={1.2} />
-                </div>
-            ) : (
-                <Image
-                    {...rest}
-                    src={src}
-                    alt={alt}
-                    fill={fill}
-                    width={!fill ? width : undefined}
-                    height={!fill ? height : undefined}
-                    onLoad={handleLoad}
-                    onError={handleError}
-                    className={cn(
-                        "transition-opacity duration-300 object-cover",
-                        loading ? "opacity-0" : "opacity-100",
-                        className
-                    )}
-                />
-            )}
-        </div>
-    )
-}
+  return (
+    <Image
+      src={resolvedSrc as string}
+      alt={alt}
+      className={cn("object-cover", className)}
+      onLoadingComplete={() => setIsLoading(false)}
+      onError={() => {
+        setIsError(true);
+        setIsLoading(false);
+      }}
+      {...rest}
+    />
+  );
+};
+
+export default MyImage;

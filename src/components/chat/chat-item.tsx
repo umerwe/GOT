@@ -1,6 +1,6 @@
 "use client"
 
-import Image from "next/image"
+import Image from "@/components/custom/MyImage"
 import { capitalizeWords } from "@/utils/capitalizeWords"
 import { formatRelativeTime } from "@/utils/formatTime"
 import { Chat } from "@/types/chat"

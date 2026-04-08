@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import Image from "next/image"
+import Image from "@/components/custom/MyImage"
 import { useGetProfile, useUpdateProfile } from "@/hooks/useProfile"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
@@ -66,14 +66,6 @@ export default function ProfilePage() {
             updateProfile.mutate(formData)
         }
     }
-
-    const handleRemoveImage = () => {
-        // Implement logic to remove profile image via API call
-        // For now, we can just reset the selected file and notify user
-        setSelectedFile(null);
-        alert("Image removal logic needs to be implemented.");
-    }
-
 
     const openEditDialog = () => {
         reset({

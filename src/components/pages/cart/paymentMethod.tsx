@@ -1,5 +1,5 @@
 // components/PaymentMethods.tsx
-import Image from 'next/image';
+import Image from '@/components/custom/MyImage';
 
 interface PaymentMethod {
   src: string;

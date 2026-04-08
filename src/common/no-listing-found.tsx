@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/custom/MyImage";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 

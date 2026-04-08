@@ -50,8 +50,6 @@ const BrandsSection = () => {
                   alt={`Brand Logo ${index + 1}`}
                   fill
                   className="object-contain"
-                  wrapperClassName='bg-transparent'
-                  disableLoader={true}
                 />
               </div>
             ))}

@@ -92,9 +92,7 @@ export default function ListCard({
                                         alt={product.brand.title || "Brand"}
                                         width={55}
                                         height={50}
-                                        wrapperClassName="w-full h-full bg-white"
                                         className="object-cover w-full h-full"
-                                        disableLoader={true}
                                     />
                                 </div>
                             )}

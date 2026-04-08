@@ -1,9 +1,10 @@
 "use client"
 
-import Image from "next/image"
+import Image from "@/components/custom/MyImage"
 import { useRouter } from "next/navigation"
 import { capitalizeWords } from "@/utils/capitalizeWords"
 import { ChatInfo } from "@/types/chat"
+import MyImage from "../custom/MyImage"
 
 interface ConversationHeaderProps {
   chatInfo: ChatInfo
@@ -42,13 +43,15 @@ const ConversationHeader = ({ chatInfo, isLoading = false }: ConversationHeaderP
           <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
         </>
       ) : chatInfo.receiver_image ? (
-        <Image
-          src={chatInfo.receiver_image || "/placeholder.svg"}
-          alt={chatInfo.receiver_name || "User"}
-          width={40}
-          height={40}
-          className="w-10 h-10 rounded-full flex-shrink-0 object-cover"
-        />
+        <div>
+          <MyImage
+            src={chatInfo.receiver_image || "/placeholder.svg"}
+            alt={chatInfo.receiver_name || "User"}
+            width={256}
+            height={256}
+            className="w-10 h-10 rounded-full flex-shrink-0 object-cover"
+          />
+        </div>
       ) : (
         <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse" />
       )}

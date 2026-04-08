@@ -22,7 +22,7 @@ import { ChevronLeft, ChevronDownIcon, Star, SlidersHorizontal } from "lucide-re
 import { BiSolidGrid } from "react-icons/bi";
 import { BsFilterLeft } from "react-icons/bs";
 import { sellerData } from "@/constants/category"
-import Image from 'next/image';
+import Image from '@/components/custom/MyImage';
 import Link from 'next/link'
 import { Business } from "@/types/business"
 

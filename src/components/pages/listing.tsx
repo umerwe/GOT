@@ -99,7 +99,7 @@ export default function Listing({ product }: ProductDetailsProps) {
       setShowLoginDialog(true)
       return
     }
-    const currentBusinessId = product.user?.id || 0;
+    const currentBusinessId = product.seller?.id || 0;
 
     const isDuplicate = cartItems.some(item => item.id === product.id);
     if (isDuplicate) {
@@ -294,13 +294,13 @@ export default function Listing({ product }: ProductDetailsProps) {
             <div>
               <span className="text-black font-semibold">Seller: </span>
               <span className="text-black font-semibold cursor-pointe">
-                {product.user?.name}
+                {product.seller?.name}
               </span>
             </div>
             <div>
               <Image
-                src={product.user?.profile_image || ""}
-                alt={product.user?.name || ""}
+                src={product.seller?.profile_image || ""}
+                alt={product.seller?.name || ""}
                 width={55}
                 height={50}
                 className="w-[55px] h-[50px]"
@@ -310,7 +310,7 @@ export default function Listing({ product }: ProductDetailsProps) {
 
           {/* Action Buttons */}
           <div className={`grid grid-cols-2 gap-3`}>
-            {/* {product?.seller?.user_type !== "business" && ( */}
+            {product?.seller?.user_type !== "business" && (
               <Button
                 onClick={handleChatClick}
                 className="bg-black hover:bg-black text-white rounded-none h-[54px] text-sm font-medium w-full"
@@ -318,7 +318,7 @@ export default function Listing({ product }: ProductDetailsProps) {
                 <BsChatDotsFill className="w-[18.5px] h-[17px] mr-2" />
                 Chat with seller
               </Button>
-            {/* )} */}
+            )}
 
             <Button
               variant="default"
@@ -359,7 +359,6 @@ export default function Listing({ product }: ProductDetailsProps) {
               width={480}
               height={80}
               className="w-full h-[80px]"
-              wrapperClassName="bg-transparent"
             />
           </div>
 
@@ -371,7 +370,6 @@ export default function Listing({ product }: ProductDetailsProps) {
               width={480}
               height={80}
               className="w-full h-[80px]"
-              wrapperClassName="w-full bg-transparent"
             />
           </div>
         </div>

@@ -17,31 +17,31 @@ api.interceptors.request.use((config) => {
 });
 
 // ✅ Handle 401 and 429 errors
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    const status = error.response?.status;
-    if (status === 401 && error?.message === "Request failed with status code 401") {
-      // toast({
-      //   title: "Token Expired",
-      //   variant: "destructive",
-      // });
+// api.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     const status = error.response?.status;
+//     if (status === 401 && error?.message === "Request failed with status code 401") {
+//       // toast({
+//       //   title: "Token Expired",
+//       //   variant: "destructive",
+//       // });
 
-      // if (typeof window !== "undefined") {
-      //   window.dispatchEvent(new Event("unauthorized"));
-      // }
-    }
+//       // if (typeof window !== "undefined") {
+//       //   window.dispatchEvent(new Event("unauthorized"));
+//       // }
+//     }
 
-    if (status === 429) {
-      toast({
-        title: "Chat Limit Reached",
-        description: "You have reached the maximum number of messages allowed. Please wait before sending more.",
-        variant: "destructive",
-      });
-    }
+//     if (status === 429) {
+//       toast({
+//         title: "Chat Limit Reached",
+//         description: "You have reached the maximum number of messages allowed. Please wait before sending more.",
+//         variant: "destructive",
+//       });
+//     }
 
-    return Promise.reject(error);
-  }
-);
+//     return Promise.reject(error);
+//   }
+// );
 
 export default api;

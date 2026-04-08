@@ -11,8 +11,12 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "new.getoutthere-app.com",
-        port: "",
-        pathname: "/storage/**",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "admin.braaap.ae",
+        pathname: "/**",
       },
       {
         protocol: "https",

@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { Button } from '@/components/ui/button';
 import GridCard from './cards/grid-card';
 import { ChevronLeft, ChevronRight, Loader, Star } from 'lucide-react';
-import Image from 'next/image';
+import Image from '@/components/custom/MyImage';
 import Link from 'next/link';
 import { Business } from '@/types/business';
 import NotFoundWrapper from '@/common/not-found';

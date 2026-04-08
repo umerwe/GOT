@@ -1,11 +1,12 @@
 "use client"
 
-import Image from "next/image"
+import Image from "@/components/custom/MyImage"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 import { DialogTitle } from "@radix-ui/react-dialog"
 import { ChatInfo, Message } from "@/types/chat"
 import { capitalizeWords } from "@/utils/capitalizeWords"
+import MyImage from "../custom/MyImage"
 
 interface MessageBubbleProps {
   message: Message
@@ -17,13 +18,15 @@ const MessageBubble = ({ message, isOwn, chatInfo }: MessageBubbleProps) => {
   return (
     <div className={`flex ${isOwn ? "justify-end" : "justify-start"} w-full`}>
       {!isOwn && (
-        <Image
-          src={message.sender_image || chatInfo.receiver_image || "/placeholder.svg"}
-          alt={message.sender_name}
-          width={32}
-          height={32}
-          className="w-8 h-8 rounded-full flex-shrink-0 object-cover mr-2"
-        />
+        <div>
+          <MyImage
+            src={message.sender_image || chatInfo.receiver_image || "/placeholder.svg"}
+            alt={message.sender_name}
+            width={256}
+            height={256}
+            className="w-8 h-8 rounded-full flex-shrink-0 object-cover mr-2"
+          />
+        </div>
       )}
       <div className="flex flex-col max-w-[80%] md:max-w-[60%]">
         <p
@@ -34,8 +37,8 @@ const MessageBubble = ({ message, isOwn, chatInfo }: MessageBubbleProps) => {
         </p>
         <div
           className={`px-4 py-2 rounded-lg break-words ${isOwn
-              ? "bg-[#FFC107] text-gray-800"
-              : "bg-[#FFEFBA] text-gray-800"
+            ? "bg-[#FFC107] text-gray-800"
+            : "bg-[#FFEFBA] text-gray-800"
             }`}
         >
           {message.message ? (
@@ -74,13 +77,15 @@ const MessageBubble = ({ message, isOwn, chatInfo }: MessageBubbleProps) => {
         </div>
       </div>
       {isOwn && (
-        <Image
-          src={message.sender_image || chatInfo.receiver_image || "/placeholder.svg"}
-          alt={message.sender_name}
-          width={32}
-          height={32}
-          className="w-8 h-8 rounded-full ml-2 flex-shrink-0 object-cover"
-        />
+        <div>
+          <MyImage
+            src={message.sender_image || chatInfo.receiver_image || "/placeholder.svg"}
+            alt={message.sender_name}
+            width={256}
+            height={256}
+            className="w-8 h-8 rounded-full ml-2 flex-shrink-0 object-cover"
+          />
+        </div>
       )}
     </div>
   )

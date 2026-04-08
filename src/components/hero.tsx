@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import Image from "next/image"
+import Image from "@/components/custom/MyImage"
 import SearchBar from "./search-bar"
 
 const HeroSection = () => {

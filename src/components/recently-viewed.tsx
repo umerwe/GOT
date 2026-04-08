@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import Image from 'next/image';
+import Image from '@/components/custom/MyImage';
 
 const RecentlyViewed = () => {
     const items = [

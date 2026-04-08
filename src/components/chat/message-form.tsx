@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Paperclip, X } from "lucide-react"
 import { useSendMessage } from "@/hooks/useChat"
 import { messageSchema, type MessageFormData } from "@/validations/message"
-import Image from "next/image"
+import Image from "@/components/custom/MyImage"
 import { Message } from "@/types/chat"
 import { useGetProfile } from "@/hooks/useProfile"
 

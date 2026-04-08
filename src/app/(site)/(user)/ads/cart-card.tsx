@@ -1,7 +1,7 @@
 "use client";
 
 import { Heart, X, Minus, Plus } from "lucide-react";
-import Image from "next/image";
+import Image from "@/components/custom/MyImage";
 
 interface CartCardProps {
   id: number;
