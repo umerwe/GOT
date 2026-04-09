@@ -5,6 +5,7 @@ export interface OrderProduct {
         id: number;
         title: string;
         image: string;
+        product_images: string[];
     };
     order_id: number;
     price: string | number;
