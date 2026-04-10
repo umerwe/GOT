@@ -33,6 +33,7 @@ export interface Category {
   id: number
   title: string
   image: string
+  total_items: number
   child?: {
     id: number
     title: string

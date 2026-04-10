@@ -24,7 +24,7 @@ const CategoryCard = ({ category }: { category: Category }) => {
                     variant="primary"
                     className="absolute bottom-0 right-0 p-2 text-[13px] font-medium"
                 >
-                    {category?.child?.length || 0} Items
+                    {category.total_items || 0} Items
                 </Button>
             </div>
 
