@@ -16,7 +16,6 @@ export default function ThankYouPage() {
             Your ad has been posted!
           </h1>
           <p className="text-lg text-gray-600">
-            Your ad is now live and visible to potential buyers.
             You can view your ad or post another one.
           </p>
 
