@@ -3,22 +3,28 @@
 import Image from "@/components/custom/MyImage"
 import Link from "next/link"
 import { FaLocationDot } from "react-icons/fa6";
-import { quickLinks, searches, section } from "@/data/footer";
+import { section } from "@/data/footer"; 
 import { useGetConfig } from "@/hooks/useConfig";
 import Logo from "../logo";
+import { useGetCategories } from "@/hooks/useCategories";
 
 export default function Footer() {
-
   const currentYear = new Date().getFullYear();
   const { data: configData } = useGetConfig();
+  const { data: categoriesData } = useGetCategories();
+
+  const footerCategories = categoriesData?.slice(0, 5).map((cat: any) => ({
+    label: cat.title,
+    href: `/ads/${cat.id}`
+  })) || [];
 
   const FooterColumn = ({ title, links }: { title: string; links: { label: string; href: string }[] }) => (
     <div className={`flex flex-col space-y-[14px]`}>
       <h6 className="text-[white] text-[14px] font-normal uppercase tracking-widest">{title}</h6>
       <ul className="space-y-[5px]">
-        {links.map((link) => (
+        {links.map((link, index) => (
           <li
-            key={link.label} className="h-[28px]"
+            key={`${link.label}-${index}`} className="h-[28px]"
             style={{ fontFamily: "Roboto, sans-serif" }}
           >
             <Link
@@ -44,27 +50,21 @@ export default function Footer() {
           />
         </div>
 
-        {/* Links Section */}
-        <div className="w-full lg:w-auto grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-[60px] lg:mr-auto pb-[12px]">
+        {/* Links Section - Adjusted to 2 columns based on your request */}
+        <div className="w-full lg:w-auto grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-[60px] lg:mr-auto pb-[12px]">
           <FooterColumn
             title="SECTIONS"
             links={section}
           />
 
           <FooterColumn
-            title="QUICK LINKS"
-            links={quickLinks}
-          />
-
-          <FooterColumn
-            title="SEARCHES"
-            links={searches}
+            title="CATEGORIES"
+            links={footerCategories}
           />
         </div>
 
         <div className="w-full lg:w-auto flex justify-start lg:justify-end">
           <div className="flex items-center gap-3">
-            {/* Facebook Link */}
             <Link
               href="https://web.facebook.com/people/Get-Out-There-UAE/100086864606365/"
               target="_blank"
@@ -79,7 +79,6 @@ export default function Footer() {
               />
             </Link>
 
-            {/* Instagram Link */}
             <Link
               href="https://www.instagram.com/getoutthereuae/"
               target="_blank"
@@ -110,7 +109,6 @@ export default function Footer() {
           </h6>
         </div>
 
-        {/* Right Side: Legal Links */}
         <div className="flex items-center gap-6 sm:gap-8 text-[#7E7E7E]">
           <Link href="/terms-and-conditions" className="hover:text-white transition-colors text-[12px]">
             Terms of Use

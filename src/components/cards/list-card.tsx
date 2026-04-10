@@ -8,6 +8,10 @@ import { getConditionLabel } from "@/utils/getConditionLabel"
 import { Heart } from "lucide-react"
 import NotFoundWrapper from "@/common/not-found"
 import Image from "@/components/custom/MyImage"
+import { useAppDispatch, useAppSelector } from "@/store/hooks"
+import { toggleFavorite } from "@/store/slices/FavouriteSlice"
+import { toast } from "../ui/toast"
+import { cn } from "@/lib/utils"
 
 interface ListCardProps {
     products: Product[]
@@ -23,6 +27,8 @@ export default function ListCard({
     isHome = true
 }: ListCardProps) {
     const router = useRouter()
+    const dispatch = useAppDispatch()
+    const favoriteItems = useAppSelector((state) => state.favorites.items)
 
     if (isLoading) {
         return (
@@ -36,145 +42,178 @@ export default function ListCard({
         return <NotFoundWrapper className="mt-[15px]" />
     }
 
+    const handleToggleFavorite = (e: React.MouseEvent, product: Product) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        const isCurrentlyFavorite = favoriteItems.some((item) => item.id === product.id)
+
+        dispatch(
+            toggleFavorite({
+                id: product.id!,
+                name: product.title,
+                price: product.price,
+                image: product.product_images?.[0] || "",
+                details: [product.manufacturing_year, product.engine_size].filter(Boolean) as string[],
+                businessId: product.seller?.id || 0
+            })
+        )
+
+        toast({
+            title: isCurrentlyFavorite ? "Removed from Favorites" : "Added to Favorites",
+        })
+    }
+
     const displayData = count ? products.slice(0, count) : products
 
     return (
         <div className="px-2 sm:px-4 lg:px-0 flex flex-col">
-            {displayData.map((product) => (
-                <div
-                    key={product.id}
-                    onClick={() => router.push(`/listing/${product.id}`)}
-                    className="w-full  bg-white p-4 lg:pt-[21.22px] lg:pb-[41.78px] lg:px-[32px] border border-gray-200 hover:shadow-md transition-shadow cursor-pointer"
-                >
-                    <div className={`flex flex-col lg:flex-row gap-6 ${isHome ? "lg:gap-[80px]" : "lg:gap-[18px]"}`}>
+            {displayData.map((product) => {
+                const isFavorite = favoriteItems.some((item) => item.id === product.id)
+                
+                return (
+                    <div
+                        key={product.id}
+                        onClick={() => router.push(`/listing/${product.id}`)}
+                        className="w-full bg-white p-4 lg:pt-[21.22px] lg:pb-[41.78px] lg:px-[32px] border border-gray-200 hover:shadow-md transition-shadow cursor-pointer"
+                    >
+                        <div className={`flex flex-col lg:flex-row gap-6 ${isHome ? "lg:gap-[80px]" : "lg:gap-[18px]"}`}>
 
-                        {/* Image Section */}
-                        <div className="w-full lg:w-[189px] flex-shrink-0">
-                            <div className="relative h-56 lg:h-[122.63px] w-full overflow-hidden rounded-none">
-                                <Image
-                                    src={product.product_images?.[0] || ""}
-                                    alt={product.title || "Product"}
-                                    fill
-                                    className="object-cover"
-                                />
-                            </div>
-                        </div>
-
-                        {/* Content Section */}
-                        <div className="flex-1 flex justify-between md:justify-start space-y-3 gap-[20px] lg:space-y-1 min-w-0 relative">
-                            <div className={`space-y-[4px] ${isHome ? "max-w-[538px]" : "w-full"}`}>
-                                <Link
-                                    href={`/listing/${product.id}`}
-                                    className="block hover:text-blue-600 transition-colors"
-                                >
-                                    <h1
-                                        className="text-[18px] text-[#000000] truncate"
-                                        title={product.title}
-                                    >
-                                        {capitalizeWords(product.title)}
-                                    </h1>
-                                </Link>
-
-                                <h4 className="text-[14px] text-black line-clamp-3">
-                                    {product.description || "No description available for this bike."}
-                                </h4>
-                                <h2 className="text-[16px] font-semibold lg:font-normal mt-[4px]">
-                                    AED {product.price.toLocaleString()}
-                                </h2>
-                            </div>
-
-
-
-                            {(isHome && product.brand?.image) && (
-                                <div className="flex-shrink-0 mt-[67px] w-[55px] h-[50px]">
+                            {/* Image Section */}
+                            <div className="w-full lg:w-[189px] flex-shrink-0">
+                                <div className="relative h-56 lg:h-[122.63px] w-full overflow-hidden rounded-none">
                                     <Image
-                                        src={product.brand.image}
-                                        alt={product.brand.title || "Brand"}
-                                        width={55}
-                                        height={50}
-                                        className="object-cover w-full h-full"
+                                        src={product.product_images?.[0] || ""}
+                                        alt={product.title || "Product"}
+                                        fill
+                                        className="object-cover"
                                     />
                                 </div>
-                            )}
+                            </div>
 
+                            {/* Content Section */}
+                            <div className="flex-1 flex justify-between md:justify-start space-y-3 gap-[20px] lg:space-y-1 min-w-0 relative">
+                                <div className={`space-y-[4px] ${isHome ? "max-w-[538px]" : "w-full"}`}>
+                                    <Link
+                                        href={`/listing/${product.id}`}
+                                        className="block hover:text-blue-600 transition-colors"
+                                    >
+                                        <h1
+                                            className="text-[18px] text-[#000000] truncate"
+                                            title={product.title}
+                                        >
+                                            {capitalizeWords(product.title)}
+                                        </h1>
+                                    </Link>
 
-                        </div>
-
-                        {/* Right Detail Section */}
-                        <div className="w-full lg:w-[224px] flex-shrink-0 border-t border-gray-100 pt-4 lg:pt-0 lg:border-t-0 flex flex-col">
-                            <div className="text-[12px] font-normal">
-                                <div className="flex justify-between h-[32px] items-center px-2">
-                                    <span className="text-[#000000]">Mileage</span>
-                                    <span className="text-[#6A7282]">
-                                        {product.mileage
-                                            ? `${product.mileage.toLocaleString()} ${product.mileage_unit || "Kms"}`
-                                            : "-"}
-                                    </span>
+                                    <h4 className="text-[14px] text-black line-clamp-3">
+                                        {product.description || "No description available for this bike."}
+                                    </h4>
+                                    <h2 className="text-[16px] font-semibold lg:font-normal mt-[4px]">
+                                        AED {product.price.toLocaleString()}
+                                    </h2>
                                 </div>
 
-                                <div className="flex justify-between h-[32px] items-center px-2 bg-[#FFF3DE]">
-                                    <span className="text-[#000000]">Engine Size</span>
-                                    <span className="text-[#6A7282]">
-                                        {product.engine_size || "-"}
-                                    </span>
-                                </div>
+                                {(isHome && product.brand?.image) && (
+                                    <div className="flex-shrink-0 mt-[67px] w-[55px] h-[50px]">
+                                        <Image
+                                            src={product.brand.image}
+                                            alt={product.brand.title || "Brand"}
+                                            width={55}
+                                            height={50}
+                                            className="object-cover w-full h-full"
+                                        />
+                                    </div>
+                                )}
+                            </div>
 
-                                <div className="flex justify-between h-[32px] items-center px-2">
-                                    <span className="text-[#000000]">Condition</span>
-                                    <span className="text-[#6A7282]">
-                                        {getConditionLabel(product.condition)}
-                                    </span>
-                                </div>
+                            {/* Right Detail Section */}
+                            <div className="w-full lg:w-[224px] flex-shrink-0 border-t border-gray-100 pt-4 lg:pt-0 lg:border-t-0 flex flex-col">
+                                <div className="text-[12px] font-normal">
+                                    <div className="flex justify-between h-[32px] items-center px-2">
+                                        <span className="text-[#000000]">Mileage</span>
+                                        <span className="text-[#6A7282]">
+                                            {product.mileage
+                                                ? `${product.mileage.toLocaleString()} ${product.mileage_unit || "Kms"}`
+                                                : "-"}
+                                        </span>
+                                    </div>
 
-                                <div className="flex justify-between h-[32px] px-2 bg-[#FFF3DE] items-center">
-                                    <span className="text-[#000000]">Year</span>
-                                    <span className="text-[#6A7282]">
-                                        {product.manufacturing_year || "-"}
-                                    </span>
+                                    <div className="flex justify-between h-[32px] items-center px-2 bg-[#FFF3DE]">
+                                        <span className="text-[#000000]">Engine Size</span>
+                                        <span className="text-[#6A7282]">
+                                            {product.engine_size || "-"}
+                                        </span>
+                                    </div>
+
+                                    <div className="flex justify-between h-[32px] items-center px-2">
+                                        <span className="text-[#000000]">Condition</span>
+                                        <span className="text-[#6A7282]">
+                                            {getConditionLabel(product.condition)}
+                                        </span>
+                                    </div>
+
+                                    <div className="flex justify-between h-[32px] px-2 bg-[#FFF3DE] items-center">
+                                        <span className="text-[#000000]">Year</span>
+                                        <span className="text-[#6A7282]">
+                                            {product.manufacturing_year || "-"}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="relative">
-                            {
-                                isHome &&
-                                <div className="flex items-center gap-1.5 text-[10px] text-[#78A962]">
-                                    <div className="bg-[#78A962] rounded-full w-[14px] h-[14px] flex items-center justify-center">
-                                        <svg
-                                            width="10"
-                                            height="10"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeWidth="2"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            className="text-white"
-                                        >
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg>
-                                    </div>
-                                    <span>Verified</span>
-                                    <button className="flex items-center gap-[10px] group absolute -bottom-2 right-0">
-                                        <div className="w-8 h-8 rounded-full border-2 border-gray-400 flex items-center justify-center text-gray-400 group-hover:border-gray-500 group-hover:text-gray-500 transition-all">
-                                            <Heart size={17} className="stroke-3" />
+                            <div className="relative">
+                                {
+                                    isHome &&
+                                    <div className="flex items-center gap-1.5 text-[10px] text-[#78A962]">
+                                        <div className="bg-[#78A962] rounded-full w-[14px] h-[14px] flex items-center justify-center">
+                                            <svg
+                                                width="10"
+                                                height="10"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                className="text-white"
+                                            >
+                                                <polyline points="20 6 9 17 4 12" />
+                                            </svg>
                                         </div>
-                                    </button>
-                                </div>
-
+                                        <span>Verified</span>
+                                        <button 
+                                            onClick={(e) => handleToggleFavorite(e, product)}
+                                            className="flex items-center gap-[10px] group absolute -bottom-2 right-0"
+                                        >
+                                            <div className={cn(
+                                                "w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all",
+                                                isFavorite ? "border-red-500 text-red-500 bg-red-50" : "border-gray-400 text-gray-400 group-hover:border-gray-500 group-hover:text-gray-500"
+                                            )}>
+                                                <Heart size={17} className="stroke-3" fill={isFavorite ? "currentColor" : "none"} />
+                                            </div>
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                            {
+                                !isHome &&
+                                <button 
+                                    onClick={(e) => handleToggleFavorite(e, product)}
+                                    className="flex items-baseline-last gap-[10px] group"
+                                >
+                                    <div className={cn(
+                                        "w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all",
+                                        isFavorite ? "border-red-500 text-red-500 bg-red-50" : "border-gray-400 text-gray-400 group-hover:border-gray-500 group-hover:text-gray-500"
+                                    )}>
+                                        <Heart size={17} className="stroke-3" fill={isFavorite ? "currentColor" : "none"} />
+                                    </div>
+                                </button>
                             }
                         </div>
-                        {
-                            !isHome &&
-                            <button className="flex items-baseline-last gap-[10px] group">
-                                <div className="w-8 h-8 rounded-full border-2 border-gray-400 flex items-center justify-center text-gray-400 group-hover:border-gray-500 group-hover:text-gray-500 transition-all">
-                                    <Heart size={17} className="stroke-3" />
-                                </div>
-                            </button>
-                        }
                     </div>
-                </div>
-            ))}
+                )
+            })}
         </div>
     )
 }

@@ -1,7 +1,10 @@
+"use client"
+
 import { Heart, ShoppingCart, Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ReactCountryFlag from "react-country-flag";
 import { NavIconsProps } from "@/types/navbar";
+import { useAppSelector } from "@/store/hooks"; // Import selector
 
 const NavIcons = ({
     isLoading,
@@ -10,9 +13,12 @@ const NavIcons = ({
     isHome,
     handleProtectedAction,
 }: NavIconsProps) => {
+    // Get the favorites count from Redux
+    const favoriteCount = useAppSelector((state) => state.favorites.items.length);
+
     return (
         <div className="flex items-center gap-4 flex-shrink-0">
-            <div className="flex-shrink-0 overflow-hidden">
+            {/* <div className="flex-shrink-0 overflow-hidden">
                 <ReactCountryFlag
                     countryCode="AE"
                     svg
@@ -22,7 +28,7 @@ const NavIcons = ({
                     }}
                     title="UAE"
                 />
-            </div>
+            </div> */}
 
             {/* Cart Icon */}
             <div
@@ -37,8 +43,20 @@ const NavIcons = ({
                 )}
             </div>
 
-            <Heart className={cn("w-[19.5px] h-[19.5px] stroke-[2.5] cursor-pointer", textColor)} />
+            {/* Favorites Icon */}
+            <div
+                onClick={() => handleProtectedAction("/favourites")}
+                className="relative cursor-pointer hover:opacity-80"
+            >
+                <Heart className={cn("w-[19.5px] h-[19.5px] stroke-[2.5]", textColor)} />
+                {favoriteCount > 0 && (
+                    <span className="absolute -top-1.5 -right-2 bg-[#E9A426] text-black text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                        {favoriteCount}
+                    </span>
+                )}
+            </div>
 
+            {/* Notifications Icon */}
             <div className="relative cursor-pointer">
                 <Bell className={cn("w-5 h-5", textColor)} />
                 <span

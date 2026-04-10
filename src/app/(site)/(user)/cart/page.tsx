@@ -20,10 +20,6 @@ export default function CartPage() {
     dispatch(removeFromCart(id));
   };
 
-  const handleAddToWishlist = (id: number) => {
-    console.log("Added to wishlist:", id);
-  };
-
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
@@ -54,9 +50,9 @@ export default function CartPage() {
                       <CartCard
                         key={item.id}
                         {...item}
+                        business={item.business || 0}
                         onQuantityChange={handleQuantityChange}
                         onRemove={handleRemove}
-                        onAddToWishlist={handleAddToWishlist}
                       />
                     ))
                   ) : (

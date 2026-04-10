@@ -14,16 +14,15 @@ import {
   ChevronLeft,
   ChevronRight,
   Heart,
-  Flame
 } from "lucide-react";
 import { BsChatDotsFill } from "react-icons/bs";
 
 import { cn } from "@/lib/utils"
-import FeaturesSection from "./listing/features-section"
 import { CartItem } from "@/types/cart"
 import { addToCart } from "@/store/slices/CartSlice"
 import { toast } from "../ui/toast"
 import { useGetProfile } from "@/hooks/useProfile"
+import { toggleFavorite } from "@/store/slices/FavouriteSlice"
 
 
 interface ProductDetailsProps {
@@ -33,9 +32,10 @@ interface ProductDetailsProps {
 export default function Listing({ product }: ProductDetailsProps) {
   const dispatch = useAppDispatch();
 
-  const { data, isLoading } = useGetProfile();
+  const { data } = useGetProfile();
 
   const cartItems = useAppSelector((state) => state.cart.items);
+  const favoriteItems = useAppSelector((state) => state.favorites.items);
   const [activeImage, setActiveImage] = useState<string | null>(
     product?.product_images?.[0] ?? null
   )
@@ -44,7 +44,30 @@ export default function Listing({ product }: ProductDetailsProps) {
   const { token } = useAppSelector((state) => state?.auth);
   const router = useRouter();
 
-  const isAccessories = product?.category?.type === "accessories"
+  const isAccessories = product?.category?.type === "accessories";
+  const isFavorite = favoriteItems.some((item) => item.id === product.id);
+
+  const handleToggleFavorite = () => {
+    if (!token) {
+      setShowLoginDialog(true);
+      return;
+    }
+
+    dispatch(
+      toggleFavorite({
+        id: product.id!,
+        name: product.title,
+        price: product.price,
+        image: product.product_images?.[0] || "",
+        details: [product.manufacturing_year, product.engine_size].filter(Boolean) as string[],
+        businessId: product.seller?.id || 0
+      })
+    );
+
+    toast({
+      title: isFavorite ? "Removed from Favorites" : "Added to Favorites",
+    });
+  };
 
   const handleChatClick = () => {
     if (!token) {
@@ -201,7 +224,7 @@ export default function Listing({ product }: ProductDetailsProps) {
             </div>
           </div>
 
-          <FeaturesSection />
+          {/* <FeaturesSection /> */}
 
           {/* Specs Grid */}
           <div className="border-2 border-gray-200 rounded-none p-6 bg-white">
@@ -239,14 +262,14 @@ export default function Listing({ product }: ProductDetailsProps) {
         <div className="lg:col-span-1 space-y-[10px] sm:px-[24px]">
 
           {/* Popularity Badge */}
-          <div className="flex items-center gap-1.5 text-[#636E7E] text-sm">
+          {/* <div className="flex items-center gap-1.5 text-[#636E7E] text-sm">
             <Flame size={16} className="text-[#FF7A00]" />
             <span>Popular: Recently 66 wishlisted this item</span>
-          </div>
+          </div> */}
 
           {/* Tags & Wishlist Icon */}
-          <div className="flex justify-between items-center py-[5px]">
-            <div className="flex gap-2">
+          <div className="flex justify-end items-center py-[5px]">
+            {/* <div className="flex gap-2">
               <span className="bg-[#E9A426] text-black px-3 h-[22px] flex items-center justify-center text-xs rounded">
                 Featured
               </span>
@@ -254,15 +277,26 @@ export default function Listing({ product }: ProductDetailsProps) {
               <span className="bg-[#E9A426] text-black px-3 h-[22px] flex items-center justify-center text-xs rounded">
                 Verified
               </span>
-            </div>
+            </div> */}
 
-            <button
-              className="flex items-center gap-[10px] group"
-            >
-              <div className="w-8 h-8 rounded-full border-2 border-gray-400 flex items-center justify-center text-gray-400 group-hover:border-gray-500 group-hover:text-gray-500 transition-all">
-                <Heart size={16} className="stroke-3" />
-              </div>
-            </button>
+            <div className="flex justify-end items-center py-[5px]">
+              <button
+                onClick={handleToggleFavorite}
+                className="flex items-center gap-[10px] group"
+              >
+                <div className={cn(
+                  "w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all",
+                  isFavorite
+                    ? "border-red-500 text-red-500 bg-red-50"
+                    : "border-gray-400 text-gray-400 group-hover:border-gray-500 group-hover:text-gray-500"
+                )}>
+                  <Heart
+                    size={16}
+                    className={cn("stroke-3", isFavorite && "fill-current")}
+                  />
+                </div>
+              </button>
+            </div>
           </div>
 
           {/* Title Header */}
@@ -280,7 +314,7 @@ export default function Listing({ product }: ProductDetailsProps) {
             </div>
 
             <div className="flex gap-1.5 text-[#636E7E] text-sm items-start">
-              <MapPin className="w-4 h-4 mt-1" />
+              <MapPin className="w-4 h-4 mt-0.5" />
               <span>{product.address || "Location not specified"}</span>
             </div>
           </div>
@@ -290,14 +324,14 @@ export default function Listing({ product }: ProductDetailsProps) {
             <h1 className="text-[24px] font-bold text-black">
               AED {product.price.toLocaleString()}
             </h1>
-            <span className="text-[#C17C00] font-medium text-sm cursor-pointer underline underline-offset-2">Need financing?</span>
+            {/* <span className="text-[#C17C00] font-medium text-sm cursor-pointer underline underline-offset-2">Need financing?</span> */}
           </div>
 
           {/* Seller Info */}
           <div className="text-sm flex items-center justify-between">
             <div>
               <span className="text-black font-semibold">Seller: </span>
-              <span className="text-black font-semibold cursor-pointe">
+              <span className="text-black font-semibold cursor-pointer capitalize">
                 {product.seller?.name}
               </span>
             </div>
@@ -335,7 +369,7 @@ export default function Listing({ product }: ProductDetailsProps) {
           </div>
 
           {/* Safety Note */}
-          <div className="flex items-center gap-2 text-[13px] text-[#636E7E] border-b border-gray-100 pb-[15px]">
+          <div className="flex items-center gap-2 text-[13px] text-[#636E7E]">
             <AlertCircle size={16} className="text-[#E9A426]" />
             <span>
               Learn more about our{" "}
@@ -356,7 +390,7 @@ export default function Listing({ product }: ProductDetailsProps) {
           }
 
           {/* Finance Section */}
-          <div>
+          {/* <div>
             <Image
               src="/details-banner1.png"
               alt="Finance Banner"
@@ -364,10 +398,10 @@ export default function Listing({ product }: ProductDetailsProps) {
               height={80}
               className="w-full h-[80px]"
             />
-          </div>
+          </div> */}
 
           {/* Advertisement Space */}
-          <div>
+          {/* <div>
             <Image
               src="/details-banner2.png"
               alt="Advertisement Banner"
@@ -375,7 +409,7 @@ export default function Listing({ product }: ProductDetailsProps) {
               height={80}
               className="w-full h-[80px]"
             />
-          </div>
+          </div> */}
         </div>
       </div>
 

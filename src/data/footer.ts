@@ -1,9 +1,7 @@
 export const section = [
     { label: "Home", href: "/" },
-    { label: "Marketplace", href: "#" },
-    { label: "Advertising", href: "#" },
-    { label: "Dealers", href: "#" },
-    { label: "Contact Us", href: "#" },
+    { label: "Marketplace", href: "/ads" },
+    { label: "Advertising", href: "/post-ad" }
 ]
 
 export const quickLinks = [

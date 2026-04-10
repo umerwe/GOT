@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import type { FilterOption, FilterState, FilterSidebarProps } from "@/types/filters"
 import { ChevronDown, ChevronUp } from "lucide-react"
+import MyImage from "../custom/MyImage"
 
 const PRICE_RANGES = [
   { label: "AED 0 - AED 10,000", min: 0, max: 10000 },
@@ -240,7 +241,13 @@ export default function FilterSidebar({
                 onClick={() => setTempFilters((prev) => ({ ...prev, brand: value }))}
               >
                 {item.image ? (
-                  <img src={item.image} alt={item.label} className="h-full w-auto object-contain" />
+                  <MyImage
+                    src={item.image}
+                    alt={item.label || "Brand"}
+                    width={256}
+                    height={256}
+                    className="h-full w-auto object-contain"
+                  />
                 ) : (
                   <span className="text-sm font-medium text-center">{item.label}</span>
                 )}

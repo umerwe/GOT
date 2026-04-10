@@ -11,6 +11,7 @@ import CategoryCard from "./cards/category-card";
 
 const CategoriesSection = () => {
     const { data = [], isLoading } = useGetCategories();
+    console.log(data);
     const [page, setPage] = useState(0);
 
     const itemsPerPage = 6;

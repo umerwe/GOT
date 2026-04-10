@@ -34,11 +34,11 @@ const NavActions = ({
             Place an Ad
           </span>
 
-          {!isMobile && <span className="opacity-40">|</span>}
+          {/* {!isMobile && <span className="opacity-40">|</span>} */}
 
-          <Link href="/help" onClick={onClose} className={itemClass}>
+          {/* <Link href="/help" onClick={onClose} className={itemClass}>
             Help
-          </Link>
+          </Link> */}
 
           {!isMobile && <span className="opacity-40">|</span>}
         </>
@@ -51,7 +51,7 @@ const NavActions = ({
           !isMobile && <UserMenu />
         ) : (
           <Link href="/auth/login" onClick={onClose} className={itemClass}>
-            Sign In
+            Account
           </Link>
         )}
       </div>

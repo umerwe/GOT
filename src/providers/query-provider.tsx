@@ -8,6 +8,7 @@ import {
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
 import { Toaster } from "../components/ui/toast";
+import TopLoader from "@/components/ui/toploader";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
     const [queryClient] = useState(
@@ -29,6 +30,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
                 {/* <AuthEventsListener /> */}
                 {children}
                 <Toaster />
+                <TopLoader />
             </QueryClientProvider>
         </Provider>
     );

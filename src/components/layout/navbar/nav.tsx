@@ -67,9 +67,9 @@ const Navbar = () => {
           {
             !isBusiness && (
               <div className="flex items-center gap-5">
-                <Link href={isAuth ? "/dashboard" : "/auth/login"} className={cn("text-base font-medium", textColor)}>
+                {/* <Link href={isAuth ? "/dashboard" : "/auth/login"} className={cn("text-base font-medium", textColor)}>
                   Account
-                </Link>
+                </Link> */}
                 <NavIcons {...commonProps} cartCount={cartCount} isHome={isHome} />
               </div>
             )

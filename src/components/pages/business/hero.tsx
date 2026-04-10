@@ -68,36 +68,36 @@ export default function BusinessHero({ logo, name, address }: HeroProps) {
             </div>
           </div>
 
-          <h1 className="text-2xl font-bold text-black mb-[10px]">{name}</h1>
+          <h1 className="text-2xl font-bold text-black mb-[10px] capitalize">{name}</h1>
 
           {/* Badges */}
           <div className="flex items-center gap-3 mb-[10px]">
-            <div className="flex items-center gap-2 bg-[#E9A426] px-3 h-[30px] rounded-full">
+            {/* <div className="flex items-center gap-2 bg-[#E9A426] px-3 h-[30px] rounded-full">
               <div className="bg-black rounded-full p-0.5">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#E9A426]"><polyline points="20 6 9 17 4 12"></polyline></svg>
               </div>
               <span className="text-xs font-medium text-black pt-0.5">Verified Seller</span>
-            </div>
+            </div> */}
 
             {/* Tooltip for Address */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="flex items-center gap-1 text-sm text-black cursor-pointer">
+            {/* <Tooltip>
+              <TooltipTrigger asChild> */}
+                <div className="flex items-center gap-1 text-sm text-black">
                   <div className="bg-black text-white w-[22px] h-[22px] rounded-[60px] flex items-center justify-center">
                     <FiMapPin size={11} />
                   </div>
-                  <span className="font-medium max-w-[100px] truncate">
+                  <span className="font-medium">
                     {address}
                   </span>
                 </div>
-              </TooltipTrigger>
+              {/* </TooltipTrigger>
               <TooltipContent className="bg-black text-white border-none rounded-none">
                 <p>{address}</p>
               </TooltipContent>
-            </Tooltip>
+            </Tooltip> */}
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <div className="flex">
               {[...Array(4)].map((_, i) => (
                 <Star key={i} size={20} fill="#E9A426" className="text-[#E9A426]" />
@@ -105,7 +105,7 @@ export default function BusinessHero({ logo, name, address }: HeroProps) {
               <Star size={20} className="text-[#E9A426]" />
             </div>
             <span className="text-sm font-medium text-black">4.5 rating</span>
-          </div>
+          </div> */}
         </div>
       </div>
     </TooltipProvider>

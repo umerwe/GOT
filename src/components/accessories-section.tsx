@@ -34,7 +34,6 @@ const AccessoriesSection = () => {
         let newIndex = currentIndex;
 
         if (direction === 'next') {
-            // Move forward by 1 or 4 depending on preference, here we move by 1 for smooth feel
             if (currentIndex + 4 < totalProducts) {
                 newIndex = currentIndex + 1;
             }
@@ -105,14 +104,14 @@ const AccessoriesSection = () => {
                                         </div>
                                     </div>
                                     <div>
-                                        <h1 className="text-lg font-bold text-black">{business.name}</h1>
+                                        <h1 className="text-lg font-bold text-black capitalize">{business.name}</h1>
                                         <p className="text-[#636E7E] text-sm max-w-[400px]">
                                             {business.address}
                                         </p>
                                     </div>
                                 </div>
 
-                                <div className="flex items-center gap-4">
+                                {/* <div className="flex items-center gap-4">
 
                                     <div className="flex items-center gap-2 bg-[#E9A426] px-3 h-[30px] rounded-full">
                                         <div className="bg-black rounded-full p-0.5">
@@ -132,7 +131,7 @@ const AccessoriesSection = () => {
                                             <Star size={18} className="text-[#E9A426]" />
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
                             </Link>
 
                             <div>
