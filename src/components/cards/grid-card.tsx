@@ -32,7 +32,7 @@ export default function GridCard({
   const dispatch = useAppDispatch();
   const favoriteItems = useAppSelector((state) => state.favorites.items);
 
-  if (isLoading) return <SkeletonLoader type="products" count={count} />;
+  if (isLoading) return <SkeletonLoader type="products" count={count} isAdsPage={isAdsPage} />;
   if (!products || products.length === 0) return <NotFoundWrapper className="mt-[15px]" />;
 
   const handleToggleFavorite = (e: React.MouseEvent, product: Product) => {

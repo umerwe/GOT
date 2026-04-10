@@ -18,23 +18,16 @@ const HeroSection = () => {
       priority
       quality={90}
     />
-    <div
-      className="absolute inset-0"
-      style={{
-        background:
-          "linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.1) 10%, rgba(0,0,0,0) 100%)",
-      }}
-    />
   </div>
 
   {/* Text Section */}
   <div className="relative z-10 w-full px-5 md:pl-[66px]">
-    <div className="max-w-[655px]">
-      <h1 className="text-[28px] text-white mb-4 leading-tight">
+    <div className="max-w-[655px] -mt-20 sm:-mt-0">
+      <h1 className="md:text-[28px] text-[24px] text-white mb-4 leading-tight">
         The <span className="text-solid">Leading Marketplace</span> for buying and selling everything Motorcycles, Parts, Gear and Accessories
       </h1>
 
-      <p className="text-[16px] text-solid mb-8 leading-relaxed">
+      <p className="md:text-[16px] text-[14px] text-solid mb-8 leading-relaxed">
         Buy, sell, and connect with fellow Bike enthusiasts in the UAE
       </p>
     </div>

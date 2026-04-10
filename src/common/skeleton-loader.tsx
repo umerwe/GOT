@@ -8,9 +8,10 @@ import { Card, CardContent } from "@/components/ui/card";
 interface SkeletonLoaderProps {
     type: string;
     count?: number;
+    isAdsPage?: boolean;
 }
 
-const SkeletonLoader = ({ type, count = 4 }: SkeletonLoaderProps) => {
+const SkeletonLoader = ({ type, count = 4, isAdsPage = false }: SkeletonLoaderProps) => {
     switch (type) {
         case "categories":
             return (
@@ -25,7 +26,7 @@ const SkeletonLoader = ({ type, count = 4 }: SkeletonLoaderProps) => {
 
         case "products":
             return (
-                <div className={`grid grid-cols-2 sm:grid-cols-2 gap-[10px] md:grid-cols-6`}>
+                <div className={`grid grid-cols-2 sm:grid-cols-2 gap-[10px] ${isAdsPage ? 'md:grid-cols-3' : 'md:grid-cols-6'}`}>
                     {Array.from({ length: count }).map((_, i) => (
                         <Card
                             key={i}

@@ -16,6 +16,7 @@ import { ConfigData } from "@/types/config"
 import { postAdSchema, type PostAdFormData } from "@/validations/ads"
 import { LocationInput } from "../ui/location"
 import { useGetConfig } from "@/hooks/useConfig"
+import { cn } from "@/lib/utils" // Ensure you have this utility or use standard string template
 
 interface Category {
   id: number
@@ -59,6 +60,7 @@ export function AdForm({
   const [selectedCategoryType, setSelectedCategoryType] = useState<string>("")
   const [uploadedImages, setUploadedImages] = useState<{ file: File; preview: string }[]>([])
   const [guidelinesChecked, setGuidelinesChecked] = useState(false)
+  const [isDragging, setIsDragging] = useState(false) // State for drag visual feedback
 
   const isAccessories = selectedCategoryType === "accessories"
 
@@ -113,8 +115,8 @@ export function AdForm({
     }
   }
 
-  const handleImageUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files
+  // Refactored logic into a reusable function to handle both Click and Drop
+  const processFiles = useCallback((files: FileList | null) => {
     if (!files) return
 
     const validFiles = Array.from(files)
@@ -133,17 +135,35 @@ export function AdForm({
       return isValidSize && isValidType
     })
 
-    if (filteredFiles.length === 0) {
-      event.target.value = ""
-      return
-    }
+    if (filteredFiles.length === 0) return
 
     const newImages = filteredFiles.map((file) => ({ file, preview: URL.createObjectURL(file) }))
     const updatedImages = [...uploadedImages, ...newImages]
     setUploadedImages(updatedImages)
     setValue("images", updatedImages.map((img) => img.file), { shouldValidate: true })
-    event.target.value = ""
   }, [uploadedImages, setValue, setError])
+
+  const handleImageUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    processFiles(event.target.files)
+    event.target.value = ""
+  }, [processFiles])
+
+  // Drag and Drop Handlers
+  const onDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }
+
+  const onDragLeave = () => {
+    setIsDragging(false)
+  }
+
+  const onDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(false)
+    if (isPending) return
+    processFiles(e.dataTransfer.files)
+  }
 
   const removeImage = useCallback((index: number) => {
     setUploadedImages((prev) => {
@@ -158,14 +178,12 @@ export function AdForm({
 
     Object.entries(data).forEach(([key, value]) => {
       if (key === "images") return
-      // Skip non-accessories fields if category is accessories
       if (isAccessories && (NON_ACCESSORIES_FIELDS as readonly string[]).includes(key)) return
       if (value !== undefined && value !== "" && value !== null) {
         formDataToSend.append(key, String(value))
       }
     })
 
-    // Always send negotiable as 0/1
     formDataToSend.set("negotiable", data.negotiable ? "1" : "0")
 
     data.images.forEach((image, index) => {
@@ -188,7 +206,16 @@ export function AdForm({
       {/* Photos Section */}
       <div>
         <h4 className="text-[16px] mb-[2.5px]">Photos</h4>
-        <div className="border-2 border-gray-300 p-8 text-center bg-gray-50/50">
+        <div 
+          onDragOver={onDragOver}
+          onDragLeave={onDragLeave}
+          onDrop={onDrop}
+          className={cn(
+            "border-2 border-dashed p-8 text-center transition-colors duration-200",
+            isDragging ? "border-yellow-500 bg-yellow-50/50" : "border-gray-300 bg-gray-50/50",
+            isPending && "opacity-50 cursor-not-allowed"
+          )}
+        >
           <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
           <p className="text-black mb-2">Drag & drop images here</p>
           <input type="file" accept=".png,.jpg,.jpeg" multiple onChange={handleImageUpload} className="hidden" id="image-upload" disabled={isPending} />

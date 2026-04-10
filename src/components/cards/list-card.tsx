@@ -93,7 +93,7 @@ export default function ListCard({
 
                             {/* Content Section */}
                             <div className="flex-1 flex justify-between md:justify-start space-y-3 gap-[20px] lg:space-y-1 min-w-0 relative">
-                                <div className={`space-y-[4px] ${isHome ? "max-w-[538px]" : "w-full"}`}>
+                                <div className={`space-y-[4px] ${isHome ? "max-w-[240px] md:max-w-[538px]" : "w-full"}`}>
                                     <Link
                                         href={`/listing/${product.id}`}
                                         className="block hover:text-blue-600 transition-colors"
