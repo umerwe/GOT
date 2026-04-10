@@ -3,7 +3,6 @@
 import { OrderSummaryProps } from "@/types/cart";
 import PaymentMethods from "./paymentMethod";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAppSelector } from "@/store/hooks";
 import LoginDialog from "@/utils/loginDialog";
@@ -11,14 +10,14 @@ import LoginDialog from "@/utils/loginDialog";
 const OrderSummary = ({
     cartItems,
     subtotal,
+    isCartPage = false
 }: OrderSummaryProps) => {
-    const router = useRouter();
     const [showLoginDialog, setShowLoginDialog] = useState(false);
     const isAuth = useAppSelector((state) => state?.auth?.token);
 
     const handleCheckout = (e: React.MouseEvent) => {
         if (!isAuth) {
-            e.preventDefault(); // Stop the Link navigation
+            e.preventDefault();
             setShowLoginDialog(true);
         }
     };
@@ -38,9 +37,9 @@ const OrderSummary = ({
                         <span>AED {subtotal.toLocaleString()}.00</span>
                     </div>
 
-                    <button className="text-gray-900 text-sm underline cursor-pointer">
+                    {/* <button className="text-gray-900 text-sm underline cursor-pointer">
                         Add promotional code
-                    </button>
+                    </button> */}
 
                     <div>
                         <div className="flex justify-between font-semibold text-sm">
@@ -50,15 +49,19 @@ const OrderSummary = ({
                     </div>
                 </div>
 
-                <Link
-                    href="/checkout"
-                    onClick={handleCheckout}
-                >
-                    <button
-                        className="w-full bg-[#F2A416] hover:bg-[#e0941a] text-black h-[50px] text-sm font-semibold transition-colors">
-                        Secure checkout
-                    </button>
-                </Link>
+                {
+                    isCartPage && (
+                        <Link
+                            href="/checkout"
+                            onClick={handleCheckout}
+                        >
+                            <button
+                                className="w-full bg-[#F2A416] hover:bg-[#e0941a] text-black h-[50px] text-sm font-semibold transition-colors">
+                                Secure checkout
+                            </button>
+                        </Link>
+                    )
+                }
             </div>
             <PaymentMethods />
 

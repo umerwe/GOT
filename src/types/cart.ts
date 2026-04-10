@@ -14,4 +14,5 @@ export interface CartItem {
 export interface OrderSummaryProps {
   cartItems: CartItem[];
   subtotal: number;
+  isCartPage?: boolean;
 }

@@ -68,6 +68,7 @@ export default function CartPage() {
               <OrderSummary
                 cartItems={cartItems}
                 subtotal={subtotal}
+                isCartPage={true}
               />
             </div>
           </div>
