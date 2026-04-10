@@ -17,6 +17,7 @@ import { postAdSchema, type PostAdFormData } from "@/validations/ads"
 import { LocationInput } from "../ui/location"
 import { useGetConfig } from "@/hooks/useConfig"
 import { cn } from "@/lib/utils" // Ensure you have this utility or use standard string template
+import { useGetProfile } from "@/hooks/useProfile"
 
 interface Category {
   id: number
@@ -53,15 +54,16 @@ export function AdForm({
   addProduct,
   isPending,
 }: AdFormProps) {
+  const { data: profileData } = useGetProfile();
+  
   const { data } = useGetConfig()
-  const configData = data as ConfigData
+  const configData = data as ConfigData;
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0)
   const [selectedCategoryType, setSelectedCategoryType] = useState<string>("")
   const [uploadedImages, setUploadedImages] = useState<{ file: File; preview: string }[]>([])
   const [guidelinesChecked, setGuidelinesChecked] = useState(false)
-  const [isDragging, setIsDragging] = useState(false) // State for drag visual feedback
-
+  const [isDragging, setIsDragging] = useState(false);
   const isAccessories = selectedCategoryType === "accessories"
 
   const subcategories = useMemo(() => {
@@ -185,6 +187,8 @@ export function AdForm({
     })
 
     formDataToSend.set("negotiable", data.negotiable ? "1" : "0")
+    formDataToSend.set("user_type", "user")
+    formDataToSend.set("business_id", profileData?.id || "")
 
     data.images.forEach((image, index) => {
       formDataToSend.append(`product_images[${index}]`, image)
