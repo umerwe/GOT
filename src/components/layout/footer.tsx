@@ -13,7 +13,7 @@ export default function Footer() {
   const { data: configData } = useGetConfig();
   const { data: categoriesData } = useGetCategories();
 
-  const footerCategories = categoriesData?.slice(0, 5).map((cat: any) => ({
+  const footerCategories = categoriesData?.slice(0, 5).map((cat: Category) => ({
     label: cat.title,
     href: `/ads/${cat.id}`
   })) || [];

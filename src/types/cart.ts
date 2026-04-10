@@ -6,6 +6,10 @@ export interface CartItem {
   quantity: number;
   business: number;
   details?: string[];
+  seller?: {
+    id: number;
+    name: string;
+  };
 }
 export interface OrderSummaryProps {
   cartItems: CartItem[];

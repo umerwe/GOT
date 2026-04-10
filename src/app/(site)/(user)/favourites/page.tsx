@@ -2,18 +2,19 @@
 
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { addToCart } from "@/store/slices/CartSlice";
-import { removeFromFavorites } from "@/store/slices/FavouriteSlice";
+import { FavoriteItem, removeFromFavorites } from "@/store/slices/FavouriteSlice";
 import CartCard from "../ads/cart-card";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import Container from "@/components/container";
 import Footer from "@/components/layout/footer";
 import { toast } from "@/components/ui/toast";
+import { CartItem } from "@/types/cart";
 
 export default function FavoritesPage() {
   const favoriteItems = useAppSelector((state) => state.favorites.items);
   const dispatch = useAppDispatch();
 
-  const handleMoveToCart = (item: any) => {
+  const handleMoveToCart = (item: FavoriteItem) => {
     dispatch(addToCart({ 
         ...item, 
         quantity: 1, 

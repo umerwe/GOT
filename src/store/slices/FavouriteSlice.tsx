@@ -2,7 +2,7 @@
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface FavoriteItem {
+export interface FavoriteItem {
   id: number;
   name: string;
   price: number;
