@@ -116,6 +116,7 @@ const Navbar = () => {
                 cartCount={cartCount}
                 isHome={false}
                 textColor="text-black"
+                onClose={() => setIsMenuOpen(false)}
               />
             </div>
           </div>

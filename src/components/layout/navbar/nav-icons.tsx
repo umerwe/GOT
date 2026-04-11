@@ -7,15 +7,26 @@ import { NavIconsProps } from "@/types/navbar";
 import { useAppSelector } from "@/store/hooks"; // Import selector
 import Link from "next/link";
 
+// Extend the interface locally or ensure NavIconsProps includes onClose
+interface ExtendedNavIconsProps extends NavIconsProps {
+    onClose?: () => void;
+}
+
 const NavIcons = ({
     isLoading,
     cartCount,
     textColor,
     isHome,
     handleProtectedAction,
-}: NavIconsProps) => {
+    onClose, // Destructure onClose
+}: ExtendedNavIconsProps) => {
     // Get the favorites count from Redux
     const favoriteCount = useAppSelector((state) => state.favorites.items.length);
+
+    const handleClick = (path: string) => {
+        handleProtectedAction(path);
+        if (onClose) onClose(); // Close menu if the function exists
+    };
 
     return (
         <div className="flex items-center gap-4 flex-shrink-0">
@@ -33,7 +44,7 @@ const NavIcons = ({
 
             {/* Cart Icon */}
             <div
-                onClick={() => handleProtectedAction("/cart")}
+                onClick={() => handleClick("/cart")}
                 className="relative cursor-pointer hover:opacity-80"
             >
                 <ShoppingCart className={cn("w-[19.5px] h-[19.5px] stroke-[2.5]", textColor)} />
@@ -46,7 +57,7 @@ const NavIcons = ({
 
             {/* Favorites Icon */}
             <div
-                onClick={() => handleProtectedAction("/favourites")}
+                onClick={() => handleClick("/favourites")}
                 className="relative cursor-pointer hover:opacity-80"
             >
                 <Heart className={cn("w-[19.5px] h-[19.5px] stroke-[2.5]", textColor)} />
@@ -60,6 +71,7 @@ const NavIcons = ({
             {/* Notifications Icon */}
             <Link
                 href="/notifications"
+                onClick={() => onClose?.()} // Close menu when notification is clicked
                 className="relative cursor-pointer">
                 <Bell className={cn("w-5 h-5", textColor)} />
                 <span
