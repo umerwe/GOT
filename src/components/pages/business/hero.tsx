@@ -29,8 +29,7 @@ export default function BusinessHero({ logo, name, address }: HeroProps) {
       });
     } catch (err) {
       toast({
-        title: "Share Failed",
-        description: "Could not copy link to clipboard.",
+        title: "Could not copy link to clipboard.",
         variant: "destructive",
       });
     }
@@ -42,7 +41,7 @@ export default function BusinessHero({ logo, name, address }: HeroProps) {
         {/* Share Button with logic */}
         <button 
           onClick={handleShare}
-          className="absolute top-8 right-12 flex items-center gap-2 text-gray-500 text-sm hover:text-black transition-colors"
+          className="absolute top-8 right-6 sm:right-12 flex items-center gap-2 text-gray-500 text-sm hover:text-black transition-colors"
         >
           <Share2 size={18} className="text-[#E9A426]" />
           <span>Share</span>

@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import ReactCountryFlag from "react-country-flag";
 import { NavIconsProps } from "@/types/navbar";
 import { useAppSelector } from "@/store/hooks"; // Import selector
+import Link from "next/link";
 
 const NavIcons = ({
     isLoading,
@@ -57,7 +58,9 @@ const NavIcons = ({
             </div>
 
             {/* Notifications Icon */}
-            <div className="relative cursor-pointer">
+            <Link
+                href="/notifications"
+                className="relative cursor-pointer">
                 <Bell className={cn("w-5 h-5", textColor)} />
                 <span
                     className={cn(
@@ -69,7 +72,7 @@ const NavIcons = ({
                 >
                     3
                 </span>
-            </div>
+            </Link>
         </div>
     );
 };

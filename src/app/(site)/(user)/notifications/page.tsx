@@ -12,7 +12,7 @@ interface Notification {
 
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-
+  console.log("notifications", notifications);
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;

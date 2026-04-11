@@ -29,7 +29,7 @@ export default function PostAd() {
             <div className="mb-[5px]">
               <h2 className="text-[20px] py-[7px]">Post New Ad</h2>
             </div>
-            <div className="bg-white p-[60px] pr-[404px]">
+            <div className="bg-white p-[20px] md:p-[60px] md:pr-[404px]">
               <AdForm
                 categories={categories}
                 isCategoriesLoading={isCategoriesLoading}

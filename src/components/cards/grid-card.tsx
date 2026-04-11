@@ -20,6 +20,7 @@ interface GridCardProps {
   count?: number;
   isSecond?: boolean;
   businessLogo?: string;
+  isBusinessPage?: boolean;
 }
 
 export default function GridCard({
@@ -28,12 +29,13 @@ export default function GridCard({
   count = 6,
   isAdsPage = false,
   businessLogo,
+  isBusinessPage = false,
 }: GridCardProps) {
   const dispatch = useAppDispatch();
   const favoriteItems = useAppSelector((state) => state.favorites.items);
 
   if (isLoading) return <SkeletonLoader type="products" count={count} isAdsPage={isAdsPage} />;
-  if (!products || products.length === 0) return <NotFoundWrapper className="mt-[15px]" />;
+  if (!products || products.length === 0) return <NotFoundWrapper className={isBusinessPage ? "mt-[125px]" : "mt-[15px]"} />;
 
   const handleToggleFavorite = (e: React.MouseEvent, product: Product) => {
     e.preventDefault();
@@ -58,13 +60,17 @@ export default function GridCard({
   };
 
   return (
-    <div className={cn("grid grid-cols-2 gap-[10px]", isAdsPage ? "md:grid-cols-3" : "md:grid-cols-6")}>
+    /* MOBILE: Scrollable Flex | DESKTOP: Grid */
+    <div className={cn(
+        "flex overflow-x-auto pb-4 gap-[10px] scrollbar-hide sm:pb-0 sm:overflow-visible sm:grid", 
+        isAdsPage ? "sm:grid-cols-3" : "sm:grid-cols-6"
+    )}>
       {products.map((product) => {
         const isFavorite = favoriteItems.some((item) => item.id === product.id);
 
         return (
-          <div key={product.id} className="relative group">
-            {/* 1. MOVE BUTTON OUTSIDE THE LINK */}
+          /* min-w-80% allows the next card to peek out, encouraging scrolling */
+          <div key={product.id} className="relative group min-w-[280px] sm:min-w-full">
             <button
               onClick={(e) => handleToggleFavorite(e, product)}
               className="absolute bottom-[115px] right-2.5 z-30 bg-white/90 hover:bg-white p-2 rounded-full shadow-sm transition-all active:scale-90"
@@ -78,7 +84,6 @@ export default function GridCard({
               />
             </button>
 
-            {/* 2. LINK ONLY WRAPS THE CARD CONTENT */}
             <Link href={`/listing/${product.id}`} className="block h-full">
               <Card className="overflow-hidden rounded-none shadow-none border-none cursor-pointer h-full">
                 <div className="relative w-full h-[343px]">

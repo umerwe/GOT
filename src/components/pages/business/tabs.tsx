@@ -1,9 +1,9 @@
 "use client"
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-const tabs = ["Motorcycles", "Gear", "Accessories"];
+const tabs = ["Motorbike", "Gear", "Accessories"];
 
 export default function SellerTabs() {
     const router = useRouter();
@@ -11,12 +11,16 @@ export default function SellerTabs() {
 
     const currentTabInUrl = searchParams.get("tab");
     const [activeTab, setActiveTab] = useState(
-        tabs.find(t => t.toLowerCase() === currentTabInUrl?.toLowerCase()) || "Motorcycles"
+        tabs.find(t => t.toLowerCase() === currentTabInUrl?.toLowerCase()) || "motor_bike"
     );
 
     const handleTabClick = (tab: string) => {
         setActiveTab(tab);
-        router.push(`?tab=${tab.toLowerCase()}`, { scroll: false });
+        if (tab.toLowerCase() === "motorbike") {
+            router.push(`?tab=motor_bike`, { scroll: false });
+        } else {
+            router.push(`?tab=${tab.toLowerCase()}`, { scroll: false });
+        }
     };
 
     return (

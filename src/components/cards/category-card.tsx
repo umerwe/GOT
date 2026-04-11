@@ -29,7 +29,7 @@ const CategoryCard = ({ category }: { category: Category }) => {
             </div>
 
             <div className="mt-2 px-1">
-                <h1 className="text-[#000000] font-semibold text-[12px] sm:text-base leading-tight truncate">
+                <h1 className="text-[#000000] font-semibold text-base leading-tight truncate">
                     {category.title}
                 </h1>
             </div>

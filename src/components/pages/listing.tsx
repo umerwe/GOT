@@ -33,6 +33,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog"
 import { useGetConfig } from "@/hooks/useConfig"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 
 
 interface ProductDetailsProps {
@@ -100,22 +101,7 @@ export default function Listing({ product }: ProductDetailsProps) {
     router.push(`/chat/${product?.seller?.id}`)
   }
 
-  const handleContactClick = () => {
-    const phoneNumber = product.seller?.phoneNumber;
-
-    if (!phoneNumber) {
-      toast({
-        title: "Number not available",
-        description: "The seller has not provided a contact number.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const cleanNumber = phoneNumber.replace(/\D/g, "");
-    window.open(`https://wa.me/${cleanNumber}`, "_blank");
-  };
-
+  const phoneNumber = product.seller?.phoneNumber;
   const handleNextImage = () => {
     if (!product.product_images) return
     const currentIndex = product.product_images.indexOf(activeImage || "")
@@ -348,14 +334,35 @@ export default function Listing({ product }: ProductDetailsProps) {
               </Button>
             )}
 
-            <Button
-              variant="default"
-              className="bg-black hover:bg-black text-white rounded-none h-[54px] text-sm font-medium w-full"
-              onClick={handleContactClick}
+            <TooltipProvider delayDuration={0}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="default"
+                className="bg-black hover:bg-black text-white rounded-none h-[54px] text-sm font-medium w-full"
+              >
+                <Phone size={20} className="mr-2" fill="white" />
+                Contact details
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent 
+              side="top" 
+              className="bg-white border-2 border-black rounded-none p-3 shadow-lg"
             >
-              <Phone size={20} className="mr-2" fill="white" />
-              Contact details
-            </Button>
+              {phoneNumber ? (
+                <div className="flex flex-col items-center gap-1">
+                  <span className="text-xs text-gray-500 uppercase font-bold">Seller Number</span>
+                  <p className="text-lg font-bold text-black select-all">
+                    {phoneNumber}
+                  </p>
+                  <span className="text-[10px] text-gray-400">Click to select/copy</span>
+                </div>
+              ) : (
+                <p className="text-sm">Number not provided</p>
+              )}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
           </div>
 
           {/* Safety Note */}
@@ -397,7 +404,7 @@ export default function Listing({ product }: ProductDetailsProps) {
           <DialogHeader>
             <DialogTitle className="text-xl font-bold mb-2">Safety Policy</DialogTitle>
             <DialogDescription asChild>
-              <div 
+              <div
                 className="text-gray-600 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar"
                 dangerouslySetInnerHTML={{ __html: configData?.safety_policy || "" }}
               />
@@ -423,9 +430,9 @@ function SpecBox({ label, value }: { label: string; value?: string | number | nu
       <span className="text-xs font-normal text-gray-500 tracking-wide uppercase">
         {label}
       </span>
-      <h1 className="text-[16px] font-semibold text-black truncate">
+      <span className="text-[14px] sm:text-[16px] font-semibold text-black truncate">
         {value || "-"}
-      </h1>
+      </span>
     </div>
   )
 }

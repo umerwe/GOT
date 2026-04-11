@@ -15,7 +15,7 @@ export default function Business() {
   const params = useParams();
   const searchParams = useSearchParams();
 
-  const activeTab = searchParams.get("tab")?.toLowerCase() || "motorcycles";
+  const activeTab = searchParams.get("tab")?.toLowerCase() || "motor_bike";
 
   const { data, isLoading } = useGetBusinessProduct(params?.id as string);
 
@@ -55,6 +55,7 @@ export default function Business() {
           isLoading={isLoading}
           count={8}
           isSecond={true}
+          isBusinessPage={true}
         />
       </Container>
 

@@ -83,7 +83,7 @@ export default function ProfilePage() {
             <div>
                 <h2 className="text-[20px] mb-[18px] h-[40px] py-[7px] leading-[26px]">Dashboard</h2>
 
-                <div className="bg-white p-[30px] pb-[116px]">
+                <div className="bg-white p-[18px] sm:p-[30px] pb-[116px]">
                     <div className="">
                         {/* --- Header --- */}
                         <div className="flex flex-col space-y-6">
@@ -118,7 +118,7 @@ export default function ProfilePage() {
 
                                     {/* --- Contact Info & Newsletters Card --- */}
                                     <Card className="bg-white rounded-none border-[3px] border-[#EAEAEA] max-w-[662px]">
-                                        <CardContent className="px-[40px] py-[30px] grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <CardContent className="px-[15px] sm:px-[40px] py-[30px] grid grid-cols-1 md:grid-cols-2 gap-8">
                                             <div>
                                                 <h3 className="text-sm text-[#000000] mb-[20px]">Contact Information</h3>
                                                 <div className="text-gray-600 space-y-1 text-sm">
@@ -144,7 +144,7 @@ export default function ProfilePage() {
 
                                     {/* --- Addresses Card --- */}
                                     <Card className="bg-white rounded-none border-[3px] border-[#EAEAEA] max-w-[662px]">
-                                        <CardContent className="px-[40px] py-[30px] grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <CardContent className="px-[15px] sm:px-[40px] py-[30px] grid grid-cols-1 md:grid-cols-2 gap-8">
                                             <div className="space-y-[20px]">
                                                 <h3 className="text-sm text-[#000000]">Default Billing Address</h3>
                                                 <p className="text-[#5E5E5E] text-[14px] font-normal">House #24, Street 5, Islamabad.</p>

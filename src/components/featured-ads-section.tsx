@@ -29,28 +29,30 @@ const FeauredAdsSection = () => {
     <div className="scroll-smooth border-b-3 border-[#EBEBEB] pb-[45px]">
       <div className="flex items-center justify-between mb-[10px]">
         <h2>Featured Ads</h2>
-        <div className="flex items-center gap-2">
+        {/* Hide pagination on mobile, show on sm and up */}
+        {!isLoading && products.length > 0 && (
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="icon"
+              className="rounded-full"
+              onClick={() => handlePaginate(-1)}
+              disabled={page <= 1 || isLoading}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
 
-          <Button
-            variant="outline"
-            size="icon"
-            className="rounded-full"
-            onClick={() => handlePaginate(-1)}
-            disabled={page <= 1 || isLoading}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-
-          <Button
-            variant="outline"
-            size="icon"
-            className="rounded-full"
-            onClick={() => handlePaginate(1)}
-            disabled={!pagination || page >= pagination.totalPages || isLoading}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
+            <Button
+              variant="outline"
+              size="icon"
+              className="rounded-full"
+              onClick={() => handlePaginate(1)}
+              disabled={!pagination || page >= pagination.totalPages || isLoading}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
       </div>
 
       <GridCard products={products} isLoading={isLoading} isSecond={true} />

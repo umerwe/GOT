@@ -220,7 +220,7 @@ export default function CategoryLayout() {
           ) : !isNotFound ? (
             <div className="space-y-[30px]">
               {businesss.map((business: Business) => (
-                <div key={business.id} className='bg-[#F5F5F5] pt-[19px] px-[20px] pb-[30px] rounded-none'>
+                <div key={business.id} className='bg-[#F5F5F5] pt-[19px] px-[14px] pb-[30px] rounded-none'>
                   <Link href={`/business/${business.id}`} className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-[23px]">
                     <div className="flex items-center gap-3">
                       <div className="relative h-[56px] w-[56px]">
@@ -253,7 +253,7 @@ export default function CategoryLayout() {
 
       {isMobileFilterOpen && (
         <div className="fixed inset-0 bg-black/50 z-50 lg:hidden">
-          <div className="fixed left-0 top-16 h-full w-80 max-w-[85vw] bg-white shadow-xl z-50 overflow-y-auto">
+          <div className="fixed left-0 top-22 h-full w-80 max-w-[85vw] bg-white shadow-xl z-50 overflow-y-auto">
             <div className="flex items-center justify-between p-4 border-b">
               <h2 className="text-lg font-semibold">Filters</h2>
               <button onClick={() => setIsMobileFilterOpen(false)} className="p-2 hover:bg-gray-100 rounded-full">

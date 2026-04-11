@@ -55,7 +55,7 @@ export default function Sidebar() {
         !isMobileOpen &&
         <button
           onClick={() => setIsMobileOpen(!isMobileOpen)}
-          className="md:hidden absolute right-4 top-1 z-50 bg-[#1a1a1a] text-white p-2 rounded-sm shadow-2xl border border-gray-700"
+          className="md:hidden absolute right-4 top-3 z-50 bg-[#1a1a1a] text-white p-2 rounded-sm shadow-2xl border border-gray-700"
         >
           <Menu className="w-6 h-6" />
         </button>

@@ -10,8 +10,7 @@ import Footer from "@/components/layout/footer"
 
 export default function ListingById() {
   const { id } = useParams()
-  const { data: product, isLoading } = useGetProduct(id as string)
-  console.log(product)
+  const { data: product, isLoading } = useGetProduct(id as string);
   
   if (isLoading) return <SkeletonLoader type="alllisting" />
   if (!product) return <NotFoundWrapper itemName="Product" />
