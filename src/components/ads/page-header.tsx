@@ -39,7 +39,7 @@ export default function PageHeader({
         {/* Indication for active search query */}
         {searchQuery && (
           <p className="text-gray-500 text-lg italic">
-            Showing results for <span className="text-black font-semibold">"{searchQuery}"</span>
+            Showing results for <span className="text-black font-semibold">&quot;{searchQuery}&quot;</span>
           </p>
         )}
       </div>

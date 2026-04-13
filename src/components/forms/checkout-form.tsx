@@ -17,6 +17,7 @@ import {
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { IoCard } from "react-icons/io5";
+import { StripeElementChangeEvent } from "@stripe/stripe-js";
 
 const paymentSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email address"),
@@ -75,7 +76,7 @@ export default function PaymentForm() {
     },
   };
 
-  const handleStripeChange = (event: any, field: string) => {
+  const handleStripeChange = (event: StripeElementChangeEvent, field: string) => {
     setStripeFields((prev) => ({
       ...prev,
       [field]: {
