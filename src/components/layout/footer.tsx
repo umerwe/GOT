@@ -10,6 +10,7 @@ import { useGetCategories } from "@/hooks/useCategories";
 import { useState } from "react";
 import LoginDialog from "@/utils/loginDialog";
 import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton
+import { Category } from "@/types/business";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -17,7 +18,7 @@ export default function Footer() {
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetCategories();
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
 
-  const footerCategories = categoriesData?.slice(0, 5).map((cat: any) => ({
+  const footerCategories = categoriesData?.slice(0, 5).map((cat: Category) => ({
     label: cat.title,
     href: `/ads/${cat.id}`
   })) || [];
