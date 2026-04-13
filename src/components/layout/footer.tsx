@@ -3,45 +3,78 @@
 import Image from "@/components/custom/MyImage"
 import Link from "next/link"
 import { FaLocationDot } from "react-icons/fa6";
-import { section } from "@/data/footer"; 
+import { section } from "@/data/footer";
 import { useGetConfig } from "@/hooks/useConfig";
 import Logo from "../logo";
 import { useGetCategories } from "@/hooks/useCategories";
+import { useState } from "react";
+import LoginDialog from "@/utils/loginDialog";
+import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const { data: configData } = useGetConfig();
-  const { data: categoriesData } = useGetCategories();
+  const { data: categoriesData, isLoading: isCategoriesLoading } = useGetCategories();
+  const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
 
-  const footerCategories = categoriesData?.slice(0, 5).map((cat: Category) => ({
+  const footerCategories = categoriesData?.slice(0, 5).map((cat: any) => ({
     label: cat.title,
     href: `/ads/${cat.id}`
   })) || [];
 
-  const FooterColumn = ({ title, links }: { title: string; links: { label: string; href: string }[] }) => (
+  const FooterColumn = ({ 
+    title, 
+    links, 
+    isLoading 
+  }: { 
+    title: string; 
+    links: { label: string; href: string }[]; 
+    isLoading?: boolean 
+  }) => (
     <div className={`flex flex-col space-y-[14px]`}>
       <h6 className="text-[white] text-[14px] font-normal uppercase tracking-widest">{title}</h6>
       <ul className="space-y-[5px]">
-        {links.map((link, index) => (
-          <li
-            key={`${link.label}-${index}`} className="h-[28px]"
-            style={{ fontFamily: "Roboto, sans-serif" }}
-          >
-            <Link
-              href={link.href}
-              className="text-[#7E7E7E] hover:text-white text-[14px] transition-colors duration-200 font-normal"
-            >
-              {link.label}
-            </Link>
-          </li>
-        ))}
+        {isLoading ? (
+          Array.from({ length: 5 }).map((_, i) => (
+            <li key={i} className="h-[28px] flex items-center">
+              <Skeleton className="h-3 w-24 bg-[#1a1a1a]" />
+            </li>
+          ))
+        ) : (
+          links.map((link, index) => {
+            const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+            const isAdvertisingProtected = link.label === "Advertising" && !token;
+
+            return (
+              <li
+                key={`${link.label}-${index}`} className="h-[28px]"
+                style={{ fontFamily: "Roboto, sans-serif" }}
+              >
+                {isAdvertisingProtected ? (
+                  <button
+                    onClick={() => setIsLoginDialogOpen(true)}
+                    className="text-[#7E7E7E] hover:text-white text-[14px] transition-colors duration-200 font-normal text-left"
+                  >
+                    {link.label}
+                  </button>
+                ) : (
+                  <Link
+                    href={link.href}
+                    className="text-[#7E7E7E] hover:text-white text-[14px] transition-colors duration-200 font-normal"
+                  >
+                    {link.label}
+                  </Link>
+                )}
+              </li>
+            );
+          })
+        )}
       </ul>
     </div>
   )
 
   return (
     <footer className="bg-black text-[#999999] pt-[40px] pb-[16px] font-sans px-[34px]">
-
       <div className="flex flex-col lg:flex-row justify-between items-start gap-10 lg:gap-[130px]">
         <div className="w-full lg:w-auto flex-shrink-0">
           <Logo
@@ -50,7 +83,6 @@ export default function Footer() {
           />
         </div>
 
-        {/* Links Section - Adjusted to 2 columns based on your request */}
         <div className="w-full lg:w-auto grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-[60px] lg:mr-auto pb-[12px]">
           <FooterColumn
             title="SECTIONS"
@@ -60,6 +92,7 @@ export default function Footer() {
           <FooterColumn
             title="CATEGORIES"
             links={footerCategories}
+            isLoading={isCategoriesLoading}
           />
         </div>
 
@@ -96,9 +129,7 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom Section: Copyright & Legal */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center text-[15px] gap-6 md:gap-0 mt-[16px] pt-8">
-
         <div className="flex flex-col md:flex-row items-start md:items-center gap-[26.3px]">
           <div className="flex items-center gap-2 text-white">
             <FaLocationDot className="w-[18px] h-[15px]" />
@@ -118,6 +149,11 @@ export default function Footer() {
           </Link>
         </div>
       </div>
+
+      <LoginDialog
+        open={isLoginDialogOpen}
+        onOpenChange={setIsLoginDialogOpen}
+      />
     </footer>
   )
 }

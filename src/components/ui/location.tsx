@@ -85,6 +85,7 @@ export function LocationInput({
     const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, {
       types: ["geocode"],
       fields: ["formatted_address", "geometry"],
+      componentRestrictions: { country: "ae" }, // Restricted to UAE
     })
 
     autocomplete.addListener("place_changed", () => {
@@ -117,13 +118,21 @@ export function LocationInput({
   const handleReverseGeocode = async (latitude: number, longitude: number) => {
     try {
       const res = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY}`
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&components=country:AE&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY}`
       )
       const data = await res.json()
+
+      // Check if result exists and is within UAE
       if (data.results[0]) {
         const address = data.results[0].formatted_address
         if (inputRef.current) inputRef.current.value = address
         updateMap(latitude, longitude, address)
+      } else {
+        toast({
+          title: "Location Restricted",
+          description: "Please select a location within the UAE.",
+          variant: "destructive"
+        })
       }
     } catch {
       toast({ title: "Error", description: "Failed to get address", variant: "destructive" })
@@ -202,9 +211,8 @@ export function LocationInput({
       <div className="w-full mt-4">
         {/* Placeholder — always render map div so mapRef is never null */}
         <div
-          className={`w-full h-[346px] border-2 border-dashed border-gray-300 bg-gray-50 flex flex-col items-center justify-center text-center gap-2 ${
-            lat !== null ? "hidden" : ""
-          }`}
+          className={`w-full h-[346px] border-2 border-dashed border-gray-300 bg-gray-50 flex flex-col items-center justify-center text-center gap-2 ${lat !== null ? "hidden" : ""
+            }`}
         >
           <MapPin className="w-8 h-8 text-gray-400" />
           <p className="text-sm text-gray-500 font-medium">No location selected</p>

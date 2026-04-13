@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Bell } from "lucide-react";
+import { Bell, Loader2 } from "lucide-react"; // Added a loader for better UX
 
 interface Notification {
   id: string | number;
@@ -10,12 +10,21 @@ interface Notification {
   created_at: string;
 }
 
+// Define the shape of your API response
+interface ApiResponse {
+  notification_data: Notification[];
+}
+
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  console.log("notifications", notifications);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) return;
+    if (!token) {
+      setIsLoading(false);
+      return;
+    }
 
     fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/notification-list`, {
       method: "POST",
@@ -29,31 +38,40 @@ export default function NotificationsPage() {
         if (!res.ok) throw new Error("Failed to fetch notifications");
         return res.json();
       })
-      .then((data: Notification[]) => {
-        setNotifications(data);
+      .then((data: ApiResponse) => {
+        // Use the corrected interface here
+        setNotifications(data?.notification_data || []);
       })
-      .catch((err) => console.error("Failed to load notifications:", err));
+      .catch((err) => console.error("Failed to load notifications:", err))
+      .finally(() => setIsLoading(false));
   }, []);
-  
+
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
+    <div className="max-w-5xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
-          <Bell className="w-6 h-6 text-yellow-400" />
           <h1 className="text-xl font-semibold">Notifications</h1>
         </div>
       </div>
 
       <div className="space-y-5">
-        {notifications.map((n) => (
-          <div key={n.id} className="flex gap-3 items-start border-b pb-4">
-            <div>
-              <p className="font-semibold">{n.title}</p>
-              <p className="text-xs text-gray-500">{n.created_at}</p>
-              <p className="text-sm text-gray-700">{n.body}</p>
-            </div>
+        {isLoading ? (
+          <div className="flex justify-center py-10">
+            <Loader2 className="animate-spin text-yellow-400" />
           </div>
-        ))}
+        ) : notifications.length > 0 ? (
+          notifications.map((n) => (
+            <div key={n.id} className="flex gap-3 items-start border-b pb-4">
+              <div className="flex-1">
+                <p className="font-semibold text-black">{n.title}</p>
+                <p className="text-xs text-gray-500 mb-1">{n.created_at}</p>
+                <p className="text-sm text-gray-700">{n.body}</p>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="text-center text-gray-500 py-10">No notifications found.</p>
+        )}
       </div>
     </div>
   );

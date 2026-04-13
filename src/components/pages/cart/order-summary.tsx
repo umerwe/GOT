@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useAppSelector } from "@/store/hooks";
 import LoginDialog from "@/utils/loginDialog";
+import { Button } from "@/components/ui/button";
 
 const OrderSummary = ({
     cartItems,
@@ -55,10 +56,12 @@ const OrderSummary = ({
                             href="/checkout"
                             onClick={handleCheckout}
                         >
-                            <button
-                                className="w-full bg-[#F2A416] hover:bg-[#e0941a] text-black h-[50px] text-sm font-semibold transition-colors">
+                            <Button
+                                className="w-full bg-[#F2A416] hover:bg-[#e0941a] text-black h-[50px] text-sm font-semibold transition-colors"
+                                disabled={cartItems.length === 0}
+                            >
                                 Secure checkout
-                            </button>
+                            </Button>
                         </Link>
                     )
                 }

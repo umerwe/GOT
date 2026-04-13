@@ -2,19 +2,20 @@
 
 import { useGetBusinessProducts } from '@/hooks/useProduct'
 import React, { useState } from 'react'
-import { Button } from '@/components/ui/button';
 import GridCard from './cards/grid-card';
-import { ChevronLeft, ChevronRight, Loader, Star } from 'lucide-react';
+import { Loader } from 'lucide-react';
 import Image from '@/components/custom/MyImage';
 import Link from 'next/link';
 import { Business } from '@/types/business';
 import NotFoundWrapper from '@/common/not-found';
 
 const AccessoriesSection = () => {
-    const { data, isLoading: businessLoading } = useGetBusinessProducts();
+    const { data, isLoading: businessLoading } = useGetBusinessProducts({
+        type: "accessories"
+    });
     const businessData = data?.data;
 
-    const [paginationMap, setPaginationMap] = useState<Record<number | string, number>>({});
+    const [paginationMap] = useState<Record<number | string, number>>({});
 
     if (businessLoading) return (
         <div className="flex items-center justify-center h-[20vh]">
@@ -29,61 +30,17 @@ const AccessoriesSection = () => {
         </div>
     }
 
-    const handleScroll = (businessId: number | string, direction: 'next' | 'prev', totalProducts: number) => {
-        const currentIndex = paginationMap[businessId] || 0;
-        let newIndex = currentIndex;
-
-        if (direction === 'next') {
-            if (currentIndex + 4 < totalProducts) {
-                newIndex = currentIndex + 1;
-            }
-        } else {
-            if (currentIndex > 0) {
-                newIndex = currentIndex - 1;
-            }
-        }
-
-        setPaginationMap(prev => ({
-            ...prev,
-            [businessId]: newIndex
-        }));
-    };
-
     return (
-        <div className="space-y-[60px]">
-            {businessData?.slice(0, 2)?.map((business: Business) => {
-                const currentIndex = paginationMap[business.id] || 0;
-                const visibleProducts = business.products?.slice(currentIndex, currentIndex + 6) || [];
-                const totalProducts = business.products?.length || 0;
+        <div className="space-y-4">
+            <h2>Accessories</h2>
 
-                return (
-                    <div key={business.id}>
-                        <div className="flex items-center justify-between mb-[15.5px]">
-                            <h2>Accessories</h2>
+            <div className='bg-[#F5F5F5]'>
+                {businessData?.slice(0, 2)?.map((business: Business) => {
+                    const currentIndex = paginationMap[business.id] || 0;
+                    const visibleProducts = business.products?.slice(currentIndex, currentIndex + 6) || [];
 
-                            <div className="flex items-center gap-2">
-                                <Button
-                                    variant="outline"
-                                    size="icon"
-                                    className="rounded-full bg-transparent border-gray-300 h-8 w-8 disabled:opacity-30"
-                                    onClick={() => handleScroll(business.id, 'prev', totalProducts)}
-                                    disabled={currentIndex === 0}
-                                >
-                                    <ChevronLeft className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    size="icon"
-                                    className="rounded-full bg-transparent border-gray-300 h-8 w-8 disabled:opacity-30"
-                                    onClick={() => handleScroll(business.id, 'next', totalProducts)}
-                                    disabled={currentIndex + 4 >= totalProducts}
-                                >
-                                    <ChevronRight className="h-4 w-4" />
-                                </Button>
-                            </div>
-                        </div>
-
-                        <div className='bg-[#F5F5F5] pt-[19px] px-[14px] pb-[30px] rounded-none'>
+                    return (
+                        <div key={business.id} className="pt-[19px] px-[14px] pb-[30px]">
                             <Link
                                 href={`/business/${business.id}`}
                                 className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-[23px]">
@@ -110,28 +67,6 @@ const AccessoriesSection = () => {
                                         </p>
                                     </div>
                                 </div>
-
-                                {/* <div className="flex items-center gap-4">
-
-                                    <div className="flex items-center gap-2 bg-[#E9A426] px-3 h-[30px] rounded-full">
-                                        <div className="bg-black rounded-full p-0.5">
-                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#E9A426]">
-                                                <polyline points="20 6 9 17 4 12"></polyline>
-                                            </svg>
-                                        </div>
-                                        <span className="text-xs font-bold text-black pt-0.5">Verified Seller</span>
-                                    </div>
-
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-sm font-medium text-black">4.5 rating</span>
-                                        <div className="flex">
-                                            {[...Array(4)].map((_, i) => (
-                                                <Star key={i} size={18} fill="#E9A426" className="text-[#E9A426]" />
-                                            ))}
-                                            <Star size={18} className="text-[#E9A426]" />
-                                        </div>
-                                    </div>
-                                </div> */}
                             </Link>
 
                             <div>
@@ -142,9 +77,9 @@ const AccessoriesSection = () => {
                                 />
                             </div>
                         </div>
-                    </div>
-                );
-            })}
+                    );
+                })}
+            </div>
         </div>
     )
 }

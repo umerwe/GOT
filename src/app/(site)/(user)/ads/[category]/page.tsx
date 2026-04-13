@@ -30,7 +30,7 @@ export default function CategoryLayout() {
   const { category } = useParams()
   const searchParams = useSearchParams() // Initialize searchParams
   const router = useRouter()
-  
+
   const categoryId = (category as string) || "all"
   const stateParam = searchParams.get("state") // Get state from URL
   const searchParam = searchParams.get("search") // Get search text from URL
@@ -67,11 +67,11 @@ export default function CategoryLayout() {
     if (selectedFilters.sellerType !== "all") f.seller_type = selectedFilters.sellerType
     if (selectedFilters.min_price >= 0) f.min_price = selectedFilters.min_price.toString()
     if (selectedFilters.max_price >= 0) f.max_price = selectedFilters.max_price.toString()
-    
+
     // Add params from SearchBar
     if (stateParam) f.state = stateParam
     if (searchParam) f.search = searchParam
-    
+
     return f
   }, [selectedFilters, stateParam, searchParam])
 
@@ -83,6 +83,7 @@ export default function CategoryLayout() {
   })
 
   const businesss = useMemo(() => businessResponse?.data ?? [], [businessResponse])
+  console.log({ businesss })
   const totalPages = businessResponse?.pagination?.totalPages ?? 1
   const totalItems = businessResponse?.pagination?.total_items || 0
 
@@ -160,7 +161,12 @@ export default function CategoryLayout() {
 
   return (
     <div className="px-[17px] py-6">
-      <PageHeader categoryTitle={displayLabels.category} resultCount={totalItems} isLoading={isProductsLoading} />
+      <PageHeader
+        categoryTitle={displayLabels.category}
+        resultCount={totalItems}
+        isLoading={isProductsLoading}
+        searchQuery={searchParam}
+      />
 
       <div className="lg:hidden mt-6 mb-6 flex flex-col gap-4">
         <div className="flex justify-between items-center">
@@ -197,7 +203,7 @@ export default function CategoryLayout() {
                 Items {startItem}-{endItem} of {totalItems}
               </span>
             ) : (
-              <span className="h-4 w-32 bg-gray-200 animate-pulse rounded" /> 
+              <span className="h-4 w-32 bg-gray-200 animate-pulse rounded" />
             )}
             <RightControls />
           </div>

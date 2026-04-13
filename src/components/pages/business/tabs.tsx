@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const tabs = ["Motorbike", "Gear", "Accessories"];
 
@@ -10,17 +10,27 @@ export default function SellerTabs() {
     const searchParams = useSearchParams();
 
     const currentTabInUrl = searchParams.get("tab");
-    const [activeTab, setActiveTab] = useState(
-        tabs.find(t => t.toLowerCase() === currentTabInUrl?.toLowerCase()) || "motor_bike"
-    );
+
+    // Fix: Match the URL param to the display name in the tabs array
+    const [activeTab, setActiveTab] = useState(() => {
+        if (currentTabInUrl === "motor_bike") return "Motorbike";
+        return tabs.find(t => t.toLowerCase() === currentTabInUrl?.toLowerCase()) || "Motorbike";
+    });
+
+    // Optional: Keep state in sync if URL changes via back/forward buttons
+    useEffect(() => {
+        if (currentTabInUrl === "motor_bike") {
+            setActiveTab("Motorbike");
+        } else if (currentTabInUrl) {
+            const found = tabs.find(t => t.toLowerCase() === currentTabInUrl.toLowerCase());
+            if (found) setActiveTab(found);
+        }
+    }, [currentTabInUrl]);
 
     const handleTabClick = (tab: string) => {
         setActiveTab(tab);
-        if (tab.toLowerCase() === "motorbike") {
-            router.push(`?tab=motor_bike`, { scroll: false });
-        } else {
-            router.push(`?tab=${tab.toLowerCase()}`, { scroll: false });
-        }
+        const urlParam = tab === "Motorbike" ? "motor_bike" : tab.toLowerCase();
+        router.push(`?tab=${urlParam}`, { scroll: false });
     };
 
     return (

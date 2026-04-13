@@ -26,8 +26,11 @@ export const UserMenu = () => {
     queryClient.removeQueries({ queryKey: ["profile"] });
     queryClient.clear();
     dispatch(logout());
-    window.location.href = '/auth/login';
-    await signOut({ redirect: false });
+    await signOut({ 
+        callbackUrl: '/auth/login', 
+        redirect: true 
+    });
+    router.push('/auth/login');
   }
 
   if (isLoading) return <div className="w-7 h-7 rounded-full bg-gray-200 animate-pulse" />;
@@ -46,16 +49,6 @@ export const UserMenu = () => {
     </div>
   );
 
-  // If NOT business, just return the clickable avatar
-  if (!isBusiness) {
-    return (
-      <div onClick={() => router.push("/dashboard")}>
-        {ProfileAvatar}
-      </div>
-    );
-  }
-
-  // If business, return the Dropdown
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -66,10 +59,19 @@ export const UserMenu = () => {
 
       <DropdownMenuPortal>
         <DropdownMenuContent align="end" className="w-40 z-[999]">
-          <DropdownMenuItem onSelect={() => router.push("/business-management/profile")} className="cursor-pointer">
-            Profile
+          {/* First option: Dashboard */}
+          <DropdownMenuItem 
+            onSelect={() => router.push("/dashboard")} 
+            className="cursor-pointer"
+          >
+            Dashboard
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={handleLogout} className="cursor-pointer">
+          
+          {/* Second option: Logout */}
+          <DropdownMenuItem 
+            onSelect={handleLogout} 
+            className="cursor-pointer text-red-600"
+          >
             Logout
           </DropdownMenuItem>
         </DropdownMenuContent>

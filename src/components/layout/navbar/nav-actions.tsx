@@ -26,7 +26,7 @@ const NavActions = ({
         <>
           <span
             onClick={() => {
-              handleProtectedAction("/post-ad");
+              handleProtectedAction("/dashboard/post-ad");
               onClose?.();
             }}
             className={itemClass}

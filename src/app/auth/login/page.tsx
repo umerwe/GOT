@@ -53,7 +53,7 @@ export default function LoginForm() {
           <label className="block text-sm font-normal text-[#0E1620]">Email Address</label>
           <Input
             type="email"
-            placeholder="twinum@example.com"
+            placeholder="example@email.com"
             {...register("email")}
             className={`rounded-none ${errors.email ? 'border-red-500' : ''}`}
           />
@@ -79,7 +79,7 @@ export default function LoginForm() {
           <div className="relative">
             <Input
               type={showPassword ? "text" : "password"}
-              placeholder="•••••••••••••"
+              placeholder="••••••••"
               {...register("password")}
               className={`rounded-none ${errors.password ? 'border-red-500' : ''}`}
             />

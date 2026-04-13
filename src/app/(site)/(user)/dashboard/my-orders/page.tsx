@@ -13,13 +13,14 @@ import { useState, useMemo } from "react";
 import Pagination from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Order } from "@/types/order";
+import Link from "next/link";
 
 export default function MyOrdersPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const [sortBy, setSortBy] = useState<string>("newest");
 
     const { data: orderResponse, isLoading } = useGetOrderList(currentPage);
-console.log({orderResponse})
+    console.log({ orderResponse })
     const rawOrders = orderResponse?.data ?? [];
     const totalPages = orderResponse?.pagination?.totalPages || 1;
     const itemsPerPage = orderResponse?.pagination?.per_page || 10;
@@ -94,8 +95,9 @@ console.log({orderResponse})
                             ))
                         ) : sortedOrders.length > 0 ? (
                             sortedOrders.map((order: Order, index: number) => (
-                                <div
+                                <Link
                                     key={order.id}
+                                    href={`/listing/${order.order_details[0]?.product?.id}`}
                                     className="grid grid-cols-12 gap-4 p-4 transition-colors items-center hover:bg-gray-50/50"
                                 >
                                     <div className="col-span-1 text-sm font-medium text-gray-900">
@@ -157,7 +159,7 @@ console.log({orderResponse})
                                             year: 'numeric'
                                         })}
                                     </div>
-                                </div>
+                                </Link>
                             ))
                         ) : (
                             <div className="p-8 text-center text-gray-500 text-sm">

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -12,14 +12,7 @@ const SearchBar = () => {
   const router = useRouter()
   const { data: zones, isLoading } = useGetZones()
 
-  useEffect(() => {
-    if (zones && zones.length > 0) {
-      setActiveLocation(zones[0].state)
-    }
-  }, [zones])
-
   const handleSearch = () => {
-    // Navigate to ads/all with state and search text as query params
     const params = new URLSearchParams()
     if (activeLocation) params.set("state", activeLocation)
     if (searchText) params.set("search", searchText)
@@ -33,9 +26,13 @@ const SearchBar = () => {
     }
   }
 
+  const toggleLocation = (state: string) => {
+    setActiveLocation((prev) => (prev === state ? "" : state))
+  }
+
   return (
     <div className="bg-white shadow-sm border-[3px] border-[#F1F1F1] w-full px-2 sm:px-[60px] pt-[28px]">
-      <div className="flex items-center overflow-x-auto border-b-2 border-gray-200 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex items-center overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         <div className="flex flex-nowrap">
           {isLoading ? (
             Array.from({ length: 3 }).map((_, i) => (
@@ -48,7 +45,7 @@ const SearchBar = () => {
             zones?.map((zone: { state: string }) => (
               <button
                 key={zone.state}
-                onClick={() => setActiveLocation(zone.state)}
+                onClick={() => toggleLocation(zone.state)}
                 className={`mr-6 pb-1.5 text-[15px] transition-all font-medium whitespace-nowrap ${
                   activeLocation === zone.state
                     ? "border-b-4 border-yellow-500 text-black"

@@ -49,7 +49,6 @@ export default function Business() {
           </h2>
         </div>
 
-        {/* GridCard handles its own skeleton internally via the isLoading prop */}
         <GridCard
           products={filteredProducts}
           isLoading={isLoading}

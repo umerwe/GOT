@@ -7,6 +7,8 @@ export const useGetProfile = () => {
   return useQuery({
     queryKey: ["profile"],
     queryFn: getProfile,
+    enabled: typeof window !== "undefined" && !!localStorage.getItem("token"),
+    staleTime: 5 * 60 * 1000,
   });
 };
 

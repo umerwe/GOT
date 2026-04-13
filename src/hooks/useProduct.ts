@@ -63,7 +63,7 @@ export const useAddProduct = () => {
         title: "Product Added",
         description: "Your product has been successfully added!",
       })
-      router.push("/post-ad/thank-you")
+      router.push("/dashboard/post-ad/thank-you")
       queryClient.invalidateQueries({ queryKey: ["userProducts"] })
       queryClient.invalidateQueries({ queryKey: ["products"] })
     },

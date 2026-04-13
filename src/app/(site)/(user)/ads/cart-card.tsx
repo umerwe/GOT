@@ -1,8 +1,7 @@
 "use client";
 
-import { Heart, X, Minus, Plus, ShoppingCart } from "lucide-react";
+import { X, Minus, Plus, ShoppingCart } from "lucide-react";
 import Image from "@/components/custom/MyImage";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useAppSelector } from "@/store/hooks"
 import { toast } from "@/components/ui/toast";
@@ -13,7 +12,7 @@ interface CartCardProps {
   price: number;
   image: string;
   quantity: number;
-  business?: number; // Added business ID prop
+  business?: number;
   details?: string[];
   variant?: "cart" | "favorite";
   onQuantityChange?: (id: number, quantity: number) => void;
@@ -27,7 +26,7 @@ export default function CartCard({
   price,
   image,
   quantity,
-  business = 0, // Default to 0
+  business = 0,
   details,
   variant = "cart",
   onQuantityChange,
@@ -37,12 +36,10 @@ export default function CartCard({
   const cartItems = useAppSelector((state) => state.cart.items);
 
   const handleAddToCartClick = () => {
-    // 1. Check for Duplicate
     const isDuplicate = cartItems.some((item) => item.id === id);
     if (isDuplicate) {
       toast({
         title: "Already in Cart",
-        description: "This item is already in your cart.",
         variant: "destructive",
       });
       return;
@@ -63,10 +60,18 @@ export default function CartCard({
     onAction?.(id);
   };
 
+  const handleRemove = () => {
+    onRemove?.(id);
+
+    toast({
+      title: "Item Removed from Cart Successfully",
+    });
+  };
+
   return (
     <div className="relative flex flex-col sm:flex-row w-full gap-5 sm:gap-[30px] py-5 pr-0 sm:pr-5 border-b border-gray-100 bg-white">
       <button
-        onClick={() => onRemove?.(id)}
+        onClick={handleRemove}
         className="absolute right-2 top-7 sm:right-5 sm:top-5 text-gray-400 hover:text-red-500 transition-colors z-10"
       >
         <X size={20} />

@@ -16,7 +16,7 @@ import { ConfigData } from "@/types/config"
 import { postAdSchema, type PostAdFormData } from "@/validations/ads"
 import { LocationInput } from "../ui/location"
 import { useGetConfig } from "@/hooks/useConfig"
-import { cn } from "@/lib/utils" // Ensure you have this utility or use standard string template
+import { cn } from "@/lib/utils"
 import { useGetProfile } from "@/hooks/useProfile"
 
 interface Category {
@@ -55,7 +55,7 @@ export function AdForm({
   isPending,
 }: AdFormProps) {
   const { data: profileData } = useGetProfile();
-  
+
   const { data } = useGetConfig()
   const configData = data as ConfigData;
 
@@ -206,11 +206,11 @@ export function AdForm({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit, (errs) => console.log(errs))} className="space-y-8">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       {/* Photos Section */}
       <div>
         <h4 className="text-[16px] mb-[2.5px]">Photos</h4>
-        <div 
+        <div
           onDragOver={onDragOver}
           onDragLeave={onDragLeave}
           onDrop={onDrop}
@@ -408,6 +408,11 @@ export function AdForm({
             min={0}
             label="Price"
             {...register("price", { valueAsNumber: true })}
+            onKeyDown={(e) => {
+              if (["e", "E", "+", "-"].includes(e.key)) {
+                e.preventDefault();
+              }
+            }}
             error={errors.price?.message}
             disabled={isPending}
           />

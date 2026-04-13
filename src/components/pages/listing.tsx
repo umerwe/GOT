@@ -129,7 +129,6 @@ export default function Listing({ product }: ProductDetailsProps) {
     if (isDuplicate) {
       toast({
         title: "Already in Cart",
-        description: "This item is already in your cart.",
         variant: "destructive",
       });
       return;
@@ -163,7 +162,7 @@ export default function Listing({ product }: ProductDetailsProps) {
     toast({
       title: "Item added to cart successfully.",
     });
-    router.push("/cart");
+    // router.push("/cart");
   };
 
   return (

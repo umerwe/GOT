@@ -7,11 +7,13 @@ interface PageHeaderProps {
   categoryTitle: string
   resultCount: number
   isLoading?: boolean
+  searchQuery?: string | null // Added this
 }
 
 export default function PageHeader({
   categoryTitle,
   isLoading = false,
+  searchQuery, // Destructure this
 }: PageHeaderProps) {
   if (isLoading) {
     return (
@@ -30,8 +32,17 @@ export default function PageHeader({
           { title: categoryTitle }
         ]}
       />
-      <h2 className="text-[32px] mb-1">{categoryTitle}</h2>
-      {/* <p className="text-gray-500">{resultCount} results</p> */}
+      <div className="flex flex-col gap-1">
+        <h2 className="text-[32px] font-bold text-black capitalize">
+          {categoryTitle}
+        </h2>
+        {/* Indication for active search query */}
+        {searchQuery && (
+          <p className="text-gray-500 text-lg italic">
+            Showing results for <span className="text-black font-semibold">"{searchQuery}"</span>
+          </p>
+        )}
+      </div>
     </div>
   )
 }
