@@ -9,7 +9,7 @@ import { Category } from "@/types/filters";
 const CategoryCard = ({ category }: { category: Category }) => {
     return (
         <Link
-            href={`/ads/${category.id}`}
+            href={`/categories/${category.id}`}
             key={category.id}
             className="flex flex-col group cursor-pointer"
         >

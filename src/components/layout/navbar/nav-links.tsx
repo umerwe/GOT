@@ -10,7 +10,7 @@ const NavLinks = ({ isMobile = false, textColor, onClose }: NavLinksProps) => {
 
     const links = [
         { name: "Home", href: "/" },
-        { name: "Categories", href: "/ads/all", match: "/ads" },
+        { name: "Categories", href: "/categories/all", match: "/categories" },
     ];
 
     return (

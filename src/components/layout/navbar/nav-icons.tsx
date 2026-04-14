@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { NavIconsProps } from "@/types/navbar";
 import { useAppSelector } from "@/store/hooks";
 import { useEffect, useState } from "react";
-import LoginDialog from "@/utils/loginDialog";
+import LoginDialog from "@/components/dialogs/loginDialog";
 interface ExtendedNavIconsProps extends NavIconsProps {
     onClose?: () => void;
 }

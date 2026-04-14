@@ -1,13 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
-import Link from "next/link";
+import { Menu, X } from "lucide-react";;
 import { usePathname, useRouter } from "next/navigation";
 import { useAppSelector } from "@/store/hooks";
 import { cn } from "@/lib/utils";
 import { UserMenu } from "../../user-menu";
-import LoginDialog from "@/utils/loginDialog";
+import LoginDialog from "@/components/dialogs/loginDialog";
 import NavIcons from "./nav-icons";
 import NavLinks from "./nav-links";
 import NavActions from "./nav-actions";
@@ -33,7 +32,7 @@ const Navbar = () => {
 
   const isHome = pathname === "/";
   const textColor = isHome ? "text-black sm:text-white" : "text-black";
-  const showNavLinks = pathname.startsWith("/ads") || pathname.startsWith("/listing") || pathname.startsWith("/privacy") || pathname.startsWith("/terms");
+  const showNavLinks = pathname.startsWith("/categories") || pathname.startsWith("/listing") || pathname.startsWith("/privacy") || pathname.startsWith("/terms");
 
   const handleProtectedAction = (path: string) => {
     if (!isAuth) {

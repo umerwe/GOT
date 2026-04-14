@@ -1,7 +1,6 @@
 // lib/api.ts
 import axios from "axios";
 import { baseURL } from "@/config/constants";
-import { toast } from "@/components/ui/toast";
 
 const api = axios.create({
   baseURL,
@@ -16,6 +15,22 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+
+api.interceptors.response.use(
+  (response) => response, // Pass through successful responses
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // 1. Clear Local Storage
+      localStorage.removeItem("token");
+
+      // 2. Redirect to Login
+      // Using window.location is often safer in interceptors to 
+      // ensure a full state reset, but you can also use your router.
+      window.location.href = "/auth/login";
+    }
+    return Promise.reject(error);
+  }
+);
 // ✅ Handle 401 and 429 errors
 // api.interceptors.response.use(
 //   (response) => response,

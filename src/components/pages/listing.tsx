@@ -3,7 +3,7 @@
 import Image from "@/components/custom/MyImage"
 import { Button } from "@/components/ui/button"
 import { capitalizeWords } from "@/utils/capitalizeWords"
-import LoginDialog from "@/utils/loginDialog"
+import LoginDialog from "@/components/dialogs/loginDialog"
 import { useState } from "react"
 import { useAppDispatch, useAppSelector } from "@/store/hooks"
 import { useRouter } from "next/navigation"

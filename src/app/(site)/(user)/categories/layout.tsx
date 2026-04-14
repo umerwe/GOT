@@ -2,16 +2,16 @@ import Footer from "@/components/layout/footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Ads",
+    title: "Categories | Braaap",
 };
 
-export default function AdsLayout({
+export default function CategoriesLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
     return (
-        <> 
+        <>
             {children}
             <Footer />
         </>

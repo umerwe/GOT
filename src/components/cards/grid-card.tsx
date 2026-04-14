@@ -12,7 +12,7 @@ import { toggleFavorite } from "@/store/slices/FavouriteSlice";
 import { cn } from "@/lib/utils";
 import { toast } from "../ui/toast";
 import { useState } from "react";
-import LoginDialog from "@/utils/loginDialog";
+import LoginDialog from "@/components/dialogs/loginDialog";
 
 interface GridCardProps {
   isHome?: boolean;

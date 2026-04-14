@@ -5,7 +5,7 @@ import PaymentMethods from "./paymentMethod";
 import Link from "next/link";
 import { useState } from "react";
 import { useAppSelector } from "@/store/hooks";
-import LoginDialog from "@/utils/loginDialog";
+import LoginDialog from "@/components/dialogs/loginDialog";
 import { Button } from "@/components/ui/button";
 
 const OrderSummary = ({

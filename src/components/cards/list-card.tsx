@@ -12,7 +12,7 @@ import { toggleFavorite } from "@/store/slices/FavouriteSlice"
 import { toast } from "../ui/toast"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
-import LoginDialog from "@/utils/loginDialog"
+import LoginDialog from "@/components/dialogs/loginDialog"
 
 interface ListCardProps {
     products: Product[]

@@ -64,14 +64,8 @@ const CategoriesSection = () => {
             ) : isEmpty ? (
                 <NotFoundWrapper />
             ) : (
-                /* MOBILE: flex, overflow-x-auto, no-scrollbar (optional)
-                   DESKTOP (sm and up): grid-cols-3 to 6, overflow-visible
-                */
                 <div className="flex overflow-x-auto pb-4 gap-4 sm:grid sm:grid-cols-3 lg:grid-cols-6 sm:gap-[10px] sm:overflow-visible sm:pb-0 scrollbar-hide">
-                    {/* For mobile, you might want to show more than just 6 items 
-                       so the user can actually scroll. If you strictly only want 
-                       to scroll the 6 items currently in the "page", use visibleCategories.
-                    */}
+
                     {visibleCategories.map((category: Category) => (
                         <div key={category.id} className="min-w-[160px] sm:min-w-full">
                             <CategoryCard category={category} />

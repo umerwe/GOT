@@ -8,7 +8,7 @@ import { useGetConfig } from "@/hooks/useConfig";
 import Logo from "../logo";
 import { useGetCategories } from "@/hooks/useCategories";
 import { useState } from "react";
-import LoginDialog from "@/utils/loginDialog";
+import LoginDialog from "@/components/dialogs/loginDialog";
 import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton
 import { Category } from "@/types/business";
 
@@ -20,7 +20,7 @@ export default function Footer() {
 
   const footerCategories = categoriesData?.slice(0, 5).map((cat: Category) => ({
     label: cat.title,
-    href: `/ads/${cat.id}`
+    href: `/categories/${cat.id}`
   })) || [];
 
   const FooterColumn = ({ 
