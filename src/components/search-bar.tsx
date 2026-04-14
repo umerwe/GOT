@@ -17,7 +17,7 @@ const SearchBar = () => {
     if (activeLocation) params.set("state", activeLocation)
     if (searchText) params.set("search", searchText)
     
-    router.push(`/ads/all?${params.toString()}`)
+    router.push(`/categories/all?${params.toString()}`)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {

@@ -52,8 +52,6 @@ export const postAdSchema = z.object({
         )
         .refine((f) => f.size <= 2 * 1024 * 1024, "Max size 2MB")
     )
-    .min(1, "At least one image is required")
-    .max(5, "Max 5 images"),
 })
 
 export type PostAdFormData = z.infer<typeof postAdSchema>

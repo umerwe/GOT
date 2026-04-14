@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import BusinessAuthCheck from "@/components/auth/business-auth-public";
 
 export const metadata: Metadata = {
-  title: "Business Management",
+  title: "Business Management | Braaap",
 };
 
 interface BusinessManagementLayoutProps {

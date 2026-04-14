@@ -29,7 +29,7 @@ export default function ThankYouPage() {
           <Button
             size="lg"
             className="bg-black hover:bg-black/80 text-white font-normal"
-            onClick={() => router.replace("/post-ad")}
+            onClick={() => router.replace("/dashboard/post-ad")}
           >
             Post Another Ad
           </Button>

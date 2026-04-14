@@ -6,6 +6,7 @@ import Image from '@/components/custom/MyImage'
 import { Brand } from '@/types/filters'
 import { motion } from 'framer-motion'
 import NotFoundWrapper from '@/common/not-found'
+import Link from 'next/link'
 
 const BrandsSection = () => {
   const { data, isLoading } = useGetBrands();
@@ -41,8 +42,9 @@ const BrandsSection = () => {
             }}
           >
             {duplicatedData.map((brand: Brand, index: number) => (
-              <div
+              <Link
                 key={`${brand.id || index}-${index}`}
+                href={`/categories/all?brand=${brand.id}`}
                 className="relative h-[103.82px] w-[129.78px] flex-shrink-0 cursor-pointer"
               >
                 <Image
@@ -51,7 +53,7 @@ const BrandsSection = () => {
                   fill
                   className="object-contain"
                 />
-              </div>
+              </Link>
             ))}
           </motion.div>
         </div>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState } from "react"
 import { useGetProducts } from "@/hooks/useProduct"
 import ListCard from "./cards/list-card"
 import {
@@ -12,36 +12,16 @@ import {
 } from "@/components/ui/select"
 
 export default function Features() {
-    const [sortBy, setSortBy] = useState("")
+    const [sortBy, setSortBy] = useState("price_low_to_high")
     const [limit, setLimit] = useState("4")
 
     const { data, isLoading } = useGetProducts({
         type: "motor_bike",
-        per_page : 4
+        per_page: parseInt(limit),
+        sort: sortBy
     })
+
     const featuresData = data?.data || [];
-
-    const processedProducts = useMemo(() => {
-        const result = [...featuresData];
-
-        result.sort((a, b) => {
-            if (sortBy === "newest") {
-                return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-            }
-            if (sortBy === "oldest") {
-                return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-            }
-            if (sortBy === "price_low") {
-                return a.price - b.price;
-            }
-            if (sortBy === "price_high") {
-                return b.price - a.price;
-            }
-            return 0;
-        });
-
-        return result.slice(0, parseInt(limit));
-    }, [featuresData, sortBy, limit]);
 
     return (
         <div className="scroll-smooth">
@@ -54,10 +34,11 @@ export default function Features() {
                         <span className="text-[13px] text-[#A2A6B0] font-semibold whitespace-nowrap">Sort By:</span>
                         <Select value={sortBy} onValueChange={setSortBy}>
                             <SelectTrigger className="w-fit text-[#000000] border-none shadow-none p-0 h-auto font-semibold focus:ring-0 text-[13px]">
-                                <SelectValue placeholder="Date published" />
+                                <SelectValue placeholder="Sort Order" />
                             </SelectTrigger>
                             <SelectContent align="end">
-                                <SelectItem value="price_low">Date Published</SelectItem>
+                                <SelectItem value="price_low_to_high">Price: Low to High</SelectItem>
+                                <SelectItem value="price_high_to_low">Price: High to Low</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
@@ -80,7 +61,7 @@ export default function Features() {
             </div>
 
             <ListCard
-                products={processedProducts}
+                products={featuresData}
                 isLoading={isLoading}
             />
         </div>

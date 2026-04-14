@@ -81,14 +81,18 @@ export default function BusinessHero({ logo, name, address }: HeroProps) {
             {/* Tooltip for Address */}
             {/* <Tooltip>
               <TooltipTrigger asChild> */}
-                <div className="flex items-center gap-1 text-sm text-black">
-                  <div className="bg-black text-white w-[22px] h-[22px] rounded-[60px] flex items-center justify-center">
-                    <FiMapPin size={11} />
+               {
+                address && (
+                  <div className="flex items-center gap-1 text-sm text-black">
+                    <div className="bg-black text-white w-[22px] h-[22px] rounded-[60px] flex items-center justify-center">
+                      <FiMapPin size={11} />
+                    </div>
+                    <span className="font-medium">
+                      {address}
+                    </span>
                   </div>
-                  <span className="font-medium">
-                    {address}
-                  </span>
-                </div>
+                )
+               }
               {/* </TooltipTrigger>
               <TooltipContent className="bg-black text-white border-none rounded-none">
                 <p>{address}</p>

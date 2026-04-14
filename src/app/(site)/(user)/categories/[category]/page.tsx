@@ -18,27 +18,31 @@ import FilterSidebar from "@/components/ads/filter-sidebar"
 import PageHeader from "@/components/ads/page-header"
 import GridCard from "@/components/cards/grid-card"
 import ListCard from "@/components/cards/list-card"
-import { ChevronLeft, ChevronDownIcon, Star, SlidersHorizontal } from "lucide-react"
-import { BiSolidGrid } from "react-icons/bi";
-import { BsFilterLeft } from "react-icons/bs";
+import { ChevronLeft, ChevronDownIcon, SlidersHorizontal } from "lucide-react"
 import { sellerData } from "@/constants/category"
 import Link from 'next/link'
 import { Business } from "@/types/business"
 import MyImage from "@/components/custom/MyImage"
+import { BiSolidGrid } from "react-icons/bi"
+import { BsFilterLeft } from "react-icons/bs"
 
 export default function CategoryLayout() {
   const { category } = useParams()
-  const searchParams = useSearchParams() // Initialize searchParams
+  const searchParams = useSearchParams()
   const router = useRouter()
 
   const categoryId = (category as string) || "all"
-  const stateParam = searchParams.get("state") // Get state from URL
-  const searchParam = searchParams.get("search") // Get search text from URL
+  const stateParam = searchParams.get("state");
+  const searchParam = searchParams.get("search");
+  const brandParam = searchParams.get("brand")
 
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(12)
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+
+  const [sortBy, setSortBy] = useState("price_low_to_high");
+
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
@@ -57,8 +61,12 @@ export default function CategoryLayout() {
   })
 
   useEffect(() => {
-    setSelectedFilters((prev) => ({ ...prev, category: categoryId }))
-  }, [categoryId])
+    setSelectedFilters((prev) => ({
+      ...prev,
+      category: categoryId,
+      brand: brandParam || "all",
+    }))
+  }, [categoryId, brandParam])
 
   const appliedFilters: ProductFilters = useMemo(() => {
     const f: ProductFilters = {}
@@ -68,19 +76,21 @@ export default function CategoryLayout() {
     if (selectedFilters.min_price >= 0) f.min_price = selectedFilters.min_price.toString()
     if (selectedFilters.max_price >= 0) f.max_price = selectedFilters.max_price.toString()
 
+    // Ensure these are included in the object
+    f.sort = sortBy;
+    f.page = currentPage;
+    f.per_page = itemsPerPage;
+
     // Add params from SearchBar
     if (stateParam) f.state = stateParam
     if (searchParam) f.search = searchParam
 
-    return f
-  }, [selectedFilters, stateParam, searchParam])
+    return f;
+    // CRITICAL: Add sortBy, currentPage, and itemsPerPage to this dependency array!
+  }, [selectedFilters, stateParam, searchParam, sortBy, currentPage, itemsPerPage])
 
   // Hook now receives state and search via appliedFilters
-  const { data: businessResponse, isLoading: isProductsLoading } = useGetBusinessProducts({
-    ...appliedFilters,
-    page: currentPage,
-    per_page: itemsPerPage
-  })
+  const { data: businessResponse, isLoading: isProductsLoading } = useGetBusinessProducts(appliedFilters);
 
   const businesss = useMemo(() => businessResponse?.data ?? [], [businessResponse])
 
@@ -119,13 +129,12 @@ export default function CategoryLayout() {
     })
   }, [selectedFilters, filterOptions, getFilterLabel])
 
-  const [sortBy, setSortBy] = useState("newest")
-
   const handleFilterChange = (filterType: keyof FilterState, value: string | number) => setSelectedFilters(prev => ({ ...prev, [filterType]: value }));
   const handlePriceRangeChange = (min: number, max: number) => setSelectedFilters(prev => ({ ...prev, min_price: min, max_price: max }));
+
   const clearAllFilters = () => {
     setSelectedFilters({ category: "all", brand: "all", sellerType: "all", min_price: 0, max_price: 100000 });
-    router.replace("/ads/all");
+    router.replace("/categories/all");
     setIsMobileFilterOpen(false);
   }
 
@@ -133,31 +142,106 @@ export default function CategoryLayout() {
 
   const RightControls = () => (
     <div className="flex items-center gap-4 text-[13px] text-gray-500">
+      {/* Sort Logic */}
       <div className="flex items-center gap-2">
         <span>Sort By:</span>
         <div className="relative">
-          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="appearance-none border-none bg-transparent focus:ring-0 cursor-pointer pr-5 p-0 text-[13px]">
-            <option value="priceLowHigh">Price</option>
+          <select
+            value={sortBy}
+            onChange={(e) => {
+              setSortBy(e.target.value);
+              setCurrentPage(1); // Reset pagination on sort change
+            }}
+            className="appearance-none border-none bg-transparent focus:ring-0 cursor-pointer pr-5 p-0 text-[13px] font-semibold text-black"
+          >
+            <option value="price_low_to_high">Price: Low to High</option>
+            <option value="price_high_to_low">Price: High to Low</option>
           </select>
           <ChevronDownIcon className="pointer-events-none absolute right-0 top-1 h-3.5 w-3.5 text-gray-500" />
         </div>
       </div>
+
+      {/* Items Per Page Logic */}
       <div className="hidden sm:flex items-center gap-2">
         <span>Show:</span>
         <div className="relative">
-          <select value={itemsPerPage} onChange={(e) => setItemsPerPage(Number(e.target.value))} className="appearance-none border-none bg-transparent font-semibold text-black focus:ring-0 cursor-pointer pr-5 p-0 text-[13px]">
+          <select
+            value={itemsPerPage}
+            onChange={(e) => {
+              setItemsPerPage(Number(e.target.value));
+              setCurrentPage(1); // Reset pagination on limit change
+            }}
+            className="appearance-none border-none bg-transparent font-semibold text-black focus:ring-0 cursor-pointer pr-5 p-0 text-[13px]"
+          >
             <option value={8}>8 per page</option>
             <option value={12}>12 per page</option>
+            <option value={24}>24 per page</option>
           </select>
           <ChevronDownIcon className="pointer-events-none absolute right-0 top-1 h-3.5 w-3.5 text-black" />
         </div>
       </div>
+
+      {/* View Mode Toggle */}
       <div className="flex items-center gap-2 pl-2 border-l border-gray-300 ml-2">
-        <button onClick={() => setViewMode("grid")} className={viewMode === "grid" ? "text-black" : "text-gray-400"}><BiSolidGrid size={22} /></button>
-        <button onClick={() => setViewMode("list")} className={viewMode === "list" ? "text-black" : "text-gray-400"}><BsFilterLeft size={24} /></button>
+        <button
+          onClick={() => setViewMode("grid")}
+          className={viewMode === "grid" ? "text-black" : "text-gray-400"}
+          title="Grid View"
+        >
+          <BiSolidGrid size={22} />
+        </button>
+        <button
+          onClick={() => setViewMode("list")}
+          className={viewMode === "list" ? "text-black" : "text-gray-400"}
+          title="List View"
+        >
+          <BsFilterLeft size={24} />
+        </button>
       </div>
     </div>
-  )
+  );
+
+  const ActiveFilters = () => {
+    const activeFilters = [];
+
+    if (selectedFilters.category !== "all") activeFilters.push({ id: 'category', label: displayLabels.category });
+    if (selectedFilters.brand !== "all") activeFilters.push({ id: 'brand', label: displayLabels.brand });
+    if (selectedFilters.sellerType !== "all") activeFilters.push({ id: 'sellerType', label: displayLabels.sellerType });
+    if (selectedFilters.min_price > 0 || selectedFilters.max_price < 100000) {
+      activeFilters.push({ id: 'price', label: `Price: ${displayLabels.priceRange}` });
+    }
+
+    if (activeFilters.length === 0) return null;
+
+    return (
+      <div className="flex flex-wrap items-center gap-2 mb-6">
+        <span className="text-[13px] font-semibold text-gray-400 mr-1">Active Filters:</span>
+        {activeFilters.map((filter) => (
+          <div
+            key={filter.id}
+            className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full border border-gray-200"
+          >
+            <span className="text-[12px] font-semibold text-black">{filter.label}</span>
+            <button
+              onClick={() => {
+                if (filter.id === 'price') handlePriceRangeChange(0, 100000);
+                else handleFilterChange(filter.id as keyof FilterState, "all");
+              }}
+              className="hover:text-red-500 transition-colors"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+        ))}
+        {/* <button
+          onClick={clearAllFilters}
+          className="text-[12px] font-bold text-red-500 hover:underline ml-2"
+        >
+          Clear All
+        </button> */}
+      </div>
+    );
+  };
 
   return (
     <div className="px-[17px] py-6">
@@ -167,6 +251,10 @@ export default function CategoryLayout() {
         isLoading={isProductsLoading}
         searchQuery={searchParam}
       />
+
+      <div className="mt-4">
+        <ActiveFilters />
+      </div>
 
       <div className="lg:hidden mt-6 mb-6 flex flex-col gap-4">
         <div className="flex justify-between items-center">
@@ -193,7 +281,7 @@ export default function CategoryLayout() {
               <ChevronLeft size={14} strokeWidth={3} /> <span>Back</span>
             </button>
           </div>
-          <FilterSidebar filterOptions={filterOptions} selectedFilters={selectedFilters} displayLabels={displayLabels} onFilterChange={handleFilterChange} onPriceRangeChange={handlePriceRangeChange} onClearFilters={clearAllFilters} onApplyFilters={(cat) => router.push(`/ads/${cat}`)} />
+          <FilterSidebar filterOptions={filterOptions} selectedFilters={selectedFilters} displayLabels={displayLabels} onFilterChange={handleFilterChange} onPriceRangeChange={handlePriceRangeChange} onClearFilters={clearAllFilters} onApplyFilters={(cat) => router.push(`/categories/${cat}`)} />
         </aside>
 
         <main className="flex-1 min-w-0">

@@ -117,7 +117,6 @@ export function AdForm({
     }
   }
 
-  // Refactored logic into a reusable function to handle both Click and Drop
   const processFiles = useCallback((files: FileList | null) => {
     if (!files) return
 
@@ -150,7 +149,6 @@ export function AdForm({
     event.target.value = ""
   }, [processFiles])
 
-  // Drag and Drop Handlers
   const onDragOver = (e: React.DragEvent) => {
     e.preventDefault()
     setIsDragging(true)
@@ -205,8 +203,20 @@ export function AdForm({
     })
   }
 
+  const onFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (uploadedImages.length === 0) {
+      setError("images", { type: "manual", message: "At least one image is required" })
+      window.scrollTo({ top: 0, behavior: "smooth" })
+      return
+    }
+
+    handleSubmit(onSubmit)(e as unknown as React.BaseSyntheticEvent)
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+    <form onSubmit={onFormSubmit} className="space-y-8">
       {/* Photos Section */}
       <div>
         <h4 className="text-[16px] mb-[2.5px]">Photos</h4>
@@ -222,13 +232,13 @@ export function AdForm({
         >
           <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
           <p className="text-black mb-2">Drag & drop images here</p>
-          <input type="file" accept=".png,.jpg,.jpeg" multiple onChange={handleImageUpload} className="hidden" id="image-upload" disabled={isPending} />
-          <label htmlFor="image-upload">
+          <input type="file" accept=".png,.jpg,.jpeg" multiple onChange={handleImageUpload} className="hidden" id="image-upload" disabled={isPending} />          <label htmlFor="image-upload">
             <Button type="button" variant="outline" className="mt-4 rounded-none" onClick={() => document.getElementById("image-upload")?.click()} disabled={isPending}>
               Upload Images
             </Button>
           </label>
         </div>
+
         {errors.images && <p className="text-red-500 text-sm mt-2 font-medium">{errors.images.message}</p>}
         <p className="text-[11px] text-gray-500 mt-2">Supported formats: PNG, JPG, JPEG (Max 2MB)</p>
         <div className="flex space-x-2 mt-[12px]">
@@ -251,7 +261,7 @@ export function AdForm({
       <div>
         <h2 className="text-[20px] font-semibold mb-[13.5px]">Product Details</h2>
         <div className="space-y-[16.5px]">
-          <Input id="title" label="Title" {...register("title")} error={errors.title?.message} disabled={isPending} />
+          <Input id="title" label="Title" {...register("title")} required error={errors.title?.message} disabled={isPending} />
 
           {!isAccessories && (
             <SelectField
@@ -272,6 +282,7 @@ export function AdForm({
             value={selectedCategoryId || ""}
             onChange={(e) => handleCategoryChange(Number(e.target.value))}
             disabled={isCategoriesLoading || isPending}
+            required
             error={errors.category_id?.message}
           />
 
@@ -281,6 +292,7 @@ export function AdForm({
             options={subcategories.map((sub) => ({ value: sub.id, label: sub.title }))}
             {...register("subcategory_id", { setValueAs: (v) => v === "" ? 0 : Number(v) })}
             value={watch("subcategory_id") || ""}
+            required
             disabled={!selectedCategoryId || subcategories.length === 0 || isPending}
             error={errors.subcategory_id?.message}
           />
@@ -291,13 +303,14 @@ export function AdForm({
             options={Array.from({ length: 10 }, (_, i) => ({ value: i + 1, label: String(i + 1) }))}
             {...register("condition", { setValueAs: (v) => v === "" ? undefined : Number(v) })}
             value={watch("condition") ?? ""}
+            required
             disabled={isPending}
             error={errors.condition?.message}
           />
 
           <div>
             <Label htmlFor="description">Description</Label>
-            <Textarea id="description" className="min-h-[120px] mt-1" {...register("description")} disabled={isPending} />
+            <Textarea id="description" required className="min-h-[120px] mt-1" {...register("description")} disabled={isPending} />
             {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description.message}</p>}
           </div>
 
@@ -308,6 +321,7 @@ export function AdForm({
             {...register("usage")}
             value={watch("usage") || ""}
             disabled={isPending}
+            required
             error={errors.usage?.message}
           />
 
@@ -317,6 +331,7 @@ export function AdForm({
                 id="mileage"
                 type="number"
                 label="Mileage"
+                required
                 min={0}
                 {...register("mileage", { valueAsNumber: true })}
                 error={errors.mileage?.message}
@@ -329,6 +344,7 @@ export function AdForm({
                 {...register("mileage_unit")}
                 value={watch("mileage_unit") || ""}
                 disabled={isPending}
+                required
                 error={errors.mileage_unit?.message}
               />
             </>
@@ -341,6 +357,7 @@ export function AdForm({
             min={1950}
             max={2050}
             {...register("manufacturing_year", { valueAsNumber: true })}
+            required
             error={errors.manufacturing_year?.message}
             disabled={isPending}
           />
@@ -354,6 +371,7 @@ export function AdForm({
                 {...register("final_drive_system")}
                 value={watch("final_drive_system") || ""}
                 disabled={isPending}
+                required
                 error={errors.final_drive_system?.message}
               />
               <SelectField
@@ -363,6 +381,7 @@ export function AdForm({
                 {...register("wheels")}
                 value={watch("wheels") || ""}
                 disabled={isPending}
+                required
                 error={errors.wheels?.message}
               />
               <SelectField
@@ -372,6 +391,7 @@ export function AdForm({
                 {...register("engine_size")}
                 value={watch("engine_size") || ""}
                 disabled={isPending}
+                required
                 error={errors.engine_size?.message}
               />
             </>
@@ -384,6 +404,7 @@ export function AdForm({
             {...register("warranty")}
             value={watch("warranty") || ""}
             disabled={isPending}
+            required
             error={errors.warranty?.message}
           />
 
@@ -394,6 +415,7 @@ export function AdForm({
             {...register("seller_type")}
             value={watch("seller_type") || ""}
             disabled={isPending}
+            required
             error={errors.seller_type?.message}
           />
         </div>
@@ -422,10 +444,10 @@ export function AdForm({
 
       <div>
         <div className="flex space-x-3 items-start">
-          <Checkbox id="guidelines" checked={guidelinesChecked} onCheckedChange={(c) => setGuidelinesChecked(c === true)} disabled={isPending} />
+          <Checkbox id="guidelines" checked={guidelinesChecked} required onCheckedChange={(c) => setGuidelinesChecked(c === true)} disabled={isPending} />
           <Label htmlFor="guidelines" className="text-sm leading-none">I confirm this ad follows guidelines</Label>
         </div>
-        <Button type="submit" className="w-full bg-black text-white h-[48px] mt-8 rounded-none" disabled={isPending || !guidelinesChecked}>
+        <Button type="submit" className="w-full bg-black text-white disabled:hover:text-white h-[48px] mt-8 rounded-none" disabled={isPending}>
           {isPending ? "Submitting..." : "Submit Ad"}
         </Button>
       </div>

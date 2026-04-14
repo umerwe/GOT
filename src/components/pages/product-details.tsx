@@ -22,7 +22,7 @@ export default function ProductDetails() {
           <Breadcrumb
             items={[
               { title: "Home", href: "/" },
-              { title: product.category?.title || "", href: `/ads/${product.category?.id}` },
+              { title: product.category?.title || "", href: `/categories/${product.category?.id}` },
               { title: product.title }
             ]}
           />

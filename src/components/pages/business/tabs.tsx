@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 
-const tabs = ["Motorbike", "Gear", "Accessories"];
+const tabs = ["Motorbike", "Accessories"];
 
 export default function SellerTabs() {
     const router = useRouter();
@@ -35,7 +35,7 @@ export default function SellerTabs() {
 
     return (
         <div className="w-full bg-white">
-            <div className="grid grid-cols-3 px-[21px] relative">
+            <div className="grid grid-cols-2 px-[21px] relative">
                 {tabs.map((tab) => {
                     const isActive = activeTab === tab;
 
@@ -43,7 +43,7 @@ export default function SellerTabs() {
                         <button
                             key={tab}
                             onClick={() => handleTabClick(tab)}
-                            className={`py-[10px] text-[16px] font-bold transition-all relative flex justify-center items-center border-b-[3px] ${isActive
+                            className={`py-[10px] text-[16px] font-bold transition-all relative flex justify-center items-center border-b-[3px] cursor-pointer ${isActive
                                     ? "text-[#E9A426] border-[#E9A426]"
                                     : "text-black border-gray-200 hover:text-[#E9A426]"
                                 }`}

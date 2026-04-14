@@ -1,6 +1,6 @@
 export const section = [
     { label: "Home", href: "/" },
-    { label: "Marketplace", href: "/ads/all" },
+    { label: "Marketplace", href: "/categories/all" },
     { label: "Advertising", href: "/dashboard/post-ad" }
 ]
 

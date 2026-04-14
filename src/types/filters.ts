@@ -30,6 +30,9 @@ export interface ProductFilters {
   max_price?: string
   state?: string
   search?: string
+  sort?: string
+  page?: number
+  per_page?: number
 }
 export interface Category {
   id: number

@@ -52,7 +52,7 @@ export default function Business() {
         <GridCard
           products={filteredProducts}
           isLoading={isLoading}
-          count={8}
+          count={6}
           isSecond={true}
           isBusinessPage={true}
         />

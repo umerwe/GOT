@@ -35,7 +35,7 @@ export default function NoListingsFound({ isFilterPage = true }: { isFilterPage?
                     </Button>
                     {
                         isFilterPage &&
-                        <Link href="/ads/all">
+                        <Link href="/categories/all">
                             <Button variant="outline">
                                 Reset Filters
                             </Button>

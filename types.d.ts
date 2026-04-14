@@ -88,6 +88,7 @@ interface ProductFilters {
   max_price?: string;
   page?: number
   per_page?: number
+  sort?: string
 }
 
 interface FilterOption {
