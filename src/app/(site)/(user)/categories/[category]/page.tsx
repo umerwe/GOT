@@ -83,7 +83,7 @@ export default function CategoryLayout() {
   })
 
   const businesss = useMemo(() => businessResponse?.data ?? [], [businessResponse])
-  console.log({ businesss })
+
   const totalPages = businessResponse?.pagination?.totalPages ?? 1
   const totalItems = businessResponse?.pagination?.total_items || 0
 
