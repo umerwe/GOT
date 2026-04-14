@@ -6,27 +6,31 @@ import { Provider } from "react-redux";
 import { store } from "@/store/store";
 import { Toaster } from "../components/ui/toast";
 import TopLoader from "@/components/ui/toploader";
+import { AxiosError } from "axios";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => {
     const handleUnauthorized = () => {
-      localStorage.removeItem("token");
-      window.location.href = "/auth/login";
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("token");
+        window.location.href = "/auth/login";
+      }
     };
 
     return new QueryClient({
-      // Handles 401s from useQuery hooks
       queryCache: new QueryCache({
-        onError: (error: any) => {
-          if (error?.response?.status === 401) {
+        // Using AxiosError with a generic for your API response shape
+        onError: (error) => {
+          const axiosError = error as AxiosError;
+          if (axiosError.response?.status === 401) {
             handleUnauthorized();
           }
         },
       }),
-      // Handles 401s from useMutation hooks
       mutationCache: new MutationCache({
-        onError: (error: any) => {
-          if (error?.response?.status === 401) {
+        onError: (error) => {
+          const axiosError = error as AxiosError;
+          if (axiosError.response?.status === 401) {
             handleUnauthorized();
           }
         },
