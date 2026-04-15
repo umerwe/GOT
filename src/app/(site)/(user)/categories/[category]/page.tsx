@@ -49,7 +49,7 @@ export default function CategoryLayout() {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
-  const { data: categories } = useGetCategories()
+  const { data: categories } = useGetCategories();
   const { data: brands } = useGetBrands()
 
   const [selectedFilters, setSelectedFilters] = useState<FilterState>({
@@ -86,10 +86,8 @@ export default function CategoryLayout() {
     if (searchParam) f.search = searchParam
 
     return f;
-    // CRITICAL: Add sortBy, currentPage, and itemsPerPage to this dependency array!
   }, [selectedFilters, stateParam, searchParam, sortBy, currentPage, itemsPerPage])
 
-  // Hook now receives state and search via appliedFilters
   const { data: businessResponse, isLoading: isProductsLoading } = useGetBusinessProducts(appliedFilters);
 
   const businesss = useMemo(() => businessResponse?.data ?? [], [businessResponse])
@@ -281,14 +279,14 @@ export default function CategoryLayout() {
               <ChevronLeft size={14} strokeWidth={3} /> <span>Back</span>
             </button>
           </div>
-          <FilterSidebar filterOptions={filterOptions} selectedFilters={selectedFilters} displayLabels={displayLabels} onFilterChange={handleFilterChange} onPriceRangeChange={handlePriceRangeChange} onClearFilters={clearAllFilters} onApplyFilters={(cat) => router.push(`/categories/${cat}`)} />
+          <FilterSidebar filterOptions={filterOptions} selectedFilters={selectedFilters} displayLabels={displayLabels} onFilterChange={handleFilterChange} onPriceRangeChange={handlePriceRangeChange} onClearFilters={clearAllFilters} onApplyFilters={(cat) => router.push(`/categories/${cat}`)} categoriesData={categories || []} />
         </aside>
 
         <main className="flex-1 min-w-0">
           <div className="hidden lg:flex items-center justify-between mb-4">
             {!isProductsLoading ? (
               <span className="text-[13px] text-gray-400">
-                Items {startItem}-{endItem} of {totalItems}
+                Sellers {startItem}-{endItem} of {totalItems}
               </span>
             ) : (
               <span className="h-4 w-32 bg-gray-200 animate-pulse rounded" />
@@ -357,7 +355,7 @@ export default function CategoryLayout() {
               </button>
             </div>
             <div className="p-6 mb-20">
-              <FilterSidebar filterOptions={filterOptions} selectedFilters={selectedFilters} displayLabels={displayLabels} onFilterChange={handleFilterChange} onPriceRangeChange={handlePriceRangeChange} onClearFilters={clearAllFilters} onApplyFilters={(cat) => { router.push(`/ads/${cat}`); setIsMobileFilterOpen(false); }} />
+              <FilterSidebar filterOptions={filterOptions} selectedFilters={selectedFilters} displayLabels={displayLabels} onFilterChange={handleFilterChange} onPriceRangeChange={handlePriceRangeChange} onClearFilters={clearAllFilters} onApplyFilters={(cat) => { router.push(`/ads/${cat}`); setIsMobileFilterOpen(false); }} categoriesData={categories?.data || []} />
             </div>
           </div>
         </div>

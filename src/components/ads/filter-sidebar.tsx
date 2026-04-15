@@ -5,18 +5,7 @@ import { Button } from "@/components/ui/button"
 import type { FilterOption, FilterState, FilterSidebarProps } from "@/types/filters"
 import { ChevronDown, ChevronUp } from "lucide-react"
 import MyImage from "../custom/MyImage"
-
-const PRICE_RANGES = [
-  { label: "AED 0 - AED 10,000", min: 0, max: 10000 },
-  { label: "AED 10,000 - AED 15,000", min: 10000, max: 15000 },
-  { label: "AED 15,000 - AED 20,000", min: 15000, max: 20000 },
-  { label: "AED 20,000 - AED 25,000", min: 20000, max: 25000 },
-  { label: "AED 25,000 - AED 30,000", min: 25000, max: 30000 },
-  { label: "AED 30,000 - AED 35,000", min: 30000, max: 35000 },
-  { label: "AED 35,000 - AED 40,000", min: 35000, max: 40000 },
-  { label: "AED 40,000 - AED 45,000", min: 40000, max: 45000 },
-  { label: "AED 70,000 and Above", min: 70000, max: 0 },
-]
+import { PRICE_RANGES } from "@/constants/price_ranges"
 
 export default function FilterSidebar({
   filterOptions,
@@ -25,13 +14,21 @@ export default function FilterSidebar({
   onPriceRangeChange,
   onClearFilters,
   onApplyFilters,
+  categoriesData
 }: FilterSidebarProps) {
-  const [tempFilters, setTempFilters] = useState<FilterState>(selectedFilters)
+  const [tempFilters, setTempFilters] = useState<FilterState>(selectedFilters);
+  const [selectedCategoryType, setSelectedCategoryType] = useState<string | null>(null);
 
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     category: false,
     price: false,
-  })
+  });
+
+  useEffect(() => {
+    const categoryObj = categoriesData?.find(c => String(c.id) === String(tempFilters.category));
+
+    setSelectedCategoryType(categoryObj?.type || null);
+  }, [tempFilters.category, categoriesData]);
 
   useEffect(() => {
     setTempFilters(selectedFilters)
@@ -86,8 +83,7 @@ export default function FilterSidebar({
 
         <div className="space-y-6 px-4">
           {filterConfig.map(({ type, label }) => {
-            const isOpen = openSections[type] ?? true
-
+            const isOpen = openSections[type] ?? true;
             return (
               <div key={type}>
                 <div
@@ -102,7 +98,7 @@ export default function FilterSidebar({
                   )}
                 </div>
 
-                {isOpen && (
+                {!isOpen && (
                   <div className="space-y-3">
                     <div className="flex items-center space-x-2">
                       <input
@@ -153,51 +149,55 @@ export default function FilterSidebar({
           })}
 
           {/* Price Range Section */}
-          <div>
-            <div
-              className="flex items-center justify-between cursor-pointer mb-3"
-              onClick={() => toggleSection('price')}
-            >
-              <label className="text-sm font-semibold cursor-pointer">Price Range</label>
-              {openSections['price'] ? (
-                <ChevronDown className="h-4 w-4 text-gray-500" />
-              ) : (
-                <ChevronUp className="h-4 w-4 text-gray-500" />
+          {
+            selectedCategoryType !== "accessories" &&
+            <div>
+              <div
+                className="flex items-center justify-between cursor-pointer mb-3"
+                onClick={() => toggleSection('price')}
+              >
+                <label className="text-sm font-semibold cursor-pointer">Price Range</label>
+                {openSections['price'] ? (
+                  <ChevronDown className="h-4 w-4 text-gray-500" />
+                ) : (
+                  <ChevronUp className="h-4 w-4 text-gray-500" />
+                )}
+              </div>
+
+              {!openSections['price'] && (
+                <div className="space-y-3">
+                  <div className="flex flex-col space-y-3">
+                    {PRICE_RANGES.map((range, index) => {
+                      const valueKey = `${range.min}-${range.max}`
+                      const isChecked =
+                        tempFilters.min_price === range.min && tempFilters.max_price === range.max
+
+                      return (
+                        <div key={index} className="flex items-center space-x-2">
+                          <input
+                            type="radio"
+                            id={`price-${index}`}
+                            name="price-range"
+                            value={valueKey}
+                            checked={isChecked}
+                            onChange={(e) => handlePriceRangeSelect(e.target.value)}
+                            className="h-3 w-3 border-gray-300 text-red-500 checked:bg-red-500 checked:border-red-500 focus:ring-red-500 cursor-pointer"
+                          />
+                          <label
+                            htmlFor={`price-${index}`}
+                            className="text-[13px] leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                          >
+                            {range.label}
+                          </label>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
               )}
             </div>
+          }
 
-            {openSections['price'] && (
-              <div className="space-y-3">
-                <div className="flex flex-col space-y-3">
-                  {PRICE_RANGES.map((range, index) => {
-                    const valueKey = `${range.min}-${range.max}`
-                    const isChecked =
-                      tempFilters.min_price === range.min && tempFilters.max_price === range.max
-
-                    return (
-                      <div key={index} className="flex items-center space-x-2">
-                        <input
-                          type="radio"
-                          id={`price-${index}`}
-                          name="price-range"
-                          value={valueKey}
-                          checked={isChecked}
-                          onChange={(e) => handlePriceRangeSelect(e.target.value)}
-                          className="h-3 w-3 border-gray-300 text-red-500 checked:bg-red-500 checked:border-red-500 focus:ring-red-500 cursor-pointer"
-                        />
-                        <label
-                          htmlFor={`price-${index}`}
-                          className="text-[13px] leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-                        >
-                          {range.label}
-                        </label>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-            )}
-          </div>
         </div>
 
         <div className="mt-8 px-4">
@@ -225,7 +225,7 @@ export default function FilterSidebar({
           </Button>
 
         </div>
-        
+
         <div className="grid grid-cols-2 gap-[1px] bg-gray-200 border border-gray-200 overflow-hidden">
           {filterOptions.brand?.map((item: FilterOption) => {
             const value = item.id || item.value || ""

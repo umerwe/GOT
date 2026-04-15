@@ -35,7 +35,7 @@ const AccessoriesSection = () => {
             <h2>Accessories</h2>
 
             <div className='bg-[#F5F5F5]'>
-                {businessData?.slice(0, 2)?.map((business: Business) => {
+                {businessData?.map((business: Business) => {
                     const currentIndex = paginationMap[business.id] || 0;
                     const visibleProducts = business.products?.slice(currentIndex, currentIndex + 6) || [];
 

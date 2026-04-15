@@ -39,6 +39,7 @@ export interface Category {
   title: string
   image: string
   total_items: number
+  type: string
   child?: {
     id: number
     title: string
@@ -66,4 +67,5 @@ export interface FilterSidebarProps {
   onPriceRangeChange: (minPrice: number, maxPrice: number) => void
   onClearFilters: () => void
   onApplyFilters: (newCategory: string) => void
+  categoriesData: Category[]
 }

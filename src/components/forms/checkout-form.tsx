@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { IoCard } from "react-icons/io5";
 import { StripeElementChangeEvent } from "@stripe/stripe-js";
+import { toast } from "../ui/toast";
 
 const paymentSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email address"),
@@ -118,7 +119,11 @@ export default function PaymentForm() {
     });
 
     if (error) {
-      alert(error.message);
+      toast({
+        title: "Payment Error",
+        description: error.message,
+        variant: "destructive",
+      })
       setLoading(false);
     } else {
       router.push(`/success?tid=${paymentMethod.id}`);

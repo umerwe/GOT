@@ -13,8 +13,7 @@ import {
   AlertCircle,
   ChevronLeft,
   ChevronRight,
-  Heart,
-  Flame
+  Heart
 } from "lucide-react";
 import { BsChatDotsFill } from "react-icons/bs";
 
@@ -34,7 +33,11 @@ import {
 } from "@/components/ui/dialog"
 import { useGetConfig } from "@/hooks/useConfig"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
-
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
 interface ProductDetailsProps {
   product: Product
@@ -322,6 +325,7 @@ export default function Listing({ product }: ProductDetailsProps) {
           </div>
 
           {/* Action Buttons */}
+          {/* Action Buttons */}
           <div className={`grid ${product?.seller?.user_type !== "business" && data?.id !== product?.seller?.id ? "grid-cols-2" : "grid-cols-1"} gap-3`}>
             {(product?.seller?.user_type !== "business" && data?.id != product?.seller?.id) && (
               <Button
@@ -333,35 +337,70 @@ export default function Listing({ product }: ProductDetailsProps) {
               </Button>
             )}
 
-            <TooltipProvider delayDuration={0}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="default"
-                className="bg-black hover:bg-black text-white rounded-none h-[54px] text-sm font-medium w-full"
+            {/* Changed Tooltip to Popover for Click behavior */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="default"
+                  className="bg-black hover:bg-black text-white rounded-none h-[54px] text-sm font-medium w-full transition-transform active:scale-[0.98]"
+                >
+                  <Phone size={20} className="mr-2" fill="white" />
+                  Contact details
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent
+                side="top"
+                align="center"
+                sideOffset={12}
+                className="bg-white border-2 border-black rounded-none p-0 w-72 z-[100] overflow-hidden"
               >
-                <Phone size={20} className="mr-2" fill="white" />
-                Contact details
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent 
-              side="top" 
-              className="bg-white border-2 border-black rounded-none p-3 shadow-lg"
-            >
-              {phoneNumber ? (
-                <div className="flex flex-col items-center gap-1">
-                  <span className="text-xs text-gray-500 uppercase font-bold">Seller Number</span>
-                  <p className="text-lg font-bold text-black select-all">
-                    {phoneNumber}
-                  </p>
-                  <span className="text-[10px] text-gray-400">Click to select/copy</span>
-                </div>
-              ) : (
-                <p className="text-sm">Number not provided</p>
-              )}
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+                {phoneNumber ? (
+                  <div className="flex flex-col">
+                    {/* Header Label */}
+                    <div className="bg-gray-50 border-b-2 border-black px-4 py-2">
+                      <span className="text-xs text-gray-500 font-semibold">
+                        Seller Contact
+                      </span>
+                    </div>
+
+                    {/* Number & Copy Row */}
+                    <div className="flex items-center justify-between p-4 gap-3">
+                      <p className="text-lg font-bold text-black tracking-tight select-all truncate">
+                        {phoneNumber}
+                      </p>
+
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="shrink-0 w-8 h-8 rounded-none border-2 border-black hover:bg-black hover:text-white transition-colors"
+                        onClick={() => {
+                          navigator?.clipboard?.writeText(phoneNumber);
+                          toast({ title: "Copied to clipboard" });
+                        }}
+                      >
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-4 text-center">
+                    <p className="text-xs font-bold uppercase text-gray-400">No Number Provided</p>
+                  </div>
+                )}
+              </PopoverContent>
+            </Popover>
           </div>
 
           {/* Safety Note */}
