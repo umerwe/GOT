@@ -32,7 +32,6 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog"
 import { useGetConfig } from "@/hooks/useConfig"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import {
   Popover,
   PopoverContent,

@@ -3,6 +3,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 interface ConfirmDialogProps {
   open: boolean
@@ -29,6 +30,7 @@ export default function ConfirmDialog({
   variant = "confirm",
   redirectPath,
 }: ConfirmDialogProps) {
+  const router = useRouter();
   const handleCancel = () => {
     onCancel?.();
     onOpenChange(false);
@@ -36,9 +38,10 @@ export default function ConfirmDialog({
 
   const handleConfirm = () => {
     onConfirm?.();
-    if (variant !== "login") {
+     if (variant !== "login") {
       onOpenChange(false);
     }
+    router.push(redirectPath || "/auth/login");
   };
 
   return (

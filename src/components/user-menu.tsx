@@ -26,14 +26,10 @@ export const UserMenu = () => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   const handleLogout = async () => {
-    queryClient.removeQueries({ queryKey: ["profile"] });
-    queryClient.clear();
     dispatch(logout());
-    await signOut({ 
-        callbackUrl: '/auth/login', 
-        redirect: true 
-    });
-    router.push('/auth/login');
+    router.replace('/auth/login');
+    await signOut({ redirect: false });
+    queryClient.clear();
   }
 
   const handleLogoutClick = () => {
