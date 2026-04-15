@@ -284,11 +284,17 @@ export default function Listing({ product }: ProductDetailsProps) {
             </h3>
 
             <div className="text-[13px] text-[#636E7E] flex flex-wrap gap-x-2">
-              <span>{product.brand?.title || "None"}</span>
+             {
+              product.brand?.title && (
+                <>
+                  <span>{product.brand?.title}</span>
+                  <span>•</span>
+                </>
+              )
+             }
+              <span>{product.condition}</span>
               <span>•</span>
-              <span>{product.condition || "Good condition"}</span>
-              <span>•</span>
-              <span>GCC Specs</span>
+              <span>{product.category?.title}</span>
             </div>
 
             <div className="flex gap-1.5 text-[#636E7E] text-sm items-start">
