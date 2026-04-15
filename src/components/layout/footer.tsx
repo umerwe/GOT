@@ -79,7 +79,7 @@ export default function Footer() {
       <div className="flex flex-col lg:flex-row justify-between items-start gap-10 lg:gap-[130px]">
         <div className="w-full lg:w-auto flex-shrink-0">
           <Logo
-            logo={configData?.site_logo}
+            logo={configData?.braaap_logo}
             className="w-[174px] h-[162px]"
           />
         </div>

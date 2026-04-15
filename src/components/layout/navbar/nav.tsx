@@ -51,7 +51,7 @@ const Navbar = () => {
     )}>
       <div className={`flex  justify-between pr-4 md:pr-0 ${isBusiness ? "items-center" : "items-start"}`}>
         <Logo
-          logo={configData?.site_logo || ""}
+          logo={configData?.braaap_logo || ""}
           navigate={isBusiness ? false : true}
         />
 
