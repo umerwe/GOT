@@ -8,7 +8,7 @@ import React from 'react'
 const PrivacyPolicy = () => {
   const { data, isLoading } = useGetConfig()
 
-  const privacyData = data?.privacy_policy || ''
+  const privacyData = data?.braaap_privacy_and_policy || ''
 
   if (isLoading) {
     return <Loader />

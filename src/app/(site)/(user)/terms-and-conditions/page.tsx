@@ -9,7 +9,7 @@ import React from 'react'
 const TermsAndCondition = () => {
   const { data, isLoading } = useGetConfig()
 
-  const termsData = data?.terms_condition || ''
+  const termsData = data?.braaap_terms_and_condition || ''
 
   if (isLoading) {
     return <Loader />
