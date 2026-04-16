@@ -46,13 +46,14 @@ const Navbar = () => {
 
   return (
     <nav className={cn(
-      "w-full top-0 md:px-[31px] md:pr-[50px] z-[500] transition-all",
+      "w-full top-0 pl-4 md:px-[31px] md:pr-[50px] z-[500] transition-all",
       isHome ? "bg-transparent absolute" : "bg-white sticky"
     )}>
-      <div className={`flex  justify-between pr-4 md:pr-0 ${isBusiness ? "items-center" : "items-start"}`}>
+      <div className={`flex justify-between pr-4 md:pr-0 ${isBusiness ? "items-center" : "items-start"}`}>
         <Logo
-          logo={configData?.braaap_logo || ""}
+          logo="/logo.png"
           navigate={isBusiness ? false : true}
+          className={`${!isHome && "invert"}`}
         />
 
         <div className="mt-[45px]">
