@@ -22,7 +22,7 @@ const MyAds = () => {
                 <h2 className="text-[20px] capitalize">
                     {displayTitle}
                 </h2>
-                <Select>
+                {/* <Select>
                     <SelectTrigger className="w-[156px] h-[36px] text-[14px] font-normal bg-white border-[#E5E7EB] text-[#0E1620]">
                         <SelectValue placeholder="Sort by" className="" />
                     </SelectTrigger>
@@ -32,7 +32,7 @@ const MyAds = () => {
                         <SelectItem value="price-high">Price: High to Low</SelectItem>
                         <SelectItem value="price-low">Price: Low to High</SelectItem>
                     </SelectContent>
-                </Select>
+                </Select> */}
             </div>
 
             <AdsTable selectedStatus={statusName === "all" ? undefined : statusName} />

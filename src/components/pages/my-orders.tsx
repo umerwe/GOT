@@ -53,7 +53,7 @@ export default function MyOrdersPage() {
                     My Orders
                 </h2>
 
-                <Select value={sortBy} onValueChange={(value) => setSortBy(value)}>
+                {/* <Select value={sortBy} onValueChange={(value) => setSortBy(value)}>
                     <SelectTrigger className="w-[156px] h-[36px] text-[14px] font-normal bg-white border-[#E5E7EB] text-[#0E1620]">
                         <SelectValue placeholder="Sort by" />
                     </SelectTrigger>
@@ -61,7 +61,7 @@ export default function MyOrdersPage() {
                         <SelectItem value="newest">Newest</SelectItem>
                         <SelectItem value="oldest">Oldest</SelectItem>
                     </SelectContent>
-                </Select>
+                </Select> */}
             </div>
 
             <div className="bg-white border border-gray-200 overflow-x-auto">

@@ -17,7 +17,7 @@ export default function DashboardPage() {
                     Latest Ads
                 </h1>
 
-                <Select>
+                {/* <Select>
                     <SelectTrigger className="w-[156px] h-[36px] text-[14px] font-normal bg-white border-[#E5E7EB] text-[#0E1620]">
                         <SelectValue placeholder="Sort by" />
                     </SelectTrigger>
@@ -27,7 +27,7 @@ export default function DashboardPage() {
                         <SelectItem value="price-high">Price: High to Low</SelectItem>
                         <SelectItem value="price-low">Price: Low to High</SelectItem>
                     </SelectContent>
-                </Select>
+                </Select> */}
             </div>
 
             <AdsTable selectedStatus={undefined} />
