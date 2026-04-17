@@ -83,14 +83,22 @@ export default function BusinessProfileForm() {
     const onSubmit = (formData: BusinessProfileValues) => {
         const payload = new FormData();
 
-        payload.append("first_name", formData.first_name);
-        payload.append("last_name", formData.last_name);
-        payload.append("phone", formData.phone);
-        payload.append("address", formData.address);
-        // Append coordinates to the FormData
-        payload.append("latitude", String(formData.latitude));
-        payload.append("longitude", String(formData.longitude));
+        // 🔥 Merge first + last name
+        const displayName = `${formData.first_name} ${formData.last_name}`.trim();
 
+        payload.append("display_name", displayName);
+
+        // 🔥 Rename phone
+        payload.append("contact_number", formData.phone);
+
+        // 🔥 Rename coordinates
+        payload.append("lat", String(formData.latitude));
+        payload.append("lng", String(formData.longitude));
+
+        // Keep address if API needs it
+        payload.append("address", formData.address);
+
+        // Logo
         if (logoFile) {
             payload.append("profile_image", logoFile);
         }
@@ -143,18 +151,18 @@ export default function BusinessProfileForm() {
                     >
                         {/* Logo Upload Section - Keep as is */}
                         <div className="flex flex-col gap-1.5">
-                             <span className="text-sm font-medium text-gray-700">Business Logo</span>
-                             <div className="flex items-center gap-4 p-4 rounded-lg border border-dashed border-gray-300 bg-gray-50">
+                            <span className="text-sm font-medium text-gray-700">Business Logo</span>
+                            <div className="flex items-center gap-4 p-4 rounded-lg border border-dashed border-gray-300 bg-gray-50">
                                 <div className="w-16 h-16 rounded-full border-2 border-gray-200 flex items-center justify-center bg-white overflow-hidden shrink-0 cursor-pointer hover:border-gray-400 transition-colors"
-                                     onClick={() => fileInputRef.current?.click()}>
+                                    onClick={() => fileInputRef.current?.click()}>
                                     <MyImage src={logoPreview || ""} alt="Logo preview" width={64} height={64} className="w-full h-full object-cover" />
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <p className="text-sm font-medium text-gray-700">{logoPreview ? "Logo selected" : "Upload your business logo"}</p>
                                     <button type="button" onClick={() => fileInputRef.current?.click()} className="text-xs font-medium text-gray-800 border border-gray-300 px-3 py-1.5 bg-white">Change</button>
                                 </div>
-                             </div>
-                             <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleLogoChange} />
+                            </div>
+                            <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleLogoChange} />
                         </div>
 
                         {/* Name and Phone Fields */}

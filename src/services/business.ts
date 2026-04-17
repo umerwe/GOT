@@ -1,7 +1,16 @@
 import api from "@/lib/axios";
-import { BusinessDetailsValues } from "@/validations/business";
 
-export const registerBusiness = async (form: BusinessDetailsValues) => {
+export interface RegisterBusinessPayload {
+  display_name: string;
+  contact_number: string;
+  lat: number | undefined;
+  lng: number | undefined;
+  email: string;
+  password: string;
+  address: string;
+}
+
+export const registerBusiness = async (form: RegisterBusinessPayload) => {
   const { data } = await api.post("/business-register", form);
   return data.data;
 };

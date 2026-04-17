@@ -37,7 +37,22 @@ export function BusinessDetailsForm() {
     });
 
     const onSubmit = (data: BusinessDetailsValues) => {
-        mutate(data);
+        const payload = {
+            // merge names
+            display_name: `${data.first_name} ${data.last_name}`.trim(),
+
+            // rename fields
+            contact_number: data.phone,
+            lat: data.latitude,
+            lng: data.longitude,
+
+            // keep required fields
+            email: data.email,
+            password: data.password,
+            address: data.address,
+        };
+
+        mutate(payload);
     };
 
     return (

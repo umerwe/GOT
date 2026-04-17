@@ -64,12 +64,16 @@ export const UserMenu = () => {
         <DropdownMenuPortal>
           <DropdownMenuContent align="end" className="w-40 z-[999]">
             {/* First option: Dashboard */}
-            <DropdownMenuItem 
-              onSelect={() => router.push("/dashboard")} 
-              className="cursor-pointer"
-            >
-              Dashboard
-            </DropdownMenuItem>
+           {
+            !isBusiness && (
+              <DropdownMenuItem 
+                onSelect={() => router.push("/dashboard")} 
+                className="cursor-pointer"
+              >
+                Dashboard
+              </DropdownMenuItem>
+            )
+           }
             
             {/* Second option: Logout */}
             <DropdownMenuItem 
