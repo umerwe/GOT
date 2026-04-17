@@ -20,7 +20,7 @@ export default function MyOrdersPage() {
     const [sortBy, setSortBy] = useState<string>("newest");
 
     const { data: orderResponse, isLoading } = useGetOrderList(currentPage);
-    
+
     const rawOrders = orderResponse?.data ?? [];
     const totalPages = orderResponse?.pagination?.totalPages || 1;
     const itemsPerPage = orderResponse?.pagination?.per_page || 10;
@@ -107,9 +107,10 @@ export default function MyOrdersPage() {
                                     <div className="col-span-3 flex items-center gap-3">
                                         <div className="w-[60px] h-[60px] bg-gray-100 relative overflow-hidden flex-shrink-0 border border-gray-200">
                                             <Image
-                                                src={order.order_details[0]?.product?.product_images[0] || "/placeholder.svg"}
+                                                src={order?.order_details?.[0]?.product?.product_images?.[0] || "/fallback.png"}
                                                 alt="product"
-                                                fill
+                                                width={256}
+                                                height={256}
                                                 className="object-cover"
                                             />
                                         </div>

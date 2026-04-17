@@ -1,8 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { AlertCircle, ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { AlertCircle,  } from "lucide-react";
 
 interface NotFoundWrapperProps {
   itemName?: string;
@@ -10,7 +8,6 @@ interface NotFoundWrapperProps {
 }
 
 export default function NotFoundWrapper({ itemName ,className = ""}: NotFoundWrapperProps) {
-  const router = useRouter();
 
   return (
     <div className={`flex flex-col justify-center items-center ${className} p-6 pb-0`}>

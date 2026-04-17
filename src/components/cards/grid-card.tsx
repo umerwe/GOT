@@ -96,7 +96,7 @@ export default function GridCard({
                 <Card className="overflow-hidden rounded-none shadow-none border-none cursor-pointer h-full">
                   <div className="relative w-full h-[343px]">
                     <Image
-                      src={product?.product_images?.[0] || "/placeholder.svg"}
+                      src={product?.product_images?.[0] || "/fallback.png"}
                       alt={product.title || "Product"}
                       fill
                       className="object-cover"

@@ -37,6 +37,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { formatLabel } from "@/utils/formatLabel"
 
 interface ProductDetailsProps {
   product: Product
@@ -150,7 +151,7 @@ export default function Listing({ product }: ProductDetailsProps) {
       id: product.id || 0,
       name: product.title,
       price: product.price,
-      image: product.product_images?.[0] || "/placeholder.svg",
+      image: product.product_images?.[0] || "/fallback.png",
       quantity: 1,
       business: currentBusinessId,
       details: [
@@ -177,14 +178,16 @@ export default function Listing({ product }: ProductDetailsProps) {
           <div className="bg-gray-50 rounded-none overflow-hidden relative group">
             <div className="relative w-full aspect-[4/3] lg:aspect-[16/10]">
               <Image
-                src={activeImage || "/placeholder.svg"}
+                src={activeImage || "/fallback.png"}
                 alt="Product Main"
                 fill
                 className="object-contain bg-gray-100"
               />
 
               {/* Navigation Arrows */}
-              <>
+              {
+                product?.product_images?.length && product?.product_images.length > 1 && (
+                  <>
                 <button
                   disabled={(product.product_images?.length || 0) <= 1}
                   onClick={(e) => {
@@ -218,14 +221,16 @@ export default function Listing({ product }: ProductDetailsProps) {
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
-              </>
+                  </>
+                )
+              }
             </div>
           </div>
 
           {/* Specs Grid */}
           <div className="border-2 border-gray-200 rounded-none p-6 bg-white">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-y-6 gap-x-4">
-              <SpecBox label="Usage" value={product.usage ? capitalizeWords(product.usage) : "-"} />
+              <SpecBox label="Usage" value={product.usage ? formatLabel(product.usage) : "-"} />
               <SpecBox label="Condition" value={product.condition} />
               {!isAccessories && (
                 <SpecBox
@@ -236,9 +241,9 @@ export default function Listing({ product }: ProductDetailsProps) {
               <SpecBox label="Year" value={product.manufacturing_year} />
               {!isAccessories && (
                 <>
-                  <SpecBox label="Final Drive" value={capitalizeWords(product?.final_drive_system)} />
-                  <SpecBox label="Wheels" value={capitalizeWords(product?.wheels)} />
-                  <SpecBox label="Engine Size" value={capitalizeWords(product.engine_size)} />
+                  <SpecBox label="Final Drive" value={formatLabel(product?.final_drive_system)} />
+                  <SpecBox label="Wheels" value={formatLabel(product?.wheels)} />
+                  <SpecBox label="Engine Size" value={formatLabel(product.engine_size)} />
                 </>
               )}
               <SpecBox label="Warranty" value={product.warranty ? "Yes" : "No"} />
@@ -633,7 +638,7 @@ function SpecBox({ label, value }: { label: string; value?: string | number | nu
 //       id: product.id || 0,
 //       name: product.title,
 //       price: product.price,
-//       image: product.product_images?.[0] || "/placeholder.svg",
+//       image: product.product_images?.[0] || "/fallback.png",
 //       quantity: 1,
 //       business: currentBusinessId,
 //       details: [
@@ -660,7 +665,7 @@ function SpecBox({ label, value }: { label: string; value?: string | number | nu
 //           <div className="bg-gray-50 rounded-none overflow-hidden relative group">
 //             <div className="relative w-full aspect-[4/3] lg:aspect-[16/10]">
 //               <Image
-//                 src={activeImage || "/placeholder.svg"}
+//                 src={activeImage || "/fallback.png"}
 //                 alt="Product Main"
 //                 fill
 //                 className="object-contain bg-gray-100"

@@ -13,7 +13,7 @@ export default function ProductDetails() {
   const { data: product, isLoading } = useGetProduct(id as string);
   
   if (isLoading) return <SkeletonLoader type="alllisting" />
-  if (!product) return <NotFoundWrapper itemName="Product" />
+  if (!product) return <NotFoundWrapper itemName="Product" className="min-h-screen" />
 
   return (
     <>

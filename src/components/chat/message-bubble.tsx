@@ -20,7 +20,7 @@ const MessageBubble = ({ message, isOwn, chatInfo }: MessageBubbleProps) => {
       {!isOwn && (
         <div>
           <MyImage
-            src={message.sender_image || chatInfo.receiver_image || "/placeholder.svg"}
+            src={message.sender_image || chatInfo.receiver_image || "/fallback.png"}
             alt={message.sender_name}
             width={256}
             height={256}
@@ -49,7 +49,7 @@ const MessageBubble = ({ message, isOwn, chatInfo }: MessageBubbleProps) => {
                 <Dialog key={index}>
                   <DialogTrigger asChild>
                     <Image
-                      src={file || "/placeholder.svg"}
+                      src={file || "/fallback.png"}
                       alt={`Attachment ${index + 1}`}
                       width={200}
                       height={200}
@@ -61,7 +61,7 @@ const MessageBubble = ({ message, isOwn, chatInfo }: MessageBubbleProps) => {
                       <DialogTitle>Image Preview</DialogTitle>
                     </VisuallyHidden>
                     <Image
-                      src={file || "/placeholder.svg"}
+                      src={file || "/fallback.png"}
                       alt={`Full-size attachment ${index + 1}`}
                       width={800}
                       height={800}
@@ -79,7 +79,7 @@ const MessageBubble = ({ message, isOwn, chatInfo }: MessageBubbleProps) => {
       {isOwn && (
         <div>
           <MyImage
-            src={message.sender_image || chatInfo.receiver_image || "/placeholder.svg"}
+            src={message.sender_image || chatInfo.receiver_image || "/fallback.png"}
             alt={message.sender_name}
             width={256}
             height={256}

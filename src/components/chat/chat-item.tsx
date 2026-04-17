@@ -30,7 +30,7 @@ const ChatItem = ({ chat, isActive = false, onClick, userId, unreadCount }: Chat
     >
       <div className="flex items-center space-x-3 min-w-0">
         <Image
-          src={chat.receiver_image || "/placeholder.svg"}
+          src={chat.receiver_image || "/fallback.png"}
           alt={chat.receiver_name || "User"}
           width={40}
           height={40}

@@ -5,7 +5,6 @@ export const metadata: Metadata = {
   title: "Product Details | Braaap",
 };
 
-
 const ProductDetailsPage = () => {
   return (
     <ProductDetails />

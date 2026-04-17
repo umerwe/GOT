@@ -31,7 +31,7 @@ export default function NoListingsFound({ isFilterPage = true }: { isFilterPage?
                 {/* Actions */}
                 <div className="flex flex-col gap-3 justify-center">
                     <Button variant="default">
-                        <Link href="/post-ad">Post a Listing</Link>
+                        <Link href="/dashboard/post-ad">Post a Listing</Link>
                     </Button>
                     {
                         isFilterPage &&

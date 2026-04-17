@@ -51,7 +51,7 @@ export default function BusinessHero({ logo, name, address }: HeroProps) {
           <div className="relative w-32 h-32 mb-[16px]">
             <div className="w-full h-full rounded-full overflow-hidden border border-gray-100">
               <Image
-                src={logo || "/placeholder.svg"}
+                src={logo || "/fallback.png"}
                 alt={name || "BusinessLogo"}
                 fill
                 className="object-cover rounded-full"

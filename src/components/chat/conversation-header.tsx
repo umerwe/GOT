@@ -45,7 +45,7 @@ const ConversationHeader = ({ chatInfo, isLoading = false }: ConversationHeaderP
       ) : chatInfo.receiver_image ? (
         <div>
           <MyImage
-            src={chatInfo.receiver_image || "/placeholder.svg"}
+            src={chatInfo.receiver_image || "/fallback.png"}
             alt={chatInfo.receiver_name || "User"}
             width={256}
             height={256}

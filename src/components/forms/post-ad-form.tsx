@@ -219,7 +219,7 @@ export function AdForm({
     <form onSubmit={onFormSubmit} className="space-y-8">
       {/* Photos Section */}
       <div>
-        <h4 className="text-[16px] mb-[2.5px]">Photos</h4>
+        <h4 className="text-[16px] mb-[2.5px]">Photos <span className="text-red-500">*</span></h4>
         <div
           onDragOver={onDragOver}
           onDragLeave={onDragLeave}
@@ -292,7 +292,6 @@ export function AdForm({
             options={subcategories.map((sub) => ({ value: sub.id, label: sub.title }))}
             {...register("subcategory_id", { setValueAs: (v) => v === "" ? 0 : Number(v) })}
             value={watch("subcategory_id") || ""}
-            required
             disabled={!selectedCategoryId || subcategories.length === 0 || isPending}
             error={errors.subcategory_id?.message}
           />
@@ -310,7 +309,7 @@ export function AdForm({
 
           <div>
             <Label htmlFor="description">Description</Label>
-            <Textarea id="description" required className="min-h-[120px] mt-1" {...register("description")} disabled={isPending} />
+            <Textarea id="description" className="min-h-[120px] mt-1" {...register("description")} disabled={isPending} />
             {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description.message}</p>}
           </div>
 
@@ -321,7 +320,6 @@ export function AdForm({
             {...register("usage")}
             value={watch("usage") || ""}
             disabled={isPending}
-            required
             error={errors.usage?.message}
           />
 
@@ -331,8 +329,8 @@ export function AdForm({
                 id="mileage"
                 type="number"
                 label="Mileage"
-                required
                 min={0}
+                defaultValue={0}
                 {...register("mileage", { valueAsNumber: true })}
                 error={errors.mileage?.message}
                 disabled={isPending}
@@ -344,7 +342,6 @@ export function AdForm({
                 {...register("mileage_unit")}
                 value={watch("mileage_unit") || ""}
                 disabled={isPending}
-                required
                 error={errors.mileage_unit?.message}
               />
             </>
@@ -357,7 +354,6 @@ export function AdForm({
             min={1950}
             max={2050}
             {...register("manufacturing_year", { valueAsNumber: true })}
-            required
             error={errors.manufacturing_year?.message}
             disabled={isPending}
           />
@@ -371,7 +367,6 @@ export function AdForm({
                 {...register("final_drive_system")}
                 value={watch("final_drive_system") || ""}
                 disabled={isPending}
-                required
                 error={errors.final_drive_system?.message}
               />
               <SelectField
@@ -381,7 +376,6 @@ export function AdForm({
                 {...register("wheels")}
                 value={watch("wheels") || ""}
                 disabled={isPending}
-                required
                 error={errors.wheels?.message}
               />
               <SelectField
@@ -391,7 +385,6 @@ export function AdForm({
                 {...register("engine_size")}
                 value={watch("engine_size") || ""}
                 disabled={isPending}
-                required
                 error={errors.engine_size?.message}
               />
             </>
@@ -404,7 +397,6 @@ export function AdForm({
             {...register("warranty")}
             value={watch("warranty") || ""}
             disabled={isPending}
-            required
             error={errors.warranty?.message}
           />
 
@@ -415,7 +407,6 @@ export function AdForm({
             {...register("seller_type")}
             value={watch("seller_type") || ""}
             disabled={isPending}
-            required
             error={errors.seller_type?.message}
           />
         </div>
@@ -427,7 +418,8 @@ export function AdForm({
           <Input
             id="price"
             type="number"
-            min={0}
+            min={1}
+            defaultValue={1}
             label="Price"
             {...register("price", { valueAsNumber: true })}
             onKeyDown={(e) => {
@@ -436,6 +428,7 @@ export function AdForm({
               }
             }}
             error={errors.price?.message}
+            required
             disabled={isPending}
           />
           <LocationInput setValue={setValue} register={register} errors={errors} isPending={isPending} />

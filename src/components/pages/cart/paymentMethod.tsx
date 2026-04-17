@@ -28,9 +28,10 @@ export default function PaymentMethods() {
           method.src ? (
             <div key={index} className="w-[44px] h-[14px] relative">
               <Image
-                src={method.src}
+                src={method.src || "/fallback.png"}
                 alt={method.alt}
-                fill
+                width={256}
+                height={256}
                 className="object-contain"
                 quality={100}
                 sizes="60px"

@@ -130,7 +130,7 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
                   <div className="col-span-4 flex items-center gap-3">
                     <div className="w-[60px] h-[60px] bg-gray-100 relative overflow-hidden flex-shrink-0 border border-gray-200">
                       <Image
-                        src={ad.product_images?.[0] || "/placeholder.svg"}
+                        src={ad.product_images?.[0] || "/fallback.png"}
                         alt={ad.title}
                         width={256}
                         height={256}

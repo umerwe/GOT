@@ -97,7 +97,7 @@ export default function ProfilePage() {
                                         <div className="space-y-3">
                                             <div className="w-[48px] h-[48px] rounded-full overflow-hidden border-2 border-white shadow-sm">
                                                 <Image
-                                                    src={data?.profile_image || "/placeholder.svg?height=96&width=96&query=profile"}
+                                                    src={data?.profile_image || "/fallback.png?height=96&width=96&query=profile"}
                                                     alt="profile-image"
                                                     width={96}
                                                     height={96}

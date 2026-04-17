@@ -1,13 +1,8 @@
 import { z } from "zod"
 
-// Zod v4: use z.coerce for string→number conversion
-const coerceNum = (msg: string) =>
-  z.coerce
-    .number({ error: msg })
-
 export const postAdSchema = z.object({
   category_id: z.coerce.number().min(1, "Category is required"),
-  subcategory_id: z.coerce.number().min(1, "Subcategory is required"),
+  subcategory_id: z.coerce.number().optional(),
   title: z.string().min(1, "Title is required").max(255, "Title too long"),
   brand_id: z.coerce.number().optional(),
 
@@ -20,15 +15,16 @@ export const postAdSchema = z.object({
 
   price: z.coerce
     .number({ error: "Price is required" })
-    .min(0, "Price must be positive"),
+    .min(1, "Price must be positive")
+    .max(999999, "Price too long"),
 
   negotiable: z.boolean(),
   address: z.string().min(1, "Address is required").max(255, "Address too long"),
   lat: z.string().min(1, "Location is required"),
   lng: z.string().min(1, "Location is required"),
-  usage: z.string().min(1, "Usage is required").max(50),
+  usage: z.string().max(50).optional(),
 
-  mileage: z.coerce.number().min(0, "Mileage must be positive").optional(),
+  mileage: z.number().min(0, "Mileage must be positive").optional(),
   mileage_unit: z.string().max(50).optional(),
 
   manufacturing_year: z.coerce
@@ -39,8 +35,8 @@ export const postAdSchema = z.object({
   final_drive_system: z.string().max(50).optional(),
   wheels: z.string().max(20).optional(),
   engine_size: z.string().max(50).optional(),
-  warranty: z.string().min(1, "Warranty is required").max(20),
-  seller_type: z.string().min(1, "Seller type is required").max(50),
+  warranty: z.string().max(20).optional(),
+  seller_type: z.string().max(50).optional(),
 
   images: z
     .array(

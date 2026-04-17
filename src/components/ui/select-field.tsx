@@ -9,13 +9,14 @@ interface SelectFieldProps extends React.SelectHTMLAttributes<HTMLSelectElement>
   error?: string
   options: { value: string | number; label: string }[]
   placeholder?: string
+  required?: boolean
 }
 
 export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
-  ({ label, error, options, placeholder = "Select an option", className, ...props }, ref) => {
+  ({ label, error, required, options, placeholder = "Select an option", className, ...props }, ref) => {
     return (
       <div className="w-full">
-        {label && <Label htmlFor={props.id}>{label}</Label>}
+        {label && <Label htmlFor={props.id}>{label} {required && <span className="text-red-500">*</span>}</Label>}
 
         <div className="relative mt-1">
           <select

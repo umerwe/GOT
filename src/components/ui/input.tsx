@@ -9,6 +9,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   showIcon?: boolean
   iconPosition?: "left" | "right"
   isSearch?: boolean
+  required?: boolean
   onIconClick?: () => void
   clasname ?: string
 }
@@ -23,6 +24,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       showIcon = false,
       iconPosition = "left",
       isSearch = false,
+      required = false,
       onIconClick,
       ...props
     },
@@ -56,7 +58,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <div className="relative w-full">
-        {label && <Label htmlFor={props.id}>{label}</Label>}
+        {label && <Label htmlFor={props.id}>{label} {required && <span className="text-red-500">*</span>}</Label>}
 
         {showIcon && icon && iconPosition === "left" && type !== "email" && type !== "number" && (
           <span className="absolute left-2.5 top-1/2 -translate-y-1/2">

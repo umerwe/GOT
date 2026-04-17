@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation"
 import { capitalizeWords } from "@/utils/capitalizeWords"
 import SkeletonLoader from "@/common/skeleton-loader"
-import { getConditionLabel } from "@/utils/getConditionLabel"
 import { Heart } from "lucide-react"
 import NotFoundWrapper from "@/common/not-found"
 import Image from "@/components/custom/MyImage"
@@ -13,6 +12,7 @@ import { toast } from "../ui/toast"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
 import LoginDialog from "@/components/dialogs/loginDialog"
+import { formatLabel } from "@/utils/formatLabel"
 
 interface ListCardProps {
     products: Product[]
@@ -148,14 +148,14 @@ export default function ListCard({
                                         <div className="flex justify-between h-[32px] items-center px-2 bg-[#FFF3DE]">
                                             <span className="text-[#000000]">Engine Size</span>
                                             <span className="text-[#6A7282]">
-                                                {product.engine_size || "-"}
+                                                {formatLabel(product.engine_size) || "-"}
                                             </span>
                                         </div>
 
                                         <div className="flex justify-between h-[32px] items-center px-2">
                                             <span className="text-[#000000]">Condition</span>
                                             <span className="text-[#6A7282]">
-                                                {getConditionLabel(product.condition)}
+                                                {(product.condition)}/10
                                             </span>
                                         </div>
 
