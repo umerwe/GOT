@@ -2,7 +2,7 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { forgetPassword, login, signup } from "@/services/auth";
+import { changePassword, forgetPassword, login, signup } from "@/services/auth";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/store/hooks";
 import { setUserData } from "@/store/slices/AuthSlice";
@@ -119,6 +119,26 @@ export const useForgetPassword = () => {
     onError: (err: AxiosError<{ message: string }>) => {
       toast({
         title: "Request Failed",
+        description: err?.response?.data?.message || "Something went wrong",
+        variant: "destructive",
+      });
+    },
+  });
+};
+
+export const useChangePassword = () => {
+  return useMutation({
+    mutationFn: ({ oldPassword, newPassword }: { oldPassword: string; newPassword: string }) => 
+      changePassword(oldPassword, newPassword),
+    onSuccess: () => {
+      toast({
+        title: "Password Changed Successfully",
+        description: "Your password has been updated.",
+      });
+    },
+    onError: (err: AxiosError<{ message: string }>) => {
+      toast({
+        title: "Password Change Failed",
         description: err?.response?.data?.message || "Something went wrong",
         variant: "destructive",
       });

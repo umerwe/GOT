@@ -5,6 +5,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import Image from "@/components/custom/MyImage"
 import { useGetProfile, useUpdateProfile } from "@/hooks/useProfile"
+import { useChangePassword } from "@/hooks/useAuth"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -14,6 +15,7 @@ import AuthGuard from "@/common/auth-guard"
 import SkeletonLoader from "@/common/skeleton-loader"
 import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
+import { Eye, EyeOff } from "lucide-react"
 
 interface ProfileForm {
     name: string
@@ -21,12 +23,23 @@ interface ProfileForm {
     phone: string
 }
 
+interface ChangePasswordForm {
+    oldPassword: string
+    newPassword: string
+    confirmPassword: string
+}
+
 export default function ProfilePage() {
     const { data, isLoading } = useGetProfile()
     const updateProfile = useUpdateProfile()
+    const changePassword = useChangePassword()
 
     const [isEditOpen, setIsEditOpen] = useState(false)
+    const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false)
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
+    const [showOldPassword, setShowOldPassword] = useState(false)
+    const [showNewPassword, setShowNewPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
     const { register, handleSubmit, reset } = useForm<ProfileForm>({
         defaultValues: {
@@ -35,6 +48,16 @@ export default function ProfilePage() {
             phone: data?.phoneNumber || "",
         },
     })
+
+    const {
+        register: registerPassword,
+        handleSubmit: handlePasswordSubmit,
+        reset: resetPassword,
+        watch,
+        formState: { errors: passwordErrors },
+    } = useForm<ChangePasswordForm>()
+
+    const newPassword = watch("newPassword")
 
     const onSubmit = async (values: ProfileForm) => {
         const formData = new FormData()
@@ -77,6 +100,21 @@ export default function ProfilePage() {
         setIsEditOpen(true)
     }
 
+    const openChangePasswordDialog = () => {
+        resetPassword()
+        setIsChangePasswordOpen(true)
+    }
+
+    const onPasswordSubmit = async (values: ChangePasswordForm) => {
+        changePassword.mutate(
+            { oldPassword: values.oldPassword, newPassword: values.newPassword },
+            {
+                onSuccess: () => {
+                    setIsChangePasswordOpen(false)
+                },
+            }
+        )
+    }
 
     return (
         <AuthGuard>
@@ -130,9 +168,12 @@ export default function ProfilePage() {
                                                     <button onClick={openEditDialog} className="text-[#C17C00] hover:text-hover">
                                                         Edit
                                                     </button>
-                                                    <Link href="#">
-                                                        <span className="text-[#C17C00] hover:text-hover cursor-pointer">Change Password</span>
-                                                    </Link>
+                                                    <button
+                                                        onClick={openChangePasswordDialog}
+                                                        className="text-[#C17C00] hover:text-hover cursor-pointer"
+                                                    >
+                                                        Change Password
+                                                    </button>
                                                 </div>
                                             </div>
                                             <div className="space-y-[20px]">
@@ -195,6 +236,111 @@ export default function ProfilePage() {
                                         </Button>
                                         <Button type="submit" disabled={updateProfile.isPending}>
                                             {updateProfile.isPending ? "Saving..." : "Save Changes"}
+                                        </Button>
+                                    </DialogFooter>
+                                </form>
+                            </DialogContent>
+                        </Dialog>
+
+                        {/* Change Password Dialog */}
+                        <Dialog open={isChangePasswordOpen} onOpenChange={setIsChangePasswordOpen}>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Change Password</DialogTitle>
+                                </DialogHeader>
+                                <form onSubmit={handlePasswordSubmit(onPasswordSubmit)} className="space-y-4">
+                                    <div>
+                                        <Label>Old Password</Label>
+                                        <div className="relative">
+                                            <Input
+                                                type={showOldPassword ? "text" : "password"}
+                                                placeholder="Enter old password"
+                                                {...registerPassword("oldPassword", {
+                                                    required: "Old password is required",
+                                                })}
+                                                className={`rounded-none ${passwordErrors.oldPassword ? 'border-red-500' : ''}`}
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowOldPassword(!showOldPassword)}
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                            >
+                                                {showOldPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                            </button>
+                                        </div>
+                                        {passwordErrors.oldPassword && (
+                                            <p className="text-red-500 text-sm mt-1">
+                                                {passwordErrors.oldPassword.message}
+                                            </p>
+                                        )}
+                                    </div>
+                                    <div>
+                                        <Label>New Password</Label>
+                                        <div className="relative">
+                                            <Input
+                                                type={showNewPassword ? "text" : "password"}
+                                                placeholder="Enter new password"
+                                                {...registerPassword("newPassword", {
+                                                    required: "New password is required",
+                                                    minLength: {
+                                                        value: 8,
+                                                        message: "Password must be at least 8 characters long",
+                                                    },
+                                                })}
+                                                className={`rounded-none ${passwordErrors.newPassword ? 'border-red-500' : ''}`}
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowNewPassword(!showNewPassword)}
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                            >
+                                                {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                            </button>
+                                        </div>
+                                        {passwordErrors.newPassword && (
+                                            <p className="text-red-500 text-sm mt-1">
+                                                {passwordErrors.newPassword.message}
+                                            </p>
+                                        )}
+                                    </div>
+                                    <div>
+                                        <Label>Confirm New Password</Label>
+                                        <div className="relative">
+                                            <Input
+                                                type={showConfirmPassword ? "text" : "password"}
+                                                placeholder="Confirm new password"
+                                                {...registerPassword("confirmPassword", {
+                                                    required: "Please confirm your new password",
+                                                    validate: (value) =>
+                                                        value === newPassword || "Passwords do not match",
+                                                })}
+                                                className={`rounded-none ${passwordErrors.confirmPassword ? 'border-red-500' : ''}`}
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                            >
+                                                {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                            </button>
+                                        </div>
+                                        {passwordErrors.confirmPassword && (
+                                            <p className="text-red-500 text-sm mt-1">
+                                                {passwordErrors.confirmPassword.message}
+                                            </p>
+                                        )}
+                                    </div>
+                                    <DialogFooter>
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            className="bg-transparent w-auto"
+                                            onClick={() => setIsChangePasswordOpen(false)}
+                                        >
+                                            Cancel
+                                        </Button>
+                                        <Button type="submit" disabled={changePassword.isPending}>
+                                            {changePassword.isPending ? "Changing..." : "Submit"}
                                         </Button>
                                     </DialogFooter>
                                 </form>

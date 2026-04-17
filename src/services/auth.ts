@@ -15,3 +15,11 @@ export const forgetPassword = async (email : string) => {
   const { data } = await api.post("/forget-password", { email })
   return data;
 }
+
+export const changePassword = async (oldPassword: string, newPassword: string) => {
+  const { data } = await api.post("/change-password", {
+    old_password: oldPassword,
+    new_password: newPassword
+  })
+  return data;
+}
