@@ -144,3 +144,31 @@ interface ProfileProps {
   updated_at: string;
   user_type?: string;
 }
+
+interface WishlistItem {
+  id: number;
+  title: string;
+  price: number;
+  product_images: string[];
+  details?: string[];
+  businessId?: number;
+  is_wishlisted?: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+interface WishlistResponse {
+  data: {
+    items: WishlistItem[];
+    message?: string;
+    total?: number;
+  };
+}
+
+interface WishlistToggleResponse {
+  data: {
+    is_wishlisted: boolean;
+    message?: string;
+    item_id?: string;
+  };
+}

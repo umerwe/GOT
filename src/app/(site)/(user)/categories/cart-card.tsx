@@ -62,10 +62,6 @@ export default function CartCard({
 
   const handleRemove = () => {
     onRemove?.(id);
-
-    toast({
-      title: "Item Removed from Cart Successfully",
-    });
   };
 
   return (

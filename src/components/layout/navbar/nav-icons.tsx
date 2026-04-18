@@ -6,6 +6,7 @@ import { NavIconsProps } from "@/types/navbar";
 import { useAppSelector } from "@/store/hooks";
 import { useEffect, useState } from "react";
 import LoginDialog from "@/components/dialogs/loginDialog";
+import { useGetWishlist } from "@/hooks/favorites/useWishlist";
 interface ExtendedNavIconsProps extends NavIconsProps {
     onClose?: () => void;
 }
@@ -18,7 +19,8 @@ const NavIcons = ({
     handleProtectedAction,
     onClose,
 }: ExtendedNavIconsProps) => {
-    const favoriteCount = useAppSelector((state) => state.favorites.items.length);
+    const {data} = useGetWishlist();
+    const favoriteCount = data?.pagination?.wishlist_count || 0;
     const [unreadCount, setUnreadCount] = useState<number>(0);
     const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
 

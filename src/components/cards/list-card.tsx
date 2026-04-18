@@ -6,13 +6,12 @@ import SkeletonLoader from "@/common/skeleton-loader"
 import { Heart } from "lucide-react"
 import NotFoundWrapper from "@/common/not-found"
 import Image from "@/components/custom/MyImage"
-import { useAppDispatch, useAppSelector } from "@/store/hooks"
-import { toggleFavorite } from "@/store/slices/FavouriteSlice"
-import { toast } from "../ui/toast"
+import { useGetWishlist, useToggleWishlist } from "@/hooks/favorites/useWishlist"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
 import LoginDialog from "@/components/dialogs/loginDialog"
 import { formatLabel } from "@/utils/formatLabel"
+import { toggleWishlist } from "@/services/favorites/wishlist"
 
 interface ListCardProps {
     products: Product[]
@@ -28,9 +27,17 @@ export default function ListCard({
     isHome = true
 }: ListCardProps) {
     const router = useRouter()
-    const dispatch = useAppDispatch()
-    const favoriteItems = useAppSelector((state) => state.favorites.items)
+    // 1. Hook to get current wishlist items from API to check "isFavorite"
+    const { data: wishlistData } = useGetWishlist();
+    // 2. Hook to toggle wishlist via API
+    const { mutate: toggleWishlist, isPending } = useToggleWishlist();
+
     const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false)
+
+    // Helper to check if a product is in the API wishlist
+    const checkIfFavorite = (productId: number) => {
+        return wishlistData?.data?.some((item: WishlistItem) => item.id === productId) || false;
+    };
 
     if (isLoading) {
         return (
@@ -53,23 +60,7 @@ export default function ListCard({
             setIsLoginDialogOpen(true)
             return
         }
-
-        const isCurrentlyFavorite = favoriteItems.some((item) => item.id === product.id)
-
-        dispatch(
-            toggleFavorite({
-                id: product.id!,
-                name: product.title,
-                price: product.price,
-                image: product.product_images?.[0] || "",
-                details: [product.manufacturing_year, product.engine_size].filter(Boolean) as string[],
-                businessId: product.seller?.id || 0
-            })
-        )
-
-        toast({
-            title: isCurrentlyFavorite ? "Removed from Favorites" : "Added to Favorites",
-        })
+        toggleWishlist(String(product.id));
     }
 
     const displayData = count ? products.slice(0, count) : products
@@ -78,8 +69,8 @@ export default function ListCard({
         <>
             <div className="px-2 sm:px-4 lg:px-0 flex flex-col">
                 {displayData.map((product) => {
-                    const isFavorite = favoriteItems.some((item) => item.id === product.id)
-                    
+                    const isFavorite = checkIfFavorite(product.id!)
+
                     return (
                         <div
                             key={product.id}
@@ -188,7 +179,7 @@ export default function ListCard({
                                                 </svg>
                                             </div>
                                             <span>Verified</span>
-                                            <button 
+                                            <button
                                                 onClick={(e) => handleToggleFavorite(e, product)}
                                                 className="flex items-center gap-[10px] group absolute -bottom-2 right-0"
                                             >
@@ -204,9 +195,10 @@ export default function ListCard({
                                 </div>
                                 {
                                     !isHome &&
-                                    <button 
+                                    <button
                                         onClick={(e) => handleToggleFavorite(e, product)}
-                                        className="flex items-baseline-last gap-[10px] group"
+                                        className="flex items-baseline-last gap-[10px] group cursor-pointer"
+                                        disabled={isPending}
                                     >
                                         <div className={cn(
                                             "w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all",
@@ -221,10 +213,10 @@ export default function ListCard({
                     )
                 })}
             </div>
-            
-            <LoginDialog 
-                open={isLoginDialogOpen} 
-                onOpenChange={setIsLoginDialogOpen} 
+
+            <LoginDialog
+                open={isLoginDialogOpen}
+                onOpenChange={setIsLoginDialogOpen}
             />
         </>
     )

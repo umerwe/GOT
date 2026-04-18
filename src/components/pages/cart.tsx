@@ -7,6 +7,7 @@ import Container from "@/components/container";
 import OrderSummary from "@/components/pages/cart/order-summary";
 import Footer from "@/components/layout/footer";
 import CartCard from "@/app/(site)/(user)/categories/cart-card";
+import { toast } from "../ui/toast";
 
 export default function Cart() {
   const cartItems = useAppSelector((state) => state.cart.items);
@@ -18,6 +19,9 @@ export default function Cart() {
 
   const handleRemove = (id: number) => {
     dispatch(removeFromCart(id));
+    toast({
+      title: "Item Removed from Cart Successfully",
+    });
   };
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);

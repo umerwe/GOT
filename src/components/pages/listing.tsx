@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils"
 // import FeaturesSection from "./listing/features-section"
 import { CartItem } from "@/types/cart"
 import { addToCart } from "@/store/slices/CartSlice"
-import { toggleFavorite } from "@/store/slices/FavouriteSlice"
+import { useGetWishlist, useToggleWishlist } from "@/hooks/favorites/useWishlist"
 import { toast } from "../ui/toast"
 import { useGetProfile } from "@/hooks/useProfile"
 import {
@@ -49,8 +49,11 @@ export default function Listing({ product }: ProductDetailsProps) {
   const { data } = useGetProfile();
   const { data: configData } = useGetConfig();
 
+  // Wishlist API Hooks
+  const { data: wishlistData } = useGetWishlist();
+  const { mutate: toggleWishlist, isPending } = useToggleWishlist();
+
   const cartItems = useAppSelector((state) => state.cart.items);
-  const favoriteItems = useAppSelector((state) => state.favorites.items);
   const { token } = useAppSelector((state) => state?.auth);
 
   const [activeImage, setActiveImage] = useState<string | null>(
@@ -60,7 +63,9 @@ export default function Listing({ product }: ProductDetailsProps) {
   const [showSafetyDialog, setShowSafetyDialog] = useState(false)
 
   const isAccessories = product?.category?.type === "accessories"
-  const isFavorite = favoriteItems.some((item) => item.id === product.id);
+  
+  // Check favorite status using API data
+  const isFavorite = wishlistData?.data?.some((item: any) => item.id === product.id);
 
   const handleToggleFavorite = () => {
     if (!token) {
@@ -68,20 +73,7 @@ export default function Listing({ product }: ProductDetailsProps) {
       return;
     }
 
-    dispatch(
-      toggleFavorite({
-        id: product.id!,
-        name: product.title,
-        price: product.price,
-        image: product.product_images?.[0] || "",
-        details: [product.manufacturing_year, product.engine_size].filter(Boolean) as string[],
-        businessId: product.seller?.id || 0
-      })
-    );
-
-    toast({
-      title: isFavorite ? "Removed from Favorites" : "Added to Favorites",
-    });
+    toggleWishlist(String(product.id));
   };
 
   const handleChatClick = () => {
@@ -266,13 +258,15 @@ export default function Listing({ product }: ProductDetailsProps) {
           <div className="flex justify-end items-center py-[5px]">
             <button
               onClick={handleToggleFavorite}
-              className="flex items-center gap-[10px] group"
+              disabled={isPending}
+              className="flex items-center gap-[10px] group cursor-pointer"
             >
               <div className={cn(
                 "w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all",
                 isFavorite
                   ? "border-red-500 text-red-500 bg-red-50"
-                  : "border-gray-400 text-gray-400 group-hover:border-gray-500 group-hover:text-gray-500"
+                  : "border-gray-400 text-gray-400 group-hover:border-gray-500 group-hover:text-gray-500",
+                isPending && "opacity-50"
               )}>
                 <Heart
                   size={16}
@@ -334,7 +328,6 @@ export default function Listing({ product }: ProductDetailsProps) {
             </div>
           </div>
 
-          {/* Action Buttons */}
           {/* Action Buttons */}
           <div className={`grid ${product?.seller?.user_type !== "business" && data?.id !== product?.seller?.id ? "grid-cols-2" : "grid-cols-1"} gap-3`}>
             {(product?.seller?.user_type !== "business" && data?.id != product?.seller?.id) && (

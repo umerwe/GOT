@@ -7,8 +7,8 @@ import SkeletonLoader from "@/common/skeleton-loader";
 import NotFoundWrapper from "@/common/not-found";
 import { Heart } from "lucide-react";
 import Image from "@/components/custom/MyImage";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { toggleFavorite } from "@/store/slices/FavouriteSlice";
+import { useAppSelector } from "@/store/hooks";
+import { useToggleWishlist, useGetWishlist } from "@/hooks/favorites/useWishlist";
 import { cn } from "@/lib/utils";
 import { toast } from "../ui/toast";
 import { useState } from "react";
@@ -33,9 +33,11 @@ export default function GridCard({
   businessLogo,
   isBusinessPage = false,
 }: GridCardProps) {
-  const dispatch = useAppDispatch();
-  const favoriteItems = useAppSelector((state) => state.favorites.items);
+  const { data: wishlistData } = useGetWishlist();
+  const {mutate: toggleWishlistMutation,isPending} = useToggleWishlist();
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
+
+  const wishlistItems = wishlistData?.data;
 
   if (isLoading) return <SkeletonLoader type="products" count={count} isAdsPage={isAdsPage} />;
   if (!products || products.length === 0) return <NotFoundWrapper className={isBusinessPage ? "mt-[125px]" : "mt-[15px]"} />;
@@ -50,38 +52,24 @@ export default function GridCard({
       return;
     }
 
-    const isCurrentlyFavorite = favoriteItems.some((item) => item.id === product.id);
-
-    dispatch(
-      toggleFavorite({
-        id: product.id!,
-        name: product.title,
-        price: product.price,
-        image: product.product_images?.[0] || "",
-        details: [product.manufacturing_year, product.engine_size].filter(Boolean) as string[],
-        businessId: product.seller?.id || 0,
-      })
-    );
-
-    toast({
-      title: isCurrentlyFavorite ? "Removed from Favorites" : "Added to Favorites",
-    });
+    toggleWishlistMutation(String(product.id));
   };
 
   return (
     <>
       <div className={cn(
-          "flex overflow-x-auto pb-4 gap-[10px] scrollbar-hide sm:pb-0 sm:overflow-visible sm:grid", 
-          isAdsPage ? "sm:grid-cols-3" : "sm:grid-cols-6"
+        "flex overflow-x-auto pb-4 gap-[10px] scrollbar-hide sm:pb-0 sm:overflow-visible sm:grid",
+        isAdsPage ? "sm:grid-cols-3" : "sm:grid-cols-6"
       )}>
         {products.map((product) => {
-          const isFavorite = favoriteItems.some((item) => item.id === product.id);
+          const isFavorite = wishlistItems.some((item : WishlistItem) => item.id === product.id);
 
           return (
             <div key={product.id} className="relative group min-w-[280px] sm:min-w-full">
               <button
                 onClick={(e) => handleToggleFavorite(e, product)}
-                className="absolute bottom-[115px] right-2.5 z-30 bg-white/90 hover:bg-white p-2 rounded-full shadow-sm transition-all active:scale-90"
+                disabled={isPending}
+                className="absolute bottom-[115px] right-2.5 z-30 bg-white/90 hover:bg-white p-2 cursor-pointer rounded-full shadow-sm transition-all active:scale-90"
               >
                 <Heart
                   size={17}

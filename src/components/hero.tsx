@@ -28,7 +28,7 @@ const HeroSection = () => {
       </h1>
 
       <p className="md:text-[16px] text-[14px] text-solid mb-8 leading-relaxed">
-        Buy, sell, and connect with fellow Bike enthusiasts in the UAE
+        Buy, sell and connect with fellow Bike enthusiasts in the UAE
       </p>
     </div>
   </div>
