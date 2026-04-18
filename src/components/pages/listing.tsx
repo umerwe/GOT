@@ -65,7 +65,7 @@ export default function Listing({ product }: ProductDetailsProps) {
   const isAccessories = product?.category?.type === "accessories"
   
   // Check favorite status using API data
-  const isFavorite = wishlistData?.data?.some((item: any) => item.id === product.id);
+  const isFavorite = wishlistData?.data?.some((item: WishlistItem) => item.id === product.id);
 
   const handleToggleFavorite = () => {
     if (!token) {
