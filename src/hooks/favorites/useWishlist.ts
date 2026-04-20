@@ -10,8 +10,8 @@ export const useGetWishlist = () => {
   return useQuery({
     queryKey: ["wishlist"],
     queryFn: getWishlist,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    retry: 1,
+    enabled: typeof window !== "undefined" && !!localStorage.getItem("token"),
+    staleTime: 5 * 60 * 1000
   });
 };
 

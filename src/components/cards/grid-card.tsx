@@ -62,7 +62,7 @@ export default function GridCard({
         isAdsPage ? "sm:grid-cols-3" : "sm:grid-cols-6"
       )}>
         {products.map((product) => {
-          const isFavorite = wishlistItems.some((item : WishlistItem) => item.id === product.id);
+          const isFavorite = wishlistItems?.some((item : WishlistItem) => item.id === product.id);
 
           return (
             <div key={product.id} className="relative group min-w-[280px] sm:min-w-full">
