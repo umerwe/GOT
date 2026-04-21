@@ -13,16 +13,11 @@ const firebaseConfig = {
 };
 
 try {
-  // Initialize Firebase
-  console.log('Service worker: Initializing Firebase with config', firebaseConfig);
   firebase.initializeApp(firebaseConfig);
-  console.log('Service worker: Firebase initialized successfully');
   
   const messaging = firebase.messaging();
-  console.log('Service worker: Messaging initialized');
 
   messaging.onBackgroundMessage(function (payload) {
-    console.log('Service worker: Background message received:', payload);
     
     try {
       const title = payload.notification?.title || "Notification";
@@ -36,7 +31,6 @@ try {
       
       self.registration.showNotification(title, options);
     } catch (error) {
-      console.error('Service worker: Error showing notification:', error);
     }
   });
 
@@ -77,7 +71,6 @@ try {
   });
 
 } catch (error) {
-  console.error('Service worker: Error during initialization:', error);
 }
 
 
