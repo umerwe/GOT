@@ -355,6 +355,7 @@ export function AdForm({
             max={2050}
             {...register("manufacturing_year", { valueAsNumber: true })}
             error={errors.manufacturing_year?.message}
+            required
             disabled={isPending}
           />
 

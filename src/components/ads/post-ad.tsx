@@ -13,14 +13,6 @@ export default function PostAd() {
 
   return (
     <AuthGuard>
-      {/* <Container className="pt-[27px] bg-[#F3F4F6] sm:pl-[23px] sm:pr-[62px]">
-        <Breadcrumb
-          items={[
-            { title: "Home", href: "/" },
-            { title: "Post Ad", href: "/post-ad" }
-          ]}
-        />
-      </Container> */}
       <div className="bg-[#F3F4F6]">
         <div className="">
           <div className="lg:col-span-3">
@@ -36,13 +28,6 @@ export default function PostAd() {
                 addProduct={addProduct}
                 isPending={isPending}
               />
-
-              {/* <p className="text-sm text-[#99A1AF] pt-[19.5px] pb-[24.5px] flex items-center justify-center">
-                Your ad is under review. We&apos;ll notify you when it&apos;s live!
-              </p>
-
-              <h5 className="text-sm   mb-[12.5px]">Current Ads</h5>
-              <AdsTable type="post-ad" /> */}
             </div>
           </div>
         </div>

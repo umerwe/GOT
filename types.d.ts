@@ -24,6 +24,7 @@ interface Product {
   price: number;
 
   status?: "pending" | "approved" | "rejected" | "expired";
+  is_featured?: number;
   category?: {
     id: number;
     title: string;
@@ -170,5 +171,19 @@ interface WishlistToggleResponse {
     is_wishlisted: boolean;
     message?: string;
     item_id?: string;
+  };
+}
+
+interface Notification {
+  id: string | number;
+  read_at: string | null;
+  created_at: string;
+  data: {
+    id: number;
+    type: string;
+    old_status?: string;
+    new_status?: string;
+    subject: string;
+    message: string;
   };
 }

@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getProducts, getUserProducts, getProduct, addProduct, updateUserProduct, deleteUserProduct, getBusinessProducts, getBusinessProduct } from "@/services/products";
+import { getProducts, getUserProducts, getProduct, addProduct, updateUserProduct, deleteUserProduct, getBusinessProducts, getBusinessProduct, activateProduct, deactivateProduct } from "@/services/products";
 import { toast } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
@@ -115,6 +115,50 @@ export const useDeleteUserProducts = () => {
     onError: (err: AxiosError<{ message: string }>) => {
       toast({
         title: "Failed to Delete Product",
+        description: `${err?.response?.data?.message}`,
+        variant: "destructive",
+      });
+    },
+  });
+};
+
+export const useActivateProduct = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: activateProduct,
+    onSuccess: () => {
+      toast({
+        title: "Product Activated",
+        description: "Your product has been successfully activated!",
+      });
+      queryClient.invalidateQueries({ queryKey: ["userProducts"] });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
+    onError: (err: AxiosError<{ message: string }>) => {
+      toast({
+        title: "Failed to Activate Product",
+        description: `${err?.response?.data?.message}`,
+        variant: "destructive",
+      });
+    },
+  });
+};
+
+export const useDeactivateProduct = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deactivateProduct,
+    onSuccess: () => {
+      toast({
+        title: "Product Deactivated",
+        description: "Your product has been successfully deactivated!",
+      });
+      queryClient.invalidateQueries({ queryKey: ["userProducts"] });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
+    onError: (err: AxiosError<{ message: string }>) => {
+      toast({
+        title: "Failed to Deactivate Product",
         description: `${err?.response?.data?.message}`,
         variant: "destructive",
       });

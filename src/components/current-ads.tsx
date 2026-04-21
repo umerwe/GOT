@@ -3,15 +3,29 @@ import type React from "react"
 import Image from "@/components/custom/MyImage"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { MoreVertical, Trash2, Eye } from "lucide-react"
+import { MoreVertical, Trash2, Eye, PowerOff, Star } from "lucide-react"
 import { useState, useEffect } from "react"
-import { useGetUserProducts, useDeleteUserProducts, useUpdateUserProduct } from "@/hooks/useProduct"
+import {
+  useGetUserProducts,
+  useDeleteUserProducts,
+  useUpdateUserProduct,
+  useActivateProduct,
+  useDeactivateProduct
+} from "@/hooks/useProduct"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog"
 import { useForm } from "react-hook-form"
 import { capitalizeWords } from "@/utils/capitalizeWords"
 import SkeletonLoader from "@/common/skeleton-loader"
@@ -23,32 +37,33 @@ import { EditProductDialog } from "./dialogs/edit-product"
 export default function AdsTable({ selectedStatus, type }: { selectedStatus?: string, type?: string }) {
   const router = useRouter()
   const [currentPage, setCurrentPage] = useState(1)
+
+  // API Hooks
   const { data: productsResponse, isLoading } = useGetUserProducts(currentPage, selectedStatus)
   const deleteProduct = useDeleteUserProducts()
   const updateProduct = useUpdateUserProduct()
+  const activateProduct = useActivateProduct()
+  const deactivateProduct = useDeactivateProduct()
 
+  // Dialog States
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
   const [isEditProductOpen, setIsEditProductOpen] = useState(false)
+  const [isFeatureOpen, setIsFeatureOpen] = useState(false)
+
+  // Selection States
   const [editProductId, setEditProductId] = useState<number | null>(null)
   const [deleteId, setDeleteId] = useState<number | null>(null)
+  const [featureProductId, setFeatureProductId] = useState<number | null>(null)
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
 
-  const {
-    reset: resetProduct,
-  } = useForm<EditProductForm>({
-    defaultValues: {
-      title: "",
-      price: "",
-      product_image: null,
-    },
+  const { reset: resetProduct } = useForm<EditProductForm>({
+    defaultValues: { title: "", price: "", product_image: null },
   })
 
   const products = productsResponse?.data || []
   const totalPages = productsResponse?.pagination?.totalPages ?? 1
 
-  const viewAd = (id: number) => {
-    router.push(`/listing/${id}`)
-  }
+  const viewAd = (id: number) => router.push(`/listing/${id}`)
 
   const editAd = (id: number, ad: Product) => {
     setEditProductId(id)
@@ -67,6 +82,14 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
     setDeleteId(id)
     setIsDeleteOpen(true)
   }
+
+  const openFeatureDialog = (id: number) => {
+    setFeatureProductId(id)
+    setIsFeatureOpen(true)
+  }
+
+  const handleActivateProduct = async (id: string) => await activateProduct.mutateAsync(id)
+  const handleDeactivateProduct = async (id: string) => await deactivateProduct.mutateAsync(id)
 
   const onProductSubmit = async (values: EditProductForm) => {
     if (!editProductId) return
@@ -87,31 +110,23 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
     )
   }
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-  }
-
   useEffect(() => {
     setCurrentPage(1)
   }, [selectedStatus])
 
-
   return (
     <div className="w-full">
-      {/* Container with horizontal scroll enabled */}
       <div className={`bg-white ${type === "post-ad" ? "border-[2px]" : "border"} border-gray-200 overflow-x-auto`}>
-
-        {/* Fixed minimum width ensures columns don't squash and triggers scrolling */}
         <div className="min-w-[1000px]">
 
           {/* --- Table Header --- */}
-          {/* Removed 'hidden sm:grid' and forced 'grid' always */}
           <div className="grid grid-cols-12 gap-4 p-4 border-b border-gray-200 text-[14px] font-bold text-black uppercase tracking-wide">
-            <div className="col-span-4">Ads</div>
+            <div className="col-span-3">Ads</div>
             <div className="col-span-2">Category</div>
             <div className="col-span-2">Ad Status</div>
+            <div className="col-span-2">Featured</div>
             <div className="col-span-2 text-left">Actions</div>
-            <div className="col-span-2 text-left"></div>
+            <div className="col-span-1"></div>
           </div>
 
           {/* --- Table Body --- */}
@@ -123,11 +138,10 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
                 <div
                   onClick={() => router.push(`/listing/${ad.id}`)}
                   key={ad.id}
-                  /* Removed grid-cols-1 sm:grid-cols-12 to force desktop view */
-                  className="grid grid-cols-12 gap-4 p-4 transition-colors items-center  cursor-pointer"
+                  className="grid grid-cols-12 gap-4 p-4 transition-colors items-center cursor-pointer"
                 >
-
-                  <div className="col-span-4 flex items-center gap-3">
+                  {/* Ad Info */}
+                  <div className="col-span-3 flex items-center gap-3">
                     <div className="w-[60px] h-[60px] bg-gray-100 relative overflow-hidden flex-shrink-0 border border-gray-200">
                       <Image
                         src={ad.product_images?.[0] || "/fallback.png"}
@@ -138,41 +152,48 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
                       />
                     </div>
                     <div className="min-w-0">
-                      <h1 className="text-sm text-[#000000] h-[24px] leading-[24px] tracking-[-0.31px] truncate">
+                      <h1 className="text-sm text-[#000000] h-[24px] leading-[24px] truncate">
                         {capitalizeWords(ad.title)}
                       </h1>
-                      <p className="text-xs font-normal text-[#6A7282] h-[20px] leading-[20px] tracking-[-0.15px]">
+                      <p className="text-xs font-normal text-[#6A7282]">
                         AED {ad.price}
                       </p>
                     </div>
                   </div>
 
-                  {/* 2. Category Column - Removed responsive padding/margins */}
+                  {/* Category */}
                   <div className="col-span-2">
-                    <p className="text-sm font-normal h-[20px] leading-[20px] tracking-[-0.15px] text-[#000000] truncate">
+                    <p className="text-sm font-normal text-[#000000] truncate">
                       {ad.category?.title || "Classifieds"}
                     </p>
-                    <p className="text-xs font-normal text-[#6A7282] h-[20px] leading-[20px] tracking-[-0.15px] truncate">
+                    <p className="text-xs font-normal text-[#6A7282] truncate">
                       {ad.subcategory?.title}
                     </p>
                   </div>
 
-                  {/* 3. Ad Status Column - Removed responsive padding/margins */}
+                  {/* Status */}
                   <div className="col-span-2">
                     <div className="flex items-center gap-2">
                       <span className={`w-2 h-2 rounded-full ${getStatusColor(ad.status)}`} />
-                      <span className="text-sm font-normal h-[20px] leading-[20px] tracking-[-0.15px] text-[#6A7282] truncate">
+                      <span className="text-sm font-normal text-[#6A7282]">
                         {capitalizeWords(ad.status)}
                       </span>
                     </div>
                   </div>
 
-                  {/* 4. Actions Column */}
+                  {/* Featured Status Column */}
+                  <div className="col-span-2">
+                    <span className="text-sm font-normal text-[#6A7282]">
+                      {ad.is_featured === 0 ? "False" : "True"}
+                    </span>
+                  </div>
+
+                  {/* Edit Button */}
                   <div
                     onClick={(e) => e.stopPropagation()}
                     className="col-span-2 flex items-center gap-2">
                     <Button
-                      className="h-[32px] w-[138.96875px] rounded-none text-[13px] font-medium bg-white border border-gray-200 text-[#0A0A0A] hover:bg-gray-50 hover:text-black"
+                      className="h-[32px] w-[138.96875px] rounded-none text-[13px] font-medium bg-white border border-gray-200 text-[#0A0A0A] hover:bg-gray-50"
                       onClick={(e) => {
                         e.stopPropagation();
                         editAd(ad.id as number, ad);
@@ -182,12 +203,13 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
                     </Button>
                   </div>
 
-                  <div className="col-span-2 flex items-center justify-end gap-2">
+                  {/* 3 Dots Menu */}
+                  <div className="col-span-1 flex items-center justify-end">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
                           variant="ghost"
-                          className="h-8 w-8 p-0 text-gray-600 hover:text-gray-600 bg-transparent hover:bg-transparent"
+                          className="h-8 w-8 p-0 text-gray-600 bg-transparent hover:bg-transparent hover:text-gray-800"
                           onClick={(e) => e.stopPropagation()}
                         >
                           <MoreVertical className="w-4 h-4" />
@@ -196,22 +218,52 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
 
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => viewAd(ad.id as number)}>
-                          <Eye className="w-4 h-4 mr-2" /> View Ad
+                          <Eye className="w-4 h-4" /> View Ad
                         </DropdownMenuItem>
 
                         <DropdownMenuItem
-                          className="text-black focus:text-red-600"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openFeatureDialog(ad.id as number);
+                          }}
+                        >
+                          <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" /> Feature Ad
+                        </DropdownMenuItem>
+
+                        {ad.status === 'approved' && (
+                          <DropdownMenuItem
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeactivateProduct(ad.id?.toString() || '');
+                            }}
+                          >
+                            <PowerOff className="w-4 h-4" /> Deactivate
+                          </DropdownMenuItem>
+                        )}
+
+                        {ad.status === 'expired' && (
+                          <DropdownMenuItem
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleActivateProduct(ad.id?.toString() || '');
+                            }}
+                          >
+                            <PowerOff className="w-4 h-4" /> Activate
+                          </DropdownMenuItem>
+                        )}
+
+                        <DropdownMenuItem
+                          className="text-red-600 focus:text-red-600"
                           onClick={(e) => {
                             e.stopPropagation();
                             confirmDelete(ad.id as number);
                           }}
                         >
-                          <Trash2 className="w-4 h-4 mr-2" /> Delete
+                          <Trash2 className="w-4 h-4" /> Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
-
                 </div>
               ))
             ) : (
@@ -223,17 +275,18 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
         </div>
       </div>
 
-      {/* --- Pagination --- */}
+      {/* Pagination */}
       {totalPages > 1 && (
         <div className="p-4 border-t border-gray-200">
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            onPageChange={handlePageChange}
+            onPageChange={setCurrentPage}
           />
         </div>
       )}
 
+      {/* Delete Dialog */}
       <DeleteProductDialog
         isOpen={isDeleteOpen}
         onOpenChange={setIsDeleteOpen}
@@ -241,6 +294,7 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
         isPending={deleteProduct.isPending}
       />
 
+      {/* Edit Dialog */}
       <EditProductDialog
         isOpen={isEditProductOpen}
         onOpenChange={setIsEditProductOpen}
@@ -248,6 +302,37 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
         onSubmit={onProductSubmit}
         isPending={updateProduct.isPending}
       />
+
+      {/* Feature Ad Dialog */}
+      <Dialog open={isFeatureOpen} onOpenChange={setIsFeatureOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+              Feature Your Ad
+            </DialogTitle>
+            <DialogDescription className="pt-4 text-gray-600">
+              Boost your visibility! Featured ads appear at the top of search results and category pages, helping you sell faster.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 my-4">
+            <div className="flex justify-between items-center">
+              <span className="text-sm font-medium text-gray-700">Service Fee</span>
+              <span className="text-lg font-bold text-black">AED 50.00</span>
+            </div>
+          </div>
+
+          <DialogFooter className="flex flex-col sm:flex-row gap-2">
+            <Button
+              className="w-full bg-black text-white hover:bg-gray-800"
+              // onClick={() => router.push('/payment')}
+            >
+              Pay Now
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

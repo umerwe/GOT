@@ -2,14 +2,6 @@
 
 import AdsTable from '@/components/current-ads'
 import { useParams } from 'next/navigation'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
-
 const MyAds = () => {
     const params = useParams()
     const statusName = params.name as string

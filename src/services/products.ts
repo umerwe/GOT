@@ -33,7 +33,7 @@ export const getBusinessProduct = async (id: string) => {
 export const getUserProducts = async (page: number, status?: string) => {
   const params = new URLSearchParams({
     page: page.toString(),
-    per_page: "5",
+    per_page: "10",
   })
 
   if (status) {
@@ -70,5 +70,15 @@ export const updateUserProduct = async (id: number, formData: FormData) => {
 
 export const deleteUserProduct = async (id: number) => {
   const { data } = await api.post(`/delete-product/${id}`);
+  return data.data;
+};
+
+export const activateProduct = async (id: string) => {
+  const { data } = await api.post(`/activate-product/${id}`);
+  return data.data;
+};
+
+export const deactivateProduct = async (id: string) => {
+  const { data } = await api.post(`/deactivate-product/${id}`);
   return data.data;
 };

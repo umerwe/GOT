@@ -15,61 +15,61 @@ interface SkeletonLoaderProps {
 
 const SkeletonLoader = ({ type, count = 4, isAdsPage = false }: SkeletonLoaderProps) => {
     switch (type) {
-       case "categories":
-    return (
-        /* Matches the scrolling flex on mobile and the grid on desktop */
-        <div className="flex overflow-x-auto pb-4 gap-4 sm:grid sm:grid-cols-3 lg:grid-cols-6 sm:gap-[10px] sm:overflow-visible sm:pb-0 scrollbar-hide">
-            {Array.from({ length: count }).map((_, i) => (
-                <div key={i} className="min-w-[160px] sm:min-w-full flex flex-col gap-2">
-                    {/* The Image Box Skeleton */}
-                    <Skeleton className="w-full h-[129px] rounded-none" />
-                    
-                    {/* The Title Skeleton */}
-                    <Skeleton className="h-4 w-3/4 mt-1" />
+        case "categories":
+            return (
+                /* Matches the scrolling flex on mobile and the grid on desktop */
+                <div className="flex overflow-x-auto pb-4 gap-4 sm:grid sm:grid-cols-3 lg:grid-cols-6 sm:gap-[10px] sm:overflow-visible sm:pb-0 scrollbar-hide">
+                    {Array.from({ length: count }).map((_, i) => (
+                        <div key={i} className="min-w-[160px] sm:min-w-full flex flex-col gap-2">
+                            {/* The Image Box Skeleton */}
+                            <Skeleton className="w-full h-[129px] rounded-none" />
+
+                            {/* The Title Skeleton */}
+                            <Skeleton className="h-4 w-3/4 mt-1" />
+                        </div>
+                    ))}
                 </div>
-            ))}
-        </div>
-    );
+            );
 
-       case "products":
-    return (
-        /* Matches the scrolling flex on mobile and grid on desktop */
-        <div className={cn(
-            "flex overflow-x-auto pb-4 gap-[10px] scrollbar-hide sm:pb-0 sm:overflow-visible sm:grid", 
-            isAdsPage ? "sm:grid-cols-3" : "sm:grid-cols-6"
-        )}>
-            {Array.from({ length: count }).map((_, i) => (
-                <Card
-                    key={i}
-                    /* min-w-[280px] ensures skeletons have the same width as actual cards on mobile */
-                    className="overflow-hidden rounded-none shadow-none border-none cursor-pointer h-full min-w-[280px] sm:min-w-full"
-                >
-                    <div className="relative">
-                        <Skeleton className="h-[343px] w-full rounded-none" />
-                    </div>
+        case "products":
+            return (
+                /* Matches the scrolling flex on mobile and grid on desktop */
+                <div className={cn(
+                    "flex overflow-x-auto pb-4 gap-[10px] scrollbar-hide sm:pb-0 sm:overflow-visible sm:grid",
+                    isAdsPage ? "sm:grid-cols-3" : "sm:grid-cols-6"
+                )}>
+                    {Array.from({ length: count }).map((_, i) => (
+                        <Card
+                            key={i}
+                            /* min-w-[280px] ensures skeletons have the same width as actual cards on mobile */
+                            className="overflow-hidden rounded-none shadow-none border-none cursor-pointer h-full min-w-[280px] sm:min-w-full"
+                        >
+                            <div className="relative">
+                                <Skeleton className="h-[343px] w-full rounded-none" />
+                            </div>
 
-                    <CardContent className="pt-[17px] px-0">
-                        {/* Title skeleton */}
-                        <Skeleton className="h-5 w-3/4 mb-2" />
+                            <CardContent className="pt-[17px] px-0">
+                                {/* Title skeleton */}
+                                <Skeleton className="h-5 w-3/4 mb-2" />
 
-                        {/* Meta data skeleton */}
-                        <div className="flex items-center flex-wrap gap-y-1 text-[14px]">
-                            <Skeleton className="h-4 w-12" />
-                            <span className="text-gray-200 px-1">|</span>
-                            <Skeleton className="h-4 w-16" />
-                            <span className="text-gray-200 px-1">|</span>
-                            <Skeleton className="h-4 w-12" />
-                        </div>
+                                {/* Meta data skeleton */}
+                                <div className="flex items-center flex-wrap gap-y-1 text-[14px]">
+                                    <Skeleton className="h-4 w-12" />
+                                    <span className="text-gray-200 px-1">|</span>
+                                    <Skeleton className="h-4 w-16" />
+                                    <span className="text-gray-200 px-1">|</span>
+                                    <Skeleton className="h-4 w-12" />
+                                </div>
 
-                        {/* Price skeleton */}
-                        <div className="mt-1.5">
-                            <Skeleton className="h-5 w-24" />
-                        </div>
-                    </CardContent>
-                </Card>
-            ))}
-        </div>
-    );
+                                {/* Price skeleton */}
+                                <div className="mt-1.5">
+                                    <Skeleton className="h-5 w-24" />
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))}
+                </div>
+            );
         case "product2":
             return (
                 <div className="px-2 mb-[60px] border border-gray-200 sm:px-4 lg:px-0 flex flex-col">
@@ -237,107 +237,107 @@ const SkeletonLoader = ({ type, count = 4, isAdsPage = false }: SkeletonLoaderPr
             );
 
         case "alllisting":
-    return (
-        <div className="sm:pl-[23px] sm:pr-[62px]">
-            {/* Breadcrumb Skeleton - Matches mt-[27px] */}
-            <Container className="mt-[27px]">
-                <div className="flex items-center gap-2">
-                    <Skeleton className="h-4 w-16" />
-                    <span className="text-gray-300">/</span>
-                    <Skeleton className="h-4 w-24" />
-                    <span className="text-gray-300">/</span>
-                    <Skeleton className="h-4 w-32" />
-                </div>
-            </Container>
-
-            {/* Main Listing Grid - Matches pt-[53px] */}
-            <Container className="pt-[53px] pb-[98px] sm:pl-[80px] px-0">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-[22px]">
-                    
-                    {/* --- LEFT COLUMN: Gallery & Specs --- */}
-                    <div className="lg:col-span-2 space-y-[20px]">
-                        {/* Main Image Gallery Skeleton - Matches aspect-[16/10] */}
-                        <div className="bg-gray-50 relative w-full aspect-[4/3] lg:aspect-[16/10]">
-                            <Skeleton className="w-full h-full rounded-none" />
+            return (
+                <div className="sm:pl-[23px] sm:pr-[62px]">
+                    {/* Breadcrumb Skeleton - Matches mt-[27px] */}
+                    <Container className="mt-[27px]">
+                        <div className="flex items-center gap-2">
+                            <Skeleton className="h-4 w-16" />
+                            <span className="text-gray-300">/</span>
+                            <Skeleton className="h-4 w-24" />
+                            <span className="text-gray-300">/</span>
+                            <Skeleton className="h-4 w-32" />
                         </div>
+                    </Container>
 
-                        {/* Specs Grid Skeleton - Matches 4 columns & p-6 border container */}
-                        <div className="border-2 border-gray-100 rounded-none p-6 bg-white">
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-y-6 gap-x-4">
-                                {[...Array(8)].map((_, i) => (
-                                    <div key={i} className="flex flex-col gap-1">
-                                        <Skeleton className="h-3 w-12" /> {/* Label */}
-                                        <Skeleton className="h-5 w-20" /> {/* Value */}
+                    {/* Main Listing Grid - Matches pt-[53px] */}
+                    <Container className="pt-[53px] pb-[98px] sm:pl-[80px] px-0">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-[22px]">
+
+                            {/* --- LEFT COLUMN: Gallery & Specs --- */}
+                            <div className="lg:col-span-2 space-y-[20px]">
+                                {/* Main Image Gallery Skeleton - Matches aspect-[16/10] */}
+                                <div className="bg-gray-50 relative w-full aspect-[4/3] lg:aspect-[16/10]">
+                                    <Skeleton className="w-full h-full rounded-none" />
+                                </div>
+
+                                {/* Specs Grid Skeleton - Matches 4 columns & p-6 border container */}
+                                <div className="border-2 border-gray-100 rounded-none p-6 bg-white">
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-y-6 gap-x-4">
+                                        {[...Array(8)].map((_, i) => (
+                                            <div key={i} className="flex flex-col gap-1">
+                                                <Skeleton className="h-3 w-12" /> {/* Label */}
+                                                <Skeleton className="h-5 w-20" /> {/* Value */}
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
+                                </div>
+
+                                {/* Overview/Description Skeleton */}
+                                <div className="space-y-[11px]">
+                                    <Skeleton className="h-[22px] w-24" /> {/* "Overview" Title */}
+                                    <div className="space-y-2">
+                                        <Skeleton className="h-4 w-full" />
+                                        <Skeleton className="h-4 w-full" />
+                                        <Skeleton className="h-4 w-2/3" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* --- RIGHT COLUMN: Details & Actions --- */}
+                            <div className="lg:col-span-1 space-y-[10px] sm:px-[24px]">
+                                {/* Wishlist Icon Placeholder */}
+                                <div className="flex justify-end py-[5px]">
+                                    <Skeleton className="w-8 h-8 rounded-full" />
+                                </div>
+
+                                {/* Title Header Skeleton */}
+                                <div className="space-y-[6px]">
+                                    <Skeleton className="h-7 w-full" /> {/* Main Title */}
+                                    <div className="flex gap-2">
+                                        <Skeleton className="h-4 w-16" />
+                                        <Skeleton className="h-4 w-16" />
+                                        <Skeleton className="h-4 w-16" />
+                                    </div>
+                                    <div className="flex gap-2 pt-2">
+                                        <Skeleton className="w-4 h-4" /> {/* Map Icon */}
+                                        <Skeleton className="h-4 w-40" />
+                                    </div>
+                                </div>
+
+                                {/* Price Skeleton */}
+                                <div className="border-t border-gray-100 pt-[15px]">
+                                    <Skeleton className="h-8 w-32" />
+                                </div>
+
+                                {/* Seller Info Skeleton */}
+                                <div className="flex items-center justify-between py-2">
+                                    <div className="space-y-1">
+                                        <Skeleton className="h-4 w-12" />
+                                        <Skeleton className="h-5 w-24" />
+                                    </div>
+                                    <Skeleton className="w-[55px] h-[50px] rounded-none" />
+                                </div>
+
+                                {/* Action Buttons Skeleton - Matches h-[54px] and grid-cols-2 */}
+                                <div className="grid grid-cols-2 gap-3">
+                                    <Skeleton className="h-[54px] w-full rounded-none" />
+                                    <Skeleton className="h-[54px] w-full rounded-none" />
+                                </div>
+
+                                {/* Safety Note Skeleton */}
+                                {/* <div className="flex items-center gap-2 pt-2">
+                                    <Skeleton className="w-4 h-4 rounded-full" />
+                                    <Skeleton className="h-4 w-48" />
+                                </div> */}
+
+                                {/* Add to Cart Skeleton (Optional/Business) */}
+                                <Skeleton className="h-[54px] w-full rounded-none mt-2" />
                             </div>
                         </div>
-
-                        {/* Overview/Description Skeleton */}
-                        <div className="space-y-[11px]">
-                            <Skeleton className="h-[22px] w-24" /> {/* "Overview" Title */}
-                            <div className="space-y-2">
-                                <Skeleton className="h-4 w-full" />
-                                <Skeleton className="h-4 w-full" />
-                                <Skeleton className="h-4 w-2/3" />
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* --- RIGHT COLUMN: Details & Actions --- */}
-                    <div className="lg:col-span-1 space-y-[10px] sm:px-[24px]">
-                        {/* Wishlist Icon Placeholder */}
-                        <div className="flex justify-end py-[5px]">
-                            <Skeleton className="w-8 h-8 rounded-full" />
-                        </div>
-
-                        {/* Title Header Skeleton */}
-                        <div className="space-y-[6px]">
-                            <Skeleton className="h-7 w-full" /> {/* Main Title */}
-                            <div className="flex gap-2">
-                                <Skeleton className="h-4 w-16" />
-                                <Skeleton className="h-4 w-16" />
-                                <Skeleton className="h-4 w-16" />
-                            </div>
-                            <div className="flex gap-2 pt-2">
-                                <Skeleton className="w-4 h-4" /> {/* Map Icon */}
-                                <Skeleton className="h-4 w-40" />
-                            </div>
-                        </div>
-
-                        {/* Price Skeleton */}
-                        <div className="border-t border-gray-100 pt-[15px]">
-                            <Skeleton className="h-8 w-32" />
-                        </div>
-
-                        {/* Seller Info Skeleton */}
-                        <div className="flex items-center justify-between py-2">
-                            <div className="space-y-1">
-                                <Skeleton className="h-4 w-12" />
-                                <Skeleton className="h-5 w-24" />
-                            </div>
-                            <Skeleton className="w-[55px] h-[50px] rounded-none" />
-                        </div>
-
-                        {/* Action Buttons Skeleton - Matches h-[54px] and grid-cols-2 */}
-                        <div className="grid grid-cols-2 gap-3">
-                            <Skeleton className="h-[54px] w-full rounded-none" />
-                            <Skeleton className="h-[54px] w-full rounded-none" />
-                        </div>
-
-                        {/* Safety Note Skeleton */}
-                        <div className="flex items-center gap-2 pt-2">
-                            <Skeleton className="w-4 h-4 rounded-full" />
-                            <Skeleton className="h-4 w-48" />
-                        </div>
-
-                        {/* Add to Cart Skeleton (Optional/Business) */}
-                        <Skeleton className="h-[54px] w-full rounded-none mt-2" />
-                    </div>
+                    </Container>
                 </div>
-            </Container>
-        </div>
-    );
+            );
 
         case "chat":
             return (
