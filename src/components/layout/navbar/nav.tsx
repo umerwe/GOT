@@ -56,7 +56,7 @@ const Navbar = () => {
           className={`${!isHome && "invert"}`}
         />
 
-        <div className="mt-[45px]">
+        <div className="mt-9 md:mt-[45px]">
           {showNavLinks && !isBusiness && <NavLinks textColor={textColor} />}
         </div>
 

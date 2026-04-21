@@ -11,17 +11,23 @@ interface LogoProps {
 
 const Logo = ({ logo, className, navigate = true }: LogoProps) => {
     return (
-        <Link href={navigate ? "/" : "/business-management/verification"} className={`relative flex items-center justify-center w-[120px] h-[74px] md:w-[200px] md:h-[104px] ${className}`}>
-            {logo ? (
-                <MyImage
-                    src={logo}
-                    alt="logo"
-                    width={256}
-                    height={256}
-                    className="object-contain"
-                />
-            ) : <SpinnerLoader />}
-        </Link>
+        <Link
+  href={navigate ? "/" : "/business-management/verification"}
+  className={`relative flex items-center justify-center w-[140px] h-[94px] md:w-[200px] md:h-[104px] ${className}`}
+>
+  {logo ? (
+    <MyImage
+      src={logo}
+      alt="logo"
+      fill
+      className="object-contain"
+      quality={100}
+      priority
+    />
+  ) : (
+    <SpinnerLoader />
+  )}
+</Link>
     )
 }
 

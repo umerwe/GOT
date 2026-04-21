@@ -18,7 +18,6 @@ export default function FilterSidebar({
 }: FilterSidebarProps) {
   const [tempFilters, setTempFilters] = useState<FilterState>(selectedFilters);
   const [selectedCategoryType, setSelectedCategoryType] = useState<string | null>(null);
-
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     category: false,
     price: false,
@@ -150,7 +149,7 @@ export default function FilterSidebar({
 
           {/* Price Range Section */}
           {
-            selectedCategoryType !== "accessories" &&
+            selectedCategoryType !== "accessories" && selectedCategoryType !== null &&
             <div>
               <div
                 className="flex items-center justify-between cursor-pointer mb-3"
@@ -216,13 +215,13 @@ export default function FilterSidebar({
         <div className="px-4">
           <h4 className="font-semibold text-base mb-3 text-center">Brands</h4>
 
-          <Button
+          {/* <Button
             variant="outline"
             className={`w-full rounded-none mb-4 text-gray-400 ${tempFilters.brand === 'all' ? 'bg-[#F6F6F6]' : 'bg-[#F6F6F6]'} border-gray-400 hover:bg-gray-50`}
             onClick={() => setTempFilters((prev) => ({ ...prev, brand: "all" }))}
           >
             All Brands
-          </Button>
+          </Button> */}
 
         </div>
 
@@ -246,7 +245,7 @@ export default function FilterSidebar({
                     alt={item.label || "Brand"}
                     width={256}
                     height={256}
-                    className="h-full w-auto object-contain"
+                    className="h-full w-full"
                   />
                 ) : (
                   <span className="text-sm font-medium text-center">{item.label}</span>

@@ -291,7 +291,7 @@ export default function Listing({ product }: ProductDetailsProps) {
                 </>
               )
              }
-              <span>{product.condition}</span>
+              <span>{product.condition}/10</span>
               <span>•</span>
               <span>{product.category?.title}</span>
             </div>

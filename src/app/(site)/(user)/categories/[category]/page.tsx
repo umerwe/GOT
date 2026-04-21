@@ -242,7 +242,7 @@ export default function CategoryLayout() {
   };
 
   return (
-    <div className="px-[17px] py-6">
+    <div className="px-[17px] pt-6 pb-[60px]">
       <PageHeader
         categoryTitle={displayLabels.category}
         resultCount={totalItems}
@@ -273,7 +273,7 @@ export default function CategoryLayout() {
       </div>
 
       <div className="flex gap-4 relative items-start mt-8">
-        <aside className="hidden lg:flex flex-col w-[280px] flex-shrink-0 sticky top-24 self-start gap-4">
+        <aside className="hidden lg:flex flex-col w-[280px] flex-shrink-0 gap-4">
           <div className="flex justify-center w-full">
             <button onClick={() => router.back()} className="flex items-center gap-1 font-bold text-black text-[13px]">
               <ChevronLeft size={14} strokeWidth={3} /> <span>Back</span>
