@@ -2,8 +2,6 @@
 importScripts("https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js");
 importScripts("https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js");
 
-console.log('Service worker: Starting initialization');
-
 // Firebase config - will be injected during build
 const firebaseConfig = {
   apiKey: "AIzaSyDN6ba7rwLpaAR3uwCbtUR5-nt3bqziEVI",
@@ -36,7 +34,6 @@ try {
         tag: payload.data?.tag || 'general-notification'
       };
       
-      console.log('Service worker: Showing notification with options', options);
       self.registration.showNotification(title, options);
     } catch (error) {
       console.error('Service worker: Error showing notification:', error);
@@ -45,11 +42,9 @@ try {
 
   // Handle notification click
   self.addEventListener("notificationclick", function(event) {
-    console.log('Service worker: Notification clicked', event.notification);
     event.notification.close();
     
     const urlToOpen = event.notification.data?.url || '/';
-    console.log('Service worker: Opening URL', urlToOpen);
     
     event.waitUntil(
       clients.matchAll({ 
@@ -59,14 +54,12 @@ try {
         // Check if there's already a window open with the target URL
         for (const client of clientList) {
           if (client.url === urlToOpen && 'focus' in client) {
-            console.log('Service worker: Focusing existing window');
             return client.focus();
           }
         }
         
         // If no client found, open a new window
         if (clients.openWindow) {
-          console.log('Service worker: Opening new window');
           return clients.openWindow(urlToOpen);
         }
       })
@@ -75,17 +68,14 @@ try {
 
   // Handle push subscription change
   self.addEventListener('pushsubscriptionchange', function(event) {
-    console.log('Service worker: Push subscription changed:', event);
     event.waitUntil(
       self.registration.pushManager.subscribe(event.oldSubscription.options)
         .then(function(subscription) {
-          console.log('Service worker: New subscription:', subscription);
           // Send new subscription to your server
         })
     );
   });
 
-  console.log('Service worker: Setup completed successfully');
 } catch (error) {
   console.error('Service worker: Error during initialization:', error);
 }

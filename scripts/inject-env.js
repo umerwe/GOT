@@ -6,8 +6,6 @@ const path = require('path');
 
 const serviceWorkerPath = path.join(__dirname, '../public/firebase-messaging-sw.js');
 
-console.log('Build script: Starting environment variable injection');
-
 // Read the original service worker
 let content = fs.readFileSync(serviceWorkerPath, 'utf8');
 
@@ -20,13 +18,9 @@ const replacements = {
   '{{NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID}}': process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   '{{NEXT_PUBLIC_FIREBASE_APP_ID}}': process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
-
-console.log('Build script: Found environment variables', Object.keys(replacements));
-
 // Apply replacements
 Object.entries(replacements).forEach(([placeholder, value]) => {
   if (!value) {
-    console.error(`Build script: Missing environment variable for placeholder: ${placeholder}`);
     process.exit(1);
   }
   content = content.replace(new RegExp(placeholder, 'g'), value);
@@ -34,4 +28,3 @@ Object.entries(replacements).forEach(([placeholder, value]) => {
 
 // Write the updated service worker
 fs.writeFileSync(serviceWorkerPath, content);
-console.log('Build script: Environment variables injected into service worker');

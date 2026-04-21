@@ -4,6 +4,7 @@ import Providers from "@/providers/query-provider";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import ChatListener from "@/components/chat-listner";
+import NotificationProvider from "@/components/notificationProvider";
 
 export const metadata: Metadata = {
   title: "Home | Braaap",
@@ -31,7 +32,7 @@ export default function RootLayout({
         <SessionProvider >
           <Providers>
             <ChatListener />
-            {/* <NotificationProvider /> */}
+            <NotificationProvider />
             {children}
           </Providers>
         </SessionProvider>

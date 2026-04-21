@@ -50,9 +50,9 @@ const AccessoriesSection = () => {
                                         <Image
                                             src={business.logo || "/default-avatar.png"}
                                             alt={business.name}
-                                            width={56}
-                                            height={50}
-                                            className="rounded-full aspect-square object-cover bg-white"
+                                            width={256}
+                                            height={256}
+                                            className="rounded-full w-14 h-14 object-cover bg-white"
                                         />
                                         <div className="absolute bottom-1 right-0 bg-[#E9A426] rounded-full p-0.5 border-2 border-white">
                                             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-black">

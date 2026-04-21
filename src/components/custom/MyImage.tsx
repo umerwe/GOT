@@ -46,8 +46,8 @@ const MyImage = ({
 
   if (isError || !resolvedSrc) {
     return (
-      <div className={cn("flex items-center justify-center bg-gray-100 text-gray-400 font-medium", className)}>
-        {fallbackText || "Image not available"}
+      <div className={cn("flex items-center h-full justify-center bg-gray-100 text-gray-400 text-[10px] font-medium", className)}>
+        {fallbackText || "Image not found"}
       </div>
     );
   }
