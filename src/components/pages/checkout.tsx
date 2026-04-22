@@ -9,6 +9,7 @@ import PaymentForm from "@/components/forms/checkout-form";
 import Footer from "@/components/layout/footer";
 import { useAppSelector } from "@/store/hooks";
 import { useGetConfig } from "@/hooks/useConfig";
+import { useSearchParams } from "next/navigation";
 
 // ── Skeleton that mirrors the real layout ──────────────────────────
 function CheckoutSkeleton() {
@@ -97,15 +98,19 @@ function StripeConfigError() {
   );
 }
 
-// ── Main page ──────────────────────────────────────────────────────
 export default function CheckoutPage() {
   const { data, isLoading } = useGetConfig();
+  const searchParams = useSearchParams();
+  const isFeatureAd = searchParams.get("type") === "feature_ad";
+  const productId = searchParams.get("product_id");
+  const FEATURE_AD_FEE = 50;
 
   const stripePublishableKey = data?.stripe?.publishable_key;
   const stripePromise = stripePublishableKey ? loadStripe(stripePublishableKey) : null;
 
   const cartItems = useAppSelector((state) => state.cart.items);
   const subTotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const totalWithFee = isFeatureAd ? subTotal + FEATURE_AD_FEE : subTotal;
 
   return (
     <>
@@ -128,10 +133,15 @@ export default function CheckoutPage() {
             <Elements stripe={stripePromise}>
               <div className="flex flex-col lg:flex-row gap-[30px] items-start justify-center">
                 <div className="w-full lg:w-[490px] shrink-0">
-                  <PaymentForm />
+                  <PaymentForm productId={productId || undefined} />
                 </div>
                 <div className="w-full lg:w-[380px] shrink-0 lg:mt-[30px]">
-                  <OrderSummary cartItems={cartItems} subtotal={subTotal} />
+                  <OrderSummary
+                    cartItems={cartItems}
+                    subtotal={totalWithFee}
+                    isFeatureAd={isFeatureAd}
+                    featureAdFee={FEATURE_AD_FEE}
+                  />
                 </div>
               </div>
             </Elements>

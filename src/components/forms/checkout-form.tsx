@@ -19,6 +19,8 @@ import { cn } from "@/lib/utils";
 import { IoCard } from "react-icons/io5";
 import { StripeElementChangeEvent } from "@stripe/stripe-js";
 import { toast } from "../ui/toast";
+import { useAppSelector } from "@/store/hooks";
+import api from "@/lib/axios";
 
 const paymentSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email address"),
@@ -40,21 +42,18 @@ const STRIPE_FIELD_ERRORS: Record<string, string> = {
   cardCvc: "Please enter your security code",
 };
 
-export default function PaymentForm() {
+export default function PaymentForm({ productId }: { productId?: string }) {
   const router = useRouter();
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-  // ── KEY FIX: track empty + complete + error per Stripe field ──
   const [stripeFields, setStripeFields] = useState<Record<string, StripeFieldState>>({
     cardNumber: { error: "", empty: true, complete: false },
     cardExpiry: { error: "", empty: true, complete: false },
     cardCvc: { error: "", empty: true, complete: false },
   });
-
-  // Whether the user attempted submit (triggers empty-field errors)
-  const [submitted, setSubmitted] = useState(false);
 
   const {
     register,
@@ -88,45 +87,71 @@ export default function PaymentForm() {
     }));
   };
 
-  // Returns the error message to display for a stripe field
   const getStripeError = (field: string): string => {
     const f = stripeFields[field];
-    if (!submitted && !f.error) return ""; // don't show errors before first submit attempt
-    if (f.empty) return STRIPE_FIELD_ERRORS[field]; // empty after submit → show required msg
-    if (f.error) return f.error;                    // Stripe returned a validation error
+    if (!submitted && !f.error) return "";
+    if (f.empty) return STRIPE_FIELD_ERRORS[field];
+    if (f.error) return f.error;
     return "";
   };
 
   const onSubmit = async (values: PaymentValues) => {
     if (!stripe || !elements) return;
 
-    setSubmitted(true); // ← this triggers empty-field error display
+    setSubmitted(true);
 
-    // Check all stripe fields are complete
     const allComplete = Object.values(stripeFields).every((f) => f.complete);
     if (!allComplete) return;
 
     setLoading(true);
 
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: "card",
-      card: elements.getElement(CardNumberElement)!,
-      billing_details: {
-        email: values.email,
-        phone: values.phone,
-        address: { postal_code: values.postalCode },
-      },
-    });
+    try {
+      if (productId) {
+        const res = await api.post("/stripe/create-featured-intent", {
+          product_id: productId,
+        });
+        const clientSecret = res.data.client_secret;
 
-    if (error) {
-      toast({
-        title: "Payment Error",
-        description: error.message,
-        variant: "destructive",
-      })
+        const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+          payment_method: {
+            card: elements.getElement(CardNumberElement)!,
+            billing_details: {
+              email: values.email,
+              phone: values.phone,
+              address: { postal_code: values.postalCode },
+            },
+          },
+        });
+
+        if (error) {
+          toast({ title: "Payment Error", description: error.message, variant: "destructive" });
+          setLoading(false);
+        } else if (paymentIntent?.status === "succeeded") {
+          router.push(`/feature-ad-success?tid=${paymentIntent.id}&product_id=${productId}`);
+        }
+
+      } else {
+        const { error, paymentMethod } = await stripe.createPaymentMethod({
+          type: "card",
+          card: elements.getElement(CardNumberElement)!,
+          billing_details: {
+            email: values.email,
+            phone: values.phone,
+            address: { postal_code: values.postalCode },
+          },
+        });
+
+        if (error) {
+          toast({ title: "Payment Error", description: error.message, variant: "destructive" });
+          setLoading(false);
+        } else {
+          router.push(`/success?tid=${paymentMethod.id}`);
+        }
+      }
+
+    } catch {
+      toast({ title: "Something went wrong", description: "Please try again.", variant: "destructive" });
       setLoading(false);
-    } else {
-      router.push(`/success?tid=${paymentMethod.id}`);
     }
   };
 

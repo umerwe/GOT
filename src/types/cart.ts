@@ -15,4 +15,6 @@ export interface OrderSummaryProps {
   cartItems: CartItem[];
   subtotal: number;
   isCartPage?: boolean;
+  isFeatureAd?: boolean;
+featureAdFee?: number;
 }

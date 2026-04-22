@@ -248,7 +248,7 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
                               handleActivateProduct(ad.id?.toString() || '');
                             }}
                           >
-                            <PowerOff className="w-4 h-4" /> Activate
+                            <PowerOff className="w-4 h-4" /> Renew
                           </DropdownMenuItem>
                         )}
 
@@ -325,8 +325,8 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
 
           <DialogFooter className="flex flex-col sm:flex-row gap-2">
             <Button
-              className="w-full bg-black text-white hover:bg-gray-800"
-              // onClick={() => router.push('/payment')}
+              className="w-full bg-black text-white border-0 hover:bg-gray-800"
+              onClick={() => router.push(`/checkout?type=feature_ad&product_id=${featureProductId}`)}
             >
               Pay Now
             </Button>
