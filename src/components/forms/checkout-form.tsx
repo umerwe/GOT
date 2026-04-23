@@ -21,6 +21,7 @@ import { StripeElementChangeEvent } from "@stripe/stripe-js";
 import { toast } from "../ui/toast";
 import { useAppSelector } from "@/store/hooks";
 import api from "@/lib/axios";
+import { CartItem } from "@/types/cart";
 
 const paymentSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email address"),
@@ -42,7 +43,7 @@ const STRIPE_FIELD_ERRORS: Record<string, string> = {
   cardCvc: "Please enter your security code",
 };
 
-export default function PaymentForm({ productId, cartItems, subTotal }: { productId?: string, cartItems?: any[], subTotal?: number }) {
+export default function PaymentForm({ productId, cartItems, subTotal }: { productId?: string, cartItems?: CartItem[], subTotal?: number }) {
   const router = useRouter();
   const stripe = useStripe();
   const elements = useElements();
@@ -133,7 +134,7 @@ export default function PaymentForm({ productId, cartItems, subTotal }: { produc
       } else {
         const res = await api.post("/create-payment-intent", {
           amount: subTotal,
-          products: cartItems?.map((item) => ({
+          products: cartItems?.map((item : CartItem) => ({
             product_id: item.id,
             quantity: item.quantity,
             price: item.price,

@@ -3,7 +3,7 @@
 import { PostAdFormData } from "@/validations/ads"
 import { useEffect, useRef, useState, useCallback } from "react"
 import { Label } from "@/components/ui/label"
-import { useForm, UseFormSetValue } from "react-hook-form"
+import { UseFormSetValue } from "react-hook-form"
 import { MapPin } from "lucide-react"
 import { toast } from "./toast"
 import GoogleMapsLoader from "@/utils/googleMapsLoader"
@@ -19,8 +19,8 @@ export function LocationInput({
   initialLng,
 }: {
   setValue: SetValueType
-  register: ReturnType<typeof useForm<PostAdFormData>>["register"]
-  errors: ReturnType<typeof useForm<PostAdFormData>>["formState"]["errors"]
+  register: any // Kept as any to avoid complex type issues with register return
+  errors: any
   isPending: boolean
   initialAddress?: string
   initialLat?: string | number
@@ -33,7 +33,7 @@ export function LocationInput({
   const inputRef = useRef<HTMLInputElement>(null)
   const mapRef = useRef<HTMLDivElement>(null)
   const mapInstance = useRef<google.maps.Map | null>(null)
-  const markerInstance = useRef<google.maps.Marker | null>(null)  // ✅ fixed: Marker not marker
+  const markerInstance = useRef<google.maps.Marker | null>(null)
 
   const mapsLoader = GoogleMapsLoader.getInstance()
 
@@ -45,6 +45,21 @@ export function LocationInput({
       const data = await res.json()
 
       if (data.status === "OK" && data.results.length > 0) {
+        // --- UAE ONLY CHECK ---
+        const isInUAE = data.results[0].address_components.some((component: any) => 
+          component.types.includes("country") && component.short_name === "AE"
+        )
+
+        if (!isInUAE) {
+          toast({ 
+            title: "Invalid Location", 
+            description: "Currently, we only support locations within the United Arab Emirates.", 
+            variant: "destructive" 
+          })
+          return
+        }
+        // -----------------------
+
         const specificResult = data.results.find((result: google.maps.GeocoderResult) =>
           result.types.includes("street_address") ||
           result.types.includes("route") ||
@@ -63,7 +78,7 @@ export function LocationInput({
         if (markerInstance.current) markerInstance.current.setPosition({ lat: latitude, lng: longitude })
         if (mapInstance.current) mapInstance.current.panTo({ lat: latitude, lng: longitude })
       } else {
-        toast({ title: "Location Error", description: "Could not determine a specific address for this point.", variant: "destructive" })
+        toast({ title: "Location Error", description: "Could not determine a specific address.", variant: "destructive" })
       }
     } catch {
       toast({ title: "Error", description: "Failed to fetch address", variant: "destructive" })
@@ -96,7 +111,6 @@ export function LocationInput({
     }
   }, [handleReverseGeocode])
 
-  // Load Google Maps
   useEffect(() => {
     const init = async () => {
       try {
@@ -109,7 +123,6 @@ export function LocationInput({
     init()
   }, [mapsLoader])
 
-  // Apply initial values once map is ready (edit mode)
   useEffect(() => {
     if (!isMapReady || !initialAddress) return
 
@@ -117,7 +130,6 @@ export function LocationInput({
     const parsedLng = initialLng != null ? parseFloat(String(initialLng)) : null
 
     if (inputRef.current) inputRef.current.value = initialAddress
-
     setValue("address", initialAddress, { shouldValidate: true })
 
     if (parsedLat !== null && parsedLng !== null && !isNaN(parsedLat) && !isNaN(parsedLng)) {
@@ -128,14 +140,13 @@ export function LocationInput({
     }
   }, [isMapReady, initialAddress, initialLat, initialLng, setValue, initOrUpdateMap])
 
-  // Setup Autocomplete
   useEffect(() => {
     if (!isMapReady || !inputRef.current || !window.google) return
 
     const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, {
       types: ["geocode"],
       fields: ["formatted_address", "geometry"],
-      componentRestrictions: { country: "ae" },
+      componentRestrictions: { country: "ae" }, // Manual search is restricted here
     })
 
     autocomplete.addListener("place_changed", () => {
@@ -174,8 +185,8 @@ export function LocationInput({
     setIsLoading(true)
     navigator.geolocation.getCurrentPosition(
       (pos) => {
+        // Validation happens inside handleReverseGeocode
         handleReverseGeocode(pos.coords.latitude, pos.coords.longitude)
-        initOrUpdateMap(pos.coords.latitude, pos.coords.longitude)
         setIsLoading(false)
       },
       () => {
@@ -189,7 +200,7 @@ export function LocationInput({
   return (
     <>
       <div className="w-full">
-        <Label htmlFor="address">Address <span className="text-red-500">*</span></Label>
+        <Label htmlFor="address" className="text-[14px]">Address <span className="text-red-500">*</span></Label>
 
         <div className="relative mt-1">
           <input

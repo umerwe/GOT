@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { businessDetailsSchema, type BusinessDetailsValues } from "@/validations/business";
@@ -12,9 +12,14 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { cn } from "@/lib/utils";
 import { Label } from "../ui/label";
+import { Eye, EyeOff } from "lucide-react"; // Import Icons
 
 export function BusinessDetailsForm() {
     const { mutate, isPending } = useRegisterBusiness();
+    
+    // Visibility States
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const {
         register,
@@ -30,6 +35,7 @@ export function BusinessDetailsForm() {
             phone: "",
             email: "",
             password: "",
+            confirm_password: "",
             address: "",
             latitude: undefined,
             longitude: undefined,
@@ -38,17 +44,12 @@ export function BusinessDetailsForm() {
 
     const onSubmit = (data: BusinessDetailsValues) => {
         const payload = {
-            // merge names
             display_name: `${data.first_name} ${data.last_name}`.trim(),
-
-            // rename fields
             contact_number: data.phone,
             lat: data.latitude,
             lng: data.longitude,
-
-            // keep required fields
             email: data.email,
-            password: data.password,
+            password: data.password, // Only send original password
             address: data.address,
         };
 
@@ -66,11 +67,8 @@ export function BusinessDetailsForm() {
                     <Input id="first_name" label="First Name" {...register("first_name")} error={errors.first_name?.message} />
                     <Input id="last_name" label="Last Name" {...register("last_name")} error={errors.last_name?.message} />
 
-                    {/* UAE-only Phone Input */}
                     <div className="relative w-full">
-                        <Label>
-                            Phone
-                        </Label>
+                        <Label>Phone</Label>
                         <Controller
                             name="phone"
                             control={control}
@@ -80,31 +78,64 @@ export function BusinessDetailsForm() {
                                     country="ae"
                                     onlyCountries={["ae"]}
                                     disableDropdown
-                                    disableCountryCode={false}
                                     inputClass={cn(
-                                        "!w-full !h-[48px] !text-sm !bg-white",
-                                        "!border-[2px] !border-[#C7CBD2] !rounded-none",
-                                        "!shadow-xs !transition-[color,box-shadow] !outline-none",
-                                        "!pl-[48px] !pr-3",
-                                        "focus-visible:!ring-[1px] focus-visible:!ring-gray-500 focus-visible:!border-gray-500",
+                                        "!w-full !h-[48px] !text-sm !bg-white !border-[2px] !border-[#C7CBD2] !rounded-none",
                                         errors.phone && "!border-destructive"
                                     )}
-                                    buttonClass={cn(
-                                        "!h-[48px] !border-[2px]  !bg-white !rounded-none",
-                                        errors.phone && "!border-destructive"
-                                    )}
+                                    buttonClass={cn("!h-[48px] !border-[2px] !bg-white !rounded-none", errors.phone && "!border-destructive")}
                                     containerClass="!w-full"
                                     onChange={(value) => field.onChange("+" + value)}
                                 />
                             )}
                         />
-                        {errors.phone && (
-                            <p className="text-red-500 text-sm mt-1.5">{errors.phone.message}</p>
-                        )}
+                        {errors.phone && <p className="text-red-500 text-sm mt-1.5">{errors.phone.message}</p>}
                     </div>
 
                     <Input id="email" label="Email" type="email" {...register("email")} error={errors.email?.message} />
-                    <Input id="password" label="Password" type="password" {...register("password")} error={errors.password?.message} />
+
+                    {/* Password Field */}
+                    <div className="space-y-[4px]">
+                        <Label htmlFor="password">Password</Label>
+                        <div className="relative">
+                            <Input
+                                id="password"
+                                type={showPassword ? "text" : "password"}
+                                {...register("password")}
+                                className={cn("rounded-none", errors.password ? "border-red-500" : "")}
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                            >
+                                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                            </button>
+                        </div>
+                        {errors.password && <p className="text-red-600 text-[14px] mt-[4px]">{errors.password.message}</p>}
+                    </div>
+
+                    {/* Confirm Password Field */}
+                    <div className="space-y-[4px]">
+                        <Label htmlFor="confirm_password">Confirm Password</Label>
+                        <div className="relative">
+                            <Input
+                                id="confirm_password"
+                                type={showConfirmPassword ? "text" : "password"}
+                                {...register("confirm_password")}
+                                className={cn("rounded-none", errors.confirm_password ? "border-red-500" : "")}
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                            >
+                                {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                            </button>
+                        </div>
+                        {errors.confirm_password && (
+                            <p className="text-red-600 text-[14px] mt-[4px]">{errors.confirm_password.message}</p>
+                        )}
+                    </div>
 
                     <div className="md:col-span-2">
                         <BusinessLocationInput
@@ -116,7 +147,7 @@ export function BusinessDetailsForm() {
                 </div>
 
                 <div className="flex gap-4">
-                    <Button type="submit" className="font-semibold h-[42px]" disabled={isPending}>
+                    <Button type="submit" className="font-semibold h-[42px] w-full md:w-auto px-12 rounded-none bg-black hover:bg-gray-800" disabled={isPending}>
                         {isPending ? "Submitting..." : "Submit"}
                     </Button>
                 </div>

@@ -31,6 +31,44 @@ interface Brand {
   title: string
 }
 
+export interface Product {
+  id: number
+  title: string
+  description: string
+  price: number
+  negotiable: number | boolean
+  condition: number
+  usage: string
+  mileage?: number
+  mileage_unit?: string
+  manufacturing_year: string | number
+  final_drive_system?: string
+  wheels?: string
+  engine_size?: string
+  warranty?: string
+  seller_type?: string
+  address: string
+  lat: number
+  lng: number
+  category_id: number
+  subcategory_id: number
+  brand_id?: number
+  product_images: string[]
+  category?: {
+    id: number
+    title: string
+    type: string
+  }
+  subcategory?: {
+    id: number
+    title: string
+  }
+  brand?: {
+    id: number
+    title: string
+  }
+}
+
 interface AdFormProps {
   categories: Category[]
   isCategoriesLoading: boolean
@@ -38,7 +76,7 @@ interface AdFormProps {
   isBrandsLoading: boolean
   onSubmitAction: (data: FormData) => void
   isPending: boolean
-  initialData?: any
+  initialData?: Product
 }
 
 const NON_ACCESSORIES_FIELDS = [
@@ -109,34 +147,34 @@ export function AdForm({
     if (!initialData) return
 
     // Safely resolve nested objects — API returns category/subcategory/brand as objects
-    const categoryId   = initialData.category?.id    ?? initialData.category_id    ?? 0
+    const categoryId = initialData.category?.id ?? initialData.category_id ?? 0
     const subcategoryId = initialData.subcategory?.id ?? initialData.subcategory_id ?? 0
-    const brandId      = initialData.brand?.id        ?? initialData.brand_id        ?? undefined
-    const categoryType = initialData.category?.type   ?? ""
+    const brandId = initialData.brand?.id ?? initialData.brand_id ?? undefined
+    const categoryType = initialData.category?.type ?? ""
 
     reset({
-      title:              initialData.title              ?? "",
-      description:        initialData.description        ?? "",
-      price:              initialData.price              ?? undefined,
-      negotiable:         initialData.negotiable === 1 || initialData.negotiable === true,
-      condition:          initialData.condition          ?? undefined,
-      usage:              initialData.usage              ?? "",
-      mileage:            initialData.mileage            ?? undefined,
-      mileage_unit:       initialData.mileage_unit       ?? "",
+      title: initialData.title ?? "",
+      description: initialData.description ?? "",
+      price: initialData.price ?? undefined,
+      negotiable: initialData.negotiable === 1 || initialData.negotiable === true,
+      condition: initialData.condition ?? undefined,
+      usage: initialData.usage ?? "",
+      mileage: initialData.mileage ?? undefined,
+      mileage_unit: initialData.mileage_unit ?? "",
       // API returns manufacturing_year as string "2000" — coerce to number
       manufacturing_year: initialData.manufacturing_year ? Number(initialData.manufacturing_year) : undefined,
       final_drive_system: initialData.final_drive_system ?? "",
-      wheels:             initialData.wheels             ?? "",
-      engine_size:        initialData.engine_size        ?? "",
-      warranty:           initialData.warranty           ?? "",
-      seller_type:        initialData.seller_type        ?? "",
-      address:            initialData.address            ?? "",
-      lat:                initialData.lat                ?? undefined,
-      lng:                initialData.lng                ?? undefined,
-      category_id:        categoryId,
-      subcategory_id:     subcategoryId,
-      brand_id:           brandId,
-      images:             [],
+      wheels: initialData.wheels ?? "",
+      engine_size: initialData.engine_size ?? "",
+      warranty: initialData.warranty ?? "",
+      seller_type: initialData.seller_type ?? "",
+      address: initialData.address ?? "",
+      lat: initialData.lat ? String(initialData.lat) : "",
+      lng: initialData.lng ? String(initialData.lng) : "",
+      category_id: categoryId,
+      subcategory_id: subcategoryId,
+      brand_id: brandId,
+      images: [],
     })
 
     setSelectedCategoryId(categoryId)
@@ -148,7 +186,7 @@ export function AdForm({
         isExisting: true,
       }))
       setUploadedImages(existing)
-      setValue("images", [new File([], "placeholder")] as any)
+      setValue("images", [new File([], "placeholder")])
     }
 
     setGuidelinesChecked(true)

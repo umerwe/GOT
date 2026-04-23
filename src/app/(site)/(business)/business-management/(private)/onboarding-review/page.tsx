@@ -95,7 +95,7 @@ export default function OnboardingReviewPage() {
               Edit Profile
             </Button>
             <a
-              href="https://new.getoutthere-app.com/login"
+              href="https://admin.braaap.ae/login"
               target="_blank"
               rel="noopener noreferrer"
             >

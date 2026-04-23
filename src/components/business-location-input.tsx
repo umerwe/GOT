@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Label } from "@/components/ui/label";
-import { MapPin, Search } from "lucide-react";
+import { MapPin } from "lucide-react";
 import GoogleMapsLoader from "@/utils/googleMapsLoader";
 import { BusinessDetailsValues } from "@/validations/business";
 import { toast } from "./ui/toast";
@@ -38,6 +38,38 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
     init();
   }, [mapsLoader]);
 
+  // --- Handle Geocoding with UAE Restriction ---
+  const handleReverseGeocode = async (lat: number, lng: number) => {
+    try {
+      const res = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY}`
+      );
+      const data = await res.json();
+      
+      if (data.status === "OK" && data.results[0]) {
+        // UAE ONLY CHECK
+        const isInUAE = data.results[0].address_components.some((component: any) => 
+          component.types.includes("country") && component.short_name === "AE"
+        );
+
+        if (!isInUAE) {
+          toast({ 
+            title: "Invalid Location", 
+            description: "Currently, we only support business locations within the UAE.", 
+            variant: "destructive" 
+          });
+          return;
+        }
+
+        const addr = data.results[0].formatted_address;
+        if (inputRef.current) inputRef.current.value = addr;
+        updateMap(lat, lng, addr);
+      }
+    } catch {
+      toast({ title: "Error", description: "Failed to get address", variant: "destructive" });
+    }
+  };
+
   const updateMap = useCallback((latitude: number, longitude: number, address: string) => {
     if (!mapRef.current || !window.google) return;
 
@@ -53,10 +85,18 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
         center: coords,
         zoom: 15,
       });
+
       markerInstance.current = new window.google.maps.Marker({
         position: coords,
         map: mapInstance.current,
         draggable: true,
+      });
+
+      // ✅ ADDED: Click listener to move pointer
+      mapInstance.current.addListener("click", (e: google.maps.MapMouseEvent) => {
+        if (e.latLng) {
+          handleReverseGeocode(e.latLng.lat(), e.latLng.lng());
+        }
       });
 
       markerInstance.current.addListener("dragend", async () => {
@@ -71,28 +111,13 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
     }
   }, [setValue]);
 
-  const handleReverseGeocode = async (lat: number, lng: number) => {
-    try {
-      const res = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY}`
-      );
-      const data = await res.json();
-      if (data.results[0]) {
-        const addr = data.results[0].formatted_address;
-        if (inputRef.current) inputRef.current.value = addr;
-        updateMap(lat, lng, addr);
-      }
-    } catch {
-      toast({ title: "Error", description: "Failed to get address", variant: "destructive" });
-    }
-  };
-
   useEffect(() => {
     if (!isMapReady || !inputRef.current || !window.google) return;
 
     const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, {
       types: ["geocode"],
       fields: ["formatted_address", "geometry"],
+      componentRestrictions: { country: "ae" },
     });
 
     autocomplete.addListener("place_changed", () => {
@@ -107,16 +132,12 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
     });
 
     const preventSubmit = (e: KeyboardEvent) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-      }
+      if (e.key === "Enter") e.preventDefault();
     };
     inputRef.current.addEventListener("keydown", preventSubmit);
 
     return () => {
-      if (inputRef.current) {
-        inputRef.current.removeEventListener("keydown", preventSubmit);
-      }
+      if (inputRef.current) inputRef.current.removeEventListener("keydown", preventSubmit);
       window.google?.maps?.event?.clearInstanceListeners(autocomplete);
     };
   }, [isMapReady, updateMap]);
@@ -154,23 +175,19 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
             autoComplete="off"
             className="flex h-[48px] w-full border-[#C7CBD2] border-[2px] bg-white pl-3 pr-12 text-sm outline-none focus:border-gray-500 disabled:opacity-50 transition-all"
           />
-          <div
-            className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center"
-          >
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
             <MapPin className="w-5 h-5 text-gray-400" />
           </div>
         </div>
         {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>}
       </div>
 
-      {/* Placeholder — shown when no location selected */}
       <div className={`w-full h-[300px] border-2 border-dashed border-gray-300 bg-gray-50 flex flex-col items-center justify-center text-center gap-2 ${hasLocation ? "hidden" : ""}`}>
         <MapPin className="w-8 h-8 text-gray-400" />
         <p className="text-sm text-gray-500 font-medium">No location selected</p>
         <p className="text-xs text-gray-400">Search for an address or use your current location</p>
       </div>
 
-      {/* Map — shown when location is selected */}
       <div
         ref={mapRef}
         className={`w-full h-[300px] border border-gray-200 bg-gray-50 rounded-md overflow-hidden ${hasLocation ? "" : "hidden"}`}

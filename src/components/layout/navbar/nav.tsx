@@ -12,11 +12,9 @@ import NavLinks from "./nav-links";
 import NavActions from "./nav-actions";
 import Logo from "@/components/logo";
 import { useGetProfile } from "@/hooks/useProfile";
-import { useGetConfig } from "@/hooks/useConfig";
 
 const Navbar = () => {
   const { data, isLoading } = useGetProfile();
-  const { data: configData } = useGetConfig();
   const router = useRouter();
 
   const token = useAppSelector((state) => state.auth.token);
