@@ -7,10 +7,8 @@ import SkeletonLoader from "@/common/skeleton-loader";
 import NotFoundWrapper from "@/common/not-found";
 import { Heart } from "lucide-react";
 import Image from "@/components/custom/MyImage";
-import { useAppSelector } from "@/store/hooks";
 import { useToggleWishlist, useGetWishlist } from "@/hooks/favorites/useWishlist";
 import { cn } from "@/lib/utils";
-import { toast } from "../ui/toast";
 import { useState } from "react";
 import LoginDialog from "@/components/dialogs/loginDialog";
 
@@ -23,6 +21,7 @@ interface GridCardProps {
   isSecond?: boolean;
   businessLogo?: string;
   isBusinessPage?: boolean;
+  isPrivate?: boolean;
 }
 
 export default function GridCard({
@@ -32,6 +31,7 @@ export default function GridCard({
   isAdsPage = false,
   businessLogo,
   isBusinessPage = false,
+  isPrivate = false,
 }: GridCardProps) {
   const { data: wishlistData } = useGetWishlist();
   const {mutate: toggleWishlistMutation,isPending} = useToggleWishlist();
@@ -113,16 +113,16 @@ export default function GridCard({
                         </h2>
                       </div>
 
-                      {businessLogo && (
-                        <div className="flex-shrink-0 w-[55px] h-[50px]">
+                      {(businessLogo || isPrivate) && (
+                        <Link href={`/business/${product?.seller?.id}`} className="flex-shrink-0 w-[50px] h-[50px]">
                           <Image
-                            src={businessLogo}
+                            src={product?.seller?.profile_image || "/fallback.png"}
                             alt="Business Logo"
-                            width={55}
-                            height={50}
-                            className="w-full h-full object-contain"
+                            width={256}
+                            height={256}
+                            className="w-full h-full object-cover"
                           />
-                        </div>
+                        </Link>
                       )}
                     </div>
                   </CardContent>

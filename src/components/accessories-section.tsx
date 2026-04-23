@@ -160,6 +160,7 @@ const AccessoriesSection = () => {
                         products={sellerProducts as Product[]}
                         isLoading={sellerLoading}
                         isSecond={true}
+                        isPrivate={true}
                     />
                 </div>
             </div>

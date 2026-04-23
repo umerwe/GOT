@@ -196,12 +196,9 @@ export const useMakeProductFeatured = () => {
   });
 };
 
-export const useGetFeaturedProducts = ({
-  page = 1,
-  per_page = 6,
-}) => {
+export const useGetFeaturedProducts = (filters?: ProductFilters) => {
   return useQuery({
-    queryKey: ["featuredProducts"],
-    queryFn: () => getFeaturedProducts({ page, per_page }),
+    queryKey: ["featuredProducts",filters],
+    queryFn: () => getFeaturedProducts(filters),
   });
 };

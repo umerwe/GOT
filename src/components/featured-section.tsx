@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useGetProducts } from "@/hooks/useProduct"
+import { useGetFeaturedProducts } from "@/hooks/useProduct"
 import ListCard from "./cards/list-card"
 import {
     Select,
@@ -15,7 +15,7 @@ export default function Features() {
     const [sortBy, setSortBy] = useState("price_low_to_high")
     const [limit, setLimit] = useState("4")
 
-    const { data, isLoading } = useGetProducts({
+    const { data, isLoading } = useGetFeaturedProducts({
         type: "motor_bike",
         per_page: parseInt(limit),
         sort: sortBy

@@ -28,32 +28,32 @@ const AllMotorcyclesSection = () => {
 
     return (
         <div className="scroll-smooth">
-                <div className="flex items-center justify-between mb-[10px]">
-                    <h2>All Motorcycles</h2>
+            <div className="flex items-center justify-between mb-[10px]">
+                <h2>All Motorcycles</h2>
 
-                    <div className="flex items-center gap-2">
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            className="rounded-full"
-                            onClick={() => handlePaginate(-1)}
-                            disabled={page <= 1 || isLoading}
-                        >
-                            <ChevronLeft className="h-4 w-4" />
-                        </Button>
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            className="rounded-full"
-                            onClick={() => handlePaginate(1)}
-                            disabled={!pagination || page >= pagination.totalPages || isLoading}
-                        >
-                            <ChevronRight className="h-4 w-4" />
-                        </Button>
-                    </div>
+                <div className="flex items-center gap-2">
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        className="rounded-full"
+                        onClick={() => handlePaginate(-1)}
+                        disabled={page <= 1 || isLoading}
+                    >
+                        <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        className="rounded-full"
+                        onClick={() => handlePaginate(1)}
+                        disabled={!pagination || page >= pagination.totalPages || isLoading}
+                    >
+                        <ChevronRight className="h-4 w-4" />
+                    </Button>
                 </div>
+            </div>
 
-                <GridCard products={motorcyclesData} isLoading={isLoading} isSecond={true} />
+            <GridCard products={motorcyclesData} isLoading={isLoading} isSecond={true} isPrivate={true} />
         </div>
     )
 }

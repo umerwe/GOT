@@ -2,7 +2,7 @@
 import { useGetBrands } from "@/hooks/useBrand"
 import { useGetCategories } from "@/hooks/useCategories"
 import { useGetBusinessProducts } from "@/hooks/useProduct"
-import { useParams, useRouter, useSearchParams } from "next/navigation" // Added useSearchParams
+import { useParams, useRouter, useSearchParams } from "next/navigation"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import Pagination from "@/components/ui/pagination"
 import type {
@@ -18,13 +18,14 @@ import FilterSidebar from "@/components/ads/filter-sidebar"
 import PageHeader from "@/components/ads/page-header"
 import GridCard from "@/components/cards/grid-card"
 import ListCard from "@/components/cards/list-card"
-import { ChevronLeft, ChevronDownIcon, SlidersHorizontal } from "lucide-react"
+import { ChevronLeft, ChevronDownIcon, SlidersHorizontal, ChevronRight } from "lucide-react"
 import { sellerData } from "@/constants/category"
 import Link from 'next/link'
 import { Business } from "@/types/business"
 import MyImage from "@/components/custom/MyImage"
 import { BiSolidGrid } from "react-icons/bi"
 import { BsFilterLeft } from "react-icons/bs"
+import { Button } from "@/components/ui/button"
 
 export default function CategoryLayout() {
   const { category } = useParams()
@@ -40,12 +41,22 @@ export default function CategoryLayout() {
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(12)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-
   const [sortBy, setSortBy] = useState("price_low_to_high");
 
+  // Client-side pagination map for each business's products (6 per page)
+  const [paginationMap, setPaginationMap] = useState<Record<number | string, number>>({});
+
+  const handleBusinessPaginate = (businessId: number, dir: number) => {
+    setPaginationMap((prev) => ({
+      ...prev,
+      [businessId]: Math.max(0, (prev[businessId] || 0) + (dir * 6))
+    }));
+  };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
+    // Reset per-business pagination when server page changes
+    setPaginationMap({})
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
@@ -76,12 +87,10 @@ export default function CategoryLayout() {
     if (selectedFilters.min_price >= 0) f.min_price = selectedFilters.min_price.toString()
     if (selectedFilters.max_price >= 0) f.max_price = selectedFilters.max_price.toString()
 
-    // Ensure these are included in the object
     f.sort = sortBy;
     f.page = currentPage;
     f.per_page = itemsPerPage;
 
-    // Add params from SearchBar
     if (stateParam) f.state = stateParam
     if (searchParam) f.search = searchParam
 
@@ -148,7 +157,7 @@ export default function CategoryLayout() {
             value={sortBy}
             onChange={(e) => {
               setSortBy(e.target.value);
-              setCurrentPage(1); // Reset pagination on sort change
+              setCurrentPage(1);
             }}
             className="appearance-none border-none bg-transparent focus:ring-0 cursor-pointer pr-5 p-0 text-[13px] font-semibold text-black"
           >
@@ -167,7 +176,7 @@ export default function CategoryLayout() {
             value={itemsPerPage}
             onChange={(e) => {
               setItemsPerPage(Number(e.target.value));
-              setCurrentPage(1); // Reset pagination on limit change
+              setCurrentPage(1);
             }}
             className="appearance-none border-none bg-transparent font-semibold text-black focus:ring-0 cursor-pointer pr-5 p-0 text-[13px]"
           >
@@ -231,12 +240,6 @@ export default function CategoryLayout() {
             </button>
           </div>
         ))}
-        {/* <button
-          onClick={clearAllFilters}
-          className="text-[12px] font-bold text-red-500 hover:underline ml-2"
-        >
-          Clear All
-        </button> */}
       </div>
     );
   };
@@ -311,30 +314,60 @@ export default function CategoryLayout() {
             </div>
           ) : !isNotFound ? (
             <div className="space-y-[30px]">
-              {businesss.map((business: Business) => (
-                <div key={business.id} className='bg-[#F5F5F5] pt-[19px] px-[14px] pb-[30px] rounded-none'>
-                  <Link href={`/business/${business.id}`} className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-[23px]">
-                    <div className="flex items-center gap-3">
-                      <div className="relative h-[56px] w-[56px]">
-                        <MyImage src={business.logo || "/default-avatar.png"} alt={business.name} fill className="rounded-full object-contain bg-white" />
-                        <div className="absolute bottom-1 right-0 bg-[#E9A426] rounded-full p-0.5 border-2 border-white">
-                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-black"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        </div>
-                      </div>
-                      <div>
-                        <h1 className="text-lg font-bold text-black capitalize">{business.name}</h1>
-                        <p className="text-[#636E7E] text-sm">{business.address}</p>
-                      </div>
-                    </div>
-                  </Link>
+              {businesss.map((business: Business) => {
+                const currentIndex = paginationMap[business.id] || 0;
+                const totalProducts = business.products?.length || 0;
+                const visibleProducts = business.products?.slice(currentIndex, currentIndex + 6) || [];
 
-                  {viewMode === 'grid' ? (
-                    <GridCard products={business.products as Product[]} isLoading={false} count={6} isAdsPage={true} />
-                  ) : (
-                    <ListCard products={business.products as Product[]} isLoading={false} count={4} />
-                  )}
-                </div>
-              ))}
+                return (
+                  <div key={business.id} className='bg-[#F5F5F5] pt-[19px] px-[14px] pb-[30px] rounded-none'>
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-[23px]">
+                      <Link href={`/business/${business.id}`} className="flex items-center gap-3">
+                        <div className="relative h-[56px] w-[56px]">
+                          <MyImage src={business.logo || "/default-avatar.png"} alt={business.name} fill className="rounded-full object-contain bg-white" />
+                          <div className="absolute bottom-1 right-0 bg-[#E9A426] rounded-full p-0.5 border-2 border-white">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-black"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                          </div>
+                        </div>
+                        <div>
+                          <h1 className="text-lg font-bold text-black capitalize">{business.name}</h1>
+                          <p className="text-[#636E7E] text-sm">{business.address}</p>
+                        </div>
+                      </Link>
+
+                      {/* Client-side pagination arrows for this business's products */}
+                      {totalProducts > 6 && (
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="rounded-full h-8 w-8 bg-white"
+                            onClick={() => handleBusinessPaginate(business.id, -1)}
+                            disabled={currentIndex === 0}
+                          >
+                            <ChevronLeft className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="rounded-full h-8 w-8 bg-white"
+                            onClick={() => handleBusinessPaginate(business.id, 1)}
+                            disabled={currentIndex + 6 >= totalProducts}
+                          >
+                            <ChevronRight className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+
+                    {viewMode === 'grid' ? (
+                      <GridCard products={visibleProducts as Product[]} isLoading={false} count={6} isAdsPage={true} />
+                    ) : (
+                      <ListCard products={visibleProducts as Product[]} isLoading={false} count={4} />
+                    )}
+                  </div>
+                );
+              })}
               <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
             </div>
           ) : (

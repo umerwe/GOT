@@ -111,13 +111,13 @@ export default function ListCard({
                                         </h2>
                                     </div>
 
-                                    {(isHome && product.brand?.image) && (
+                                    {(isHome && product.seller?.profile_image) && (
                                         <div className="flex-shrink-0 mt-[67px] w-[55px] h-[50px]">
                                             <Image
-                                                src={product.brand.image}
-                                                alt={product.brand.title || "Brand"}
-                                                width={55}
-                                                height={50}
+                                                src={product.seller.profile_image}
+                                                alt={product.seller.name || "Seller"}
+                                                width={256}
+                                                height={256}
                                                 className="object-cover w-full h-full"
                                             />
                                         </div>

@@ -350,18 +350,6 @@ export function AdForm({
         <div className="space-y-[16.5px]">
           <Input id="title" label="Title" {...register("title")} required error={errors.title?.message} disabled={isPending} />
 
-          {!isAccessories && (
-            <SelectField
-              id="brand_id"
-              label="Brand"
-              options={brandsData.map((brand) => ({ value: brand.id, label: brand.title }))}
-              {...register("brand_id", { setValueAs: (v) => v === "" ? undefined : Number(v) })}
-              value={watch("brand_id") ?? ""}
-              disabled={isBrandsLoading || isPending}
-              error={errors.brand_id?.message}
-            />
-          )}
-
           <SelectField
             id="category_id"
             label="Category"
@@ -382,6 +370,18 @@ export function AdForm({
             disabled={!selectedCategoryId || subcategories.length === 0 || isPending}
             error={errors.subcategory_id?.message}
           />
+
+           {!isAccessories && (
+            <SelectField
+              id="brand_id"
+              label="Brand"
+              options={brandsData.map((brand) => ({ value: brand.id, label: brand.title }))}
+              {...register("brand_id", { setValueAs: (v) => v === "" ? undefined : Number(v) })}
+              value={watch("brand_id") ?? ""}
+              disabled={isBrandsLoading || isPending}
+              error={errors.brand_id?.message}
+            />
+          )}
 
           <SelectField
             id="condition"
