@@ -184,7 +184,7 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
                   {/* Featured Status Column */}
                   <div className="col-span-2">
                     <span className="text-sm font-normal text-[#6A7282]">
-                      {ad.is_featured === 0 ? "False" : "True"}
+                      {ad.is_featured === 0 ? "No" : "Yes"}
                     </span>
                   </div>
 
@@ -193,7 +193,7 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
                     onClick={(e) => e.stopPropagation()}
                     className="col-span-2 flex items-center gap-2">
                     <Button
-                      className="h-[32px] w-[138.96875px] rounded-none text-[13px] font-medium bg-white border border-gray-200 text-[#0A0A0A] hover:bg-gray-50"
+                      className="h-[32px] w-[138.96875px] rounded-none text-[13px] font-medium bg-white border border-gray-200 text-[#0A0A0A] hover:bg-gray-50 hover:text-black"
                       onClick={(e) => {
                         e.stopPropagation();
                         editAd(ad.id as number, ad);

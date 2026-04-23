@@ -22,6 +22,7 @@ const menuItems = [
       { name: "All Ads", href: "/dashboard/status/all" },
       { name: "Pending", href: "/dashboard/status/pending" },
       { name: "Approved", href: "/dashboard/status/approved" },
+      { name: "In Active", href: "/dashboard/status/inactive" },
       { name: "Cancelled", href: "/dashboard/status/cancelled" },
       { name: "Expired", href: "/dashboard/status/expired" },
     ],

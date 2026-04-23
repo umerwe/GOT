@@ -105,7 +105,7 @@ export default function CheckoutPage() {
   const productId = searchParams.get("product_id");
   const FEATURE_AD_FEE = 50;
 
-  const stripePublishableKey = data?.stripe?.publishable_key;
+  const stripePublishableKey = data?.test_stripe?.test_publishable_key;
   const stripePromise = stripePublishableKey ? loadStripe(stripePublishableKey) : null;
 
   const cartItems = useAppSelector((state) => state.cart.items);

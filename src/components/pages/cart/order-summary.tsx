@@ -30,7 +30,7 @@ const OrderSummary = ({
     return (
         <div className="lg:col-span-1">
             <div className="bg-[#F6F6F6] p-[20px] space-y-[20px]">
-                <h2 className="text-[20px] text-gray-900 pb-[10px] border-b border-gray-900">Order summary</h2>
+                <h2 className="text-[20px] text-gray-900 pb-[10px] border-b border-gray-900">{isFeatureAd ? "Total" : "Order summary"}</h2>
 
                 {
                     !isFeatureAd && (

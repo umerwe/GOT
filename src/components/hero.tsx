@@ -34,7 +34,7 @@ const HeroSection = () => {
   </div>
 
   {/* Search Bar */}
-  <div className="absolute bottom-18 left-1/2 -translate-x-1/2 translate-y-1/2 w-full max-w-4xl px-2 md:px-4 z-20">
+  <div className="absolute bottom-18 left-1/2 -translate-x-1/2 translate-y-23 w-full max-w-4xl px-2 md:px-4 z-20">
     <SearchBar />
   </div>
 </div>

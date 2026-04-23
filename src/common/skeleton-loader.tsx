@@ -145,39 +145,44 @@ const SkeletonLoader = ({ type, count = 4, isAdsPage = false }: SkeletonLoaderPr
                     {Array.from({ length: count }).map((_, i) => (
                         <div
                             key={i}
-                            className="grid grid-cols-1 sm:grid-cols-12 gap-4 p-4 items-center animate-pulse"
+                            className="grid grid-cols-12 gap-4 p-4 items-center animate-pulse border-b border-gray-50"
                         >
-                            {/* 1. Ads Column (Matches your first column exactly) */}
-                            <div className="col-span-1 sm:col-span-4 flex items-start sm:items-center gap-3">
-                                <Skeleton className="w-[60px] h-[60px] bg-gray-200 flex-shrink-0 rounded-none border border-gray-100" />
-                                <div className="min-w-0 space-y-1">
-                                    <Skeleton className="h-[24px] w-[180px] bg-gray-200" /> {/* Title */}
-                                    <Skeleton className="h-[20px] w-[80px] bg-gray-100" />  {/* Price */}
+                            {/* 1. Ads Column (col-span-3) */}
+                            <div className="col-span-3 flex items-center gap-3">
+                                <Skeleton className="w-[60px] h-[60px] bg-gray-200 flex-shrink-0 border border-gray-100" />
+                                <div className="min-w-0 space-y-2">
+                                    <Skeleton className="h-[14px] w-[140px] bg-gray-200" /> {/* Title */}
+                                    <Skeleton className="h-[12px] w-[70px] bg-gray-100" />  {/* Price */}
                                 </div>
                             </div>
 
-                            {/* 2. Category Column (Matches pl-16 and -mt-2) */}
-                            <div className="col-span-1 sm:col-span-2 pl-16 sm:pl-0 -mt-2 sm:mt-0 space-y-1">
-                                <Skeleton className="h-[20px] w-[100px] bg-gray-200" />
-                                <Skeleton className="h-[20px] w-[60px] bg-gray-100" />
+                            {/* 2. Category Column (col-span-2) */}
+                            <div className="col-span-2 space-y-2">
+                                <Skeleton className="h-[14px] w-[100px] bg-gray-200" />
+                                <Skeleton className="h-[12px] w-[60px] bg-gray-100" />
                             </div>
 
-                            {/* 3. Ad Status Column */}
-                            <div className="col-span-1 sm:col-span-2 pl-16 sm:pl-0 -mt-2 sm:mt-0">
+                            {/* 3. Ad Status Column (col-span-2) */}
+                            <div className="col-span-2">
                                 <div className="flex items-center gap-2">
                                     <Skeleton className="w-2 h-2 rounded-full bg-gray-200" />
-                                    <Skeleton className="h-[20px] w-[60px] bg-gray-100" />
+                                    <Skeleton className="h-[14px] w-[60px] bg-gray-100" />
                                 </div>
                             </div>
 
-                            {/* 4. Actions Column (Matches Button width w-[138.96px]) */}
-                            <div className="col-span-1 sm:col-span-2 flex items-center gap-2">
-                                <Skeleton className="h-[32px] w-[138.96px] rounded-none bg-gray-200" />
+                            {/* 4. Featured Status Column (col-span-2) */}
+                            <div className="col-span-2">
+                                <Skeleton className="h-[14px] w-[30px] bg-gray-100" />
                             </div>
 
-                            {/* 5. More Icon Column */}
-                            <div className="col-span-1 sm:col-span-2 flex items-center justify-end">
-                                <Skeleton className="h-8 w-8 bg-gray-100 rounded-none" />
+                            {/* 5. Edit Button Column (col-span-2) */}
+                            <div className="col-span-2">
+                                <Skeleton className="h-[32px] w-[138.97px] rounded-none bg-gray-200" />
+                            </div>
+
+                            {/* 6. More Icon Column (col-span-1) */}
+                            <div className="col-span-1 flex justify-end">
+                                <Skeleton className="h-8 w-8 bg-gray-100 rounded-md" />
                             </div>
                         </div>
                     ))}
