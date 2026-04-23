@@ -3,7 +3,7 @@
 import { PostAdFormData } from "@/validations/ads"
 import { useEffect, useRef, useState, useCallback } from "react"
 import { Label } from "@/components/ui/label"
-import { UseFormSetValue } from "react-hook-form"
+import { UseFormSetValue, UseFormRegister, FieldErrors } from "react-hook-form"
 import { MapPin } from "lucide-react"
 import { toast } from "./toast"
 import GoogleMapsLoader from "@/utils/googleMapsLoader"
@@ -12,6 +12,7 @@ type SetValueType = UseFormSetValue<PostAdFormData>
 
 export function LocationInput({
   setValue,
+  register,
   errors,
   isPending,
   initialAddress,
@@ -19,8 +20,8 @@ export function LocationInput({
   initialLng,
 }: {
   setValue: SetValueType
-  register: any // Kept as any to avoid complex type issues with register return
-  errors: any
+  register: UseFormRegister<PostAdFormData>
+  errors: FieldErrors<PostAdFormData>
   isPending: boolean
   initialAddress?: string
   initialLat?: string | number
@@ -46,7 +47,7 @@ export function LocationInput({
 
       if (data.status === "OK" && data.results.length > 0) {
         // --- UAE ONLY CHECK ---
-        const isInUAE = data.results[0].address_components.some((component: any) => 
+        const isInUAE = data.results[0].address_components.some((component: google.maps.GeocoderAddressComponent) => 
           component.types.includes("country") && component.short_name === "AE"
         )
 
@@ -185,7 +186,6 @@ export function LocationInput({
     setIsLoading(true)
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        // Validation happens inside handleReverseGeocode
         handleReverseGeocode(pos.coords.latitude, pos.coords.longitude)
         setIsLoading(false)
       },
@@ -238,7 +238,7 @@ export function LocationInput({
         type="button"
         onClick={handleUseCurrentLocation}
         disabled={isLoading || isPending}
-        className="w-full text-sm bg-black text-white h-[48px] font-normal hover:bg-gray-900 disabled:opacity-50 flex items-center justify-center gap-2 mt-[18px]"
+        className="w-full text-sm bg-black text-white h-[48px] font-normal cursor-pointer hover:bg-gray-900 disabled:opacity-50 flex items-center justify-center gap-2 mt-[18px]"
       >
         {isLoading ? "Getting Location..." : "Use Current Location"}
       </button>

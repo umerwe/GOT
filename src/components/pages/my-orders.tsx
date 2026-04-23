@@ -1,15 +1,8 @@
 "use client"
 import { useGetOrderList } from "@/hooks/useOrder";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 import Image from "@/components/custom/MyImage";
 import { cn } from "@/lib/utils";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import Pagination from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Order } from "@/types/order";
@@ -17,29 +10,13 @@ import Link from "next/link";
 
 export default function MyOrdersPage() {
     const [currentPage, setCurrentPage] = useState(1);
-    const [sortBy, setSortBy] = useState<string>("newest");
 
     const { data: orderResponse, isLoading } = useGetOrderList(currentPage);
 
     const rawOrders = orderResponse?.data ?? [];
+    console.log(rawOrders)
     const totalPages = orderResponse?.pagination?.totalPages || 1;
     const itemsPerPage = orderResponse?.pagination?.per_page || 10;
-
-    const sortedOrders = useMemo(() => {
-        const result = [...rawOrders];
-
-        result.sort((a, b) => {
-            if (sortBy === "newest") {
-                return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-            }
-            if (sortBy === "oldest") {
-                return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
-            }
-            return 0;
-        });
-
-        return result;
-    }, [rawOrders, sortBy]);
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -52,16 +29,6 @@ export default function MyOrdersPage() {
                 <h2 className="text-[20px] capitalize font-medium text-black">
                     My Orders
                 </h2>
-
-                {/* <Select value={sortBy} onValueChange={(value) => setSortBy(value)}>
-                    <SelectTrigger className="w-[156px] h-[36px] text-[14px] font-normal bg-white border-[#E5E7EB] text-[#0E1620]">
-                        <SelectValue placeholder="Sort by" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="newest">Newest</SelectItem>
-                        <SelectItem value="oldest">Oldest</SelectItem>
-                    </SelectContent>
-                </Select> */}
             </div>
 
             <div className="bg-white border border-gray-200 overflow-x-auto">
@@ -93,8 +60,8 @@ export default function MyOrdersPage() {
                                     <div className="col-span-2"><Skeleton className="h-4 w-20" /></div>
                                 </div>
                             ))
-                        ) : sortedOrders.length > 0 ? (
-                            sortedOrders.map((order: Order, index: number) => (
+                        ) : rawOrders.length > 0 ? (
+                            rawOrders.map((order: Order, index: number) => (
                                 <Link
                                     key={order.id}
                                     href={`/listing/${order.order_details[0]?.product?.id}`}

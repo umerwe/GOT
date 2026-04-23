@@ -90,6 +90,7 @@ interface ProductFilters {
   page?: number
   per_page?: number
   sort?: string
+  user_type?: string
 }
 
 interface FilterOption {

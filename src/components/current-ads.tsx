@@ -25,7 +25,6 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog"
-import { useForm } from "react-hook-form"
 import { capitalizeWords } from "@/utils/capitalizeWords"
 import SkeletonLoader from "@/common/skeleton-loader"
 import Pagination from "@/components/ui/pagination"
@@ -37,7 +36,8 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
   const [currentPage, setCurrentPage] = useState(1)
 
   // API Hooks
-  const { data: productsResponse, isLoading } = useGetUserProducts(currentPage, selectedStatus)
+  const { data: productsResponse, isLoading } = useGetUserProducts(currentPage, selectedStatus);
+  
   const deleteProduct = useDeleteUserProducts()
   const activateProduct = useActivateProduct()
   const deactivateProduct = useDeactivateProduct()

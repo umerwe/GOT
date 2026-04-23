@@ -3,13 +3,13 @@
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useGetProducts } from "@/hooks/useProduct";
+import { useGetFeaturedProducts } from "@/hooks/useProduct";
 import GridCard from "./cards/grid-card";
-
+  
 const FeauredAdsSection = () => {
   const [page, setPage] = useState(1);
-
-  const { data, isLoading } = useGetProducts({
+  
+  const { data, isLoading } = useGetFeaturedProducts({
     page: page,
     per_page: 6
   });
@@ -29,7 +29,6 @@ const FeauredAdsSection = () => {
     <div className="scroll-smooth border-b-3 border-[#EBEBEB] pb-[45px]">
       <div className="flex items-center justify-between mb-[10px]">
         <h2>Featured Ads</h2>
-        {/* Hide pagination on mobile, show on sm and up */}
         {!isLoading && products.length > 0 && (
           <div className="flex items-center gap-2">
             <Button

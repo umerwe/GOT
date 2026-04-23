@@ -87,3 +87,21 @@ export const makeProductFeatured = async (productId: string) => {
   const { data } = await api.post("/make-product-featured", { product_id: productId });
   return data;
 };
+
+export const getSellerProducts = async (filters: ProductFilters = {}) => {
+  const { data } = await api.get("/seller-products", {
+    params: {
+      ...filters
+    }
+  })
+  return data
+}
+
+export const getFeaturedProducts = async (filters: ProductFilters = {}) => {
+  const { data } = await api.get("/featured-products", {
+    params: {
+      ...filters
+    }
+  })
+  return data
+};

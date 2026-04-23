@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getProducts, getUserProducts, getProduct, addProduct, updateUserProduct, deleteUserProduct, getBusinessProducts, getBusinessProduct, activateProduct, deactivateProduct, makeProductFeatured } from "@/services/products";
+import { getProducts, getUserProducts, getProduct, addProduct, updateUserProduct, deleteUserProduct, getBusinessProducts, getBusinessProduct, activateProduct, deactivateProduct, makeProductFeatured, getSellerProducts, getFeaturedProducts } from "@/services/products";
 import { toast } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
@@ -22,6 +22,17 @@ export const useGetBusinessProducts = (
   return useQuery({
     queryKey: ["businessProducts", filters],
     queryFn: () => getBusinessProducts(filters),
+    enabled: options?.enabled ?? true,
+  })
+}
+
+export const useGetSellerProducts = (
+  filters?: ProductFilters,
+  options?: { enabled?: boolean }
+) => {
+  return useQuery({
+    queryKey: ["sellerProducts", filters],
+    queryFn: () => getSellerProducts(filters),
     enabled: options?.enabled ?? true,
   })
 }
@@ -182,5 +193,15 @@ export const useMakeProductFeatured = () => {
         variant: "destructive",
       });
     },
+  });
+};
+
+export const useGetFeaturedProducts = ({
+  page = 1,
+  per_page = 6,
+}) => {
+  return useQuery({
+    queryKey: ["featuredProducts"],
+    queryFn: () => getFeaturedProducts({ page, per_page }),
   });
 };

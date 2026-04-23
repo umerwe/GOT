@@ -13,8 +13,8 @@ export default function EditAdPage() {
   const { data: product, isLoading: isProductLoading } = useGetProduct(id as string)
   const { data: categories = [], isLoading: isCategoriesLoading } = useGetCategories()
   const { data: brandsData = [], isLoading: isBrandsLoading } = useGetBrands()
-  const { mutate: updateProduct, isPending: isUpdating } = useUpdateUserProduct()
-  console.log(product)
+  const { mutate: updateProduct, isPending: isUpdating } = useUpdateUserProduct();
+  
   const handleUpdate = (formData: FormData) => {
     updateProduct({ id: Number(id), formData }, {
       onSuccess: () => {

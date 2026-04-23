@@ -68,7 +68,7 @@ export default function CartCard({
     <div className="relative flex flex-col sm:flex-row w-full gap-5 sm:gap-[30px] py-5 pr-0 sm:pr-5 border-b border-gray-100 bg-white">
       <button
         onClick={handleRemove}
-        className="absolute right-2 top-7 sm:right-5 sm:top-5 text-gray-400 hover:text-red-500 transition-colors z-10"
+        className="absolute right-2 top-7 sm:right-5 sm:top-5 text-gray-400 hover:text-red-500 transition-colors z-10 cursor-pointer"
       >
         <X size={20} />
       </button>
@@ -107,7 +107,7 @@ export default function CartCard({
             <div className="flex items-center">
               <button
                 onClick={() => onQuantityChange?.(id, quantity - 1)}
-                className="w-[30px] h-[30px] border border-[#C5A353] flex items-center justify-center"
+                className="w-[30px] h-[30px] border border-[#C5A353] flex items-center justify-center cursor-pointer"
               >
                 <Minus size={18} />
               </button>
@@ -116,7 +116,7 @@ export default function CartCard({
               </div>
               <button
                 onClick={() => onQuantityChange?.(id, quantity + 1)}
-                className="w-[30px] h-[30px] border border-[#C5A353] flex items-center justify-center"
+                className="w-[30px] h-[30px] border border-[#C5A353] flex items-center justify-center cursor-pointer"
               >
                 <Plus size={18} />
               </button>
@@ -124,7 +124,7 @@ export default function CartCard({
           ) : (
             <button
               onClick={handleAddToCartClick}
-              className="flex items-center gap-2 text-sm font-bold text-[#E9A426] hover:underline"
+              className="flex items-center gap-2 text-sm font-bold text-[#E9A426] hover:underline cursor-pointer" 
             >
               <ShoppingCart size={18} />
               Add to Cart

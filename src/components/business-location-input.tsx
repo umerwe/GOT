@@ -47,8 +47,10 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
       const data = await res.json();
       
       if (data.status === "OK" && data.results[0]) {
-        // UAE ONLY CHECK
-        const isInUAE = data.results[0].address_components.some((component: any) => 
+        const firstResult: google.maps.GeocoderResult = data.results[0];
+
+        // UAE ONLY CHECK - Correctly typed component
+        const isInUAE = firstResult.address_components.some((component: google.maps.GeocoderAddressComponent) => 
           component.types.includes("country") && component.short_name === "AE"
         );
 
@@ -61,7 +63,7 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
           return;
         }
 
-        const addr = data.results[0].formatted_address;
+        const addr = firstResult.formatted_address;
         if (inputRef.current) inputRef.current.value = addr;
         updateMap(lat, lng, addr);
       }
@@ -78,7 +80,7 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
     setValue("longitude", longitude);
     setHasLocation(true);
 
-    const coords = { lat: latitude, lng: longitude };
+    const coords: google.maps.LatLngLiteral = { lat: latitude, lng: longitude };
 
     if (!mapInstance.current) {
       mapInstance.current = new window.google.maps.Map(mapRef.current, {
@@ -92,7 +94,7 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
         draggable: true,
       });
 
-      // ✅ ADDED: Click listener to move pointer
+      // Click listener to move pointer
       mapInstance.current.addListener("click", (e: google.maps.MapMouseEvent) => {
         if (e.latLng) {
           handleReverseGeocode(e.latLng.lat(), e.latLng.lng());
@@ -149,7 +151,7 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
     }
     setIsLoading(true);
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
+      (pos: GeolocationPosition) => {
         handleReverseGeocode(pos.coords.latitude, pos.coords.longitude);
         setIsLoading(false);
       },
@@ -197,10 +199,10 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
         type="button"
         onClick={handleUseCurrentLocation}
         disabled={isLoading || isPending}
-        className="w-full bg-black text-white h-[48px] text-sm font-semibold hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+        className="w-full bg-black text-white h-[48px] text-sm font-semibold cursor-pointer hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
       >
         {isLoading ? (
-          <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
+          <div className="animate-spin h-4 w-4 border-2 border-white  border-t-transparent rounded-full" />
         ) : null}
         {isLoading ? "Locating..." : "Use Current Location"}
       </button>
