@@ -6,7 +6,12 @@ const MyAds = () => {
     const params = useParams()
     const statusName = params.name as string
 
-    const displayTitle = statusName === 'all' ? 'All Ads' : statusName
+    const displayTitle =
+        statusName === 'all'
+            ? 'All Ads'
+            : statusName === 'inactive'
+                ? 'In Active'
+                : statusName;
 
     return (
         <div>
