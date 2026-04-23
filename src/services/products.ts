@@ -82,3 +82,8 @@ export const deactivateProduct = async (id: string) => {
   const { data } = await api.post(`/deactivate-product/${id}`);
   return data.data;
 };
+
+export const makeProductFeatured = async (productId: string) => {
+  const { data } = await api.post("/make-product-featured", { product_id: productId });
+  return data;
+};

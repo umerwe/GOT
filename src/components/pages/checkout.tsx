@@ -133,7 +133,7 @@ export default function CheckoutPage() {
             <Elements stripe={stripePromise}>
               <div className="flex flex-col lg:flex-row gap-[30px] items-start justify-center">
                 <div className="w-full lg:w-[490px] shrink-0">
-                  <PaymentForm productId={productId || undefined} />
+                  <PaymentForm productId={productId || undefined} cartItems={cartItems} subTotal={subTotal} />
                 </div>
                 <div className="w-full lg:w-[380px] shrink-0 lg:mt-[30px]">
                   <OrderSummary

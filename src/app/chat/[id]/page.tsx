@@ -18,7 +18,10 @@ const ConversationPage = () => {
   const { data: profileData } = useGetProfile()
 
   const { id } = useParams();
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
+
+  const productId = searchParams.get("product_id")
+
   const pathname = usePathname()
   const router = useRouter()
   const conversationId = searchParams.get("conversation_id")
@@ -175,6 +178,7 @@ const ConversationPage = () => {
           <div className="border-t border-gray-200 flex-shrink-0">
             <MessageForm
               receiverId={id as string}
+              productId={productId ? Number(productId) : undefined}
               onMessageSent={handleMessageSent}
             />
           </div>

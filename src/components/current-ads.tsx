@@ -8,7 +8,6 @@ import { useState, useEffect } from "react"
 import {
   useGetUserProducts,
   useDeleteUserProducts,
-  useUpdateUserProduct,
   useActivateProduct,
   useDeactivateProduct
 } from "@/hooks/useProduct"
@@ -32,7 +31,6 @@ import SkeletonLoader from "@/common/skeleton-loader"
 import Pagination from "@/components/ui/pagination"
 import { getStatusColor } from "@/utils/getStatusColor"
 import { DeleteProductDialog } from "./dialogs/delete-product"
-import { EditProductDialog } from "./dialogs/edit-product"
 
 export default function AdsTable({ selectedStatus, type }: { selectedStatus?: string, type?: string }) {
   const router = useRouter()
@@ -41,35 +39,21 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
   // API Hooks
   const { data: productsResponse, isLoading } = useGetUserProducts(currentPage, selectedStatus)
   const deleteProduct = useDeleteUserProducts()
-  const updateProduct = useUpdateUserProduct()
   const activateProduct = useActivateProduct()
   const deactivateProduct = useDeactivateProduct()
 
   // Dialog States
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
-  const [isEditProductOpen, setIsEditProductOpen] = useState(false)
   const [isFeatureOpen, setIsFeatureOpen] = useState(false)
 
   // Selection States
-  const [editProductId, setEditProductId] = useState<number | null>(null)
   const [deleteId, setDeleteId] = useState<number | null>(null)
-  const [featureProductId, setFeatureProductId] = useState<number | null>(null)
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null)
-
-  const { reset: resetProduct } = useForm<EditProductForm>({
-    defaultValues: { title: "", price: "", product_image: null },
-  })
+  const [featureProductId, setFeatureProductId] = useState<number | null>(null);
 
   const products = productsResponse?.data || []
   const totalPages = productsResponse?.pagination?.totalPages ?? 1
 
-  const viewAd = (id: number) => router.push(`/listing/${id}`)
-
-  const editAd = (id: number, ad: Product) => {
-    setEditProductId(id)
-    setEditingProduct(ad)
-    setIsEditProductOpen(true)
-  }
+  const viewAd = (id: number) => router.push(`/listing/${id}`);
 
   const handleDelete = () => {
     if (!deleteId) return
@@ -90,25 +74,6 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
 
   const handleActivateProduct = async (id: string) => await activateProduct.mutateAsync(id)
   const handleDeactivateProduct = async (id: string) => await deactivateProduct.mutateAsync(id)
-
-  const onProductSubmit = async (values: EditProductForm) => {
-    if (!editProductId) return
-    const formData = new FormData()
-    formData.append("title", values.title)
-    formData.append("price", values.price)
-    if (values.product_image && values.product_image[0]) {
-      formData.append("product_images[0]", values.product_image[0])
-    }
-    updateProduct.mutate(
-      { id: editProductId, formData },
-      {
-        onSuccess: () => {
-          setIsEditProductOpen(false)
-          resetProduct({ title: "", price: "", product_image: null })
-        },
-      },
-    )
-  }
 
   useEffect(() => {
     setCurrentPage(1)
@@ -194,10 +159,7 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
                     className="col-span-2 flex items-center gap-2">
                     <Button
                       className="h-[32px] w-[138.96875px] rounded-none text-[13px] font-medium bg-white border border-gray-200 text-[#0A0A0A] hover:bg-gray-50 hover:text-black"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        editAd(ad.id as number, ad);
-                      }}
+                      onClick={() => router.push(`/dashboard/product/edit/${ad.id}`)}
                     >
                       Edit Post
                     </Button>
@@ -221,14 +183,18 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
                           <Eye className="w-4 h-4" /> View Ad
                         </DropdownMenuItem>
 
-                        <DropdownMenuItem
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openFeatureDialog(ad.id as number);
-                          }}
-                        >
-                          <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" /> Feature Ad
-                        </DropdownMenuItem>
+                        {
+                          ad.is_featured === 0 && (
+                            <DropdownMenuItem
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                openFeatureDialog(ad.id as number);
+                              }}
+                            >
+                              <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" /> Feature Ad
+                            </DropdownMenuItem>
+                          )
+                        }
 
                         {ad.status === 'approved' && (
                           <DropdownMenuItem
@@ -241,7 +207,7 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
                           </DropdownMenuItem>
                         )}
 
-                        {ad.status === 'expired' && (
+                        {(ad.status === 'expired' || ad.status === 'inactive') && (
                           <DropdownMenuItem
                             onClick={(e) => {
                               e.stopPropagation();
@@ -292,15 +258,6 @@ export default function AdsTable({ selectedStatus, type }: { selectedStatus?: st
         onOpenChange={setIsDeleteOpen}
         onConfirm={handleDelete}
         isPending={deleteProduct.isPending}
-      />
-
-      {/* Edit Dialog */}
-      <EditProductDialog
-        isOpen={isEditProductOpen}
-        onOpenChange={setIsEditProductOpen}
-        product={editingProduct}
-        onSubmit={onProductSubmit}
-        isPending={updateProduct.isPending}
       />
 
       {/* Feature Ad Dialog */}

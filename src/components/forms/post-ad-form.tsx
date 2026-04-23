@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useCallback, useMemo } from "react"
+import { useState, useCallback, useMemo, useEffect } from "react"
 import { useForm, Resolver } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
@@ -36,8 +36,9 @@ interface AdFormProps {
   isCategoriesLoading: boolean
   brandsData: Brand[]
   isBrandsLoading: boolean
-  addProduct: (data: FormData, options: { onSuccess: () => void }) => void
+  onSubmitAction: (data: FormData) => void
   isPending: boolean
+  initialData?: any
 }
 
 const NON_ACCESSORIES_FIELDS = [
@@ -51,19 +52,22 @@ export function AdForm({
   isCategoriesLoading,
   brandsData,
   isBrandsLoading,
-  addProduct,
+  onSubmitAction,
   isPending,
+  initialData,
 }: AdFormProps) {
   const { data: profileData } = useGetProfile();
+  const { data: config } = useGetConfig()
+  const configData = config as ConfigData;
 
-  const { data } = useGetConfig()
-  const configData = data as ConfigData;
+  const isEditMode = !!initialData;
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0)
   const [selectedCategoryType, setSelectedCategoryType] = useState<string>("")
-  const [uploadedImages, setUploadedImages] = useState<{ file: File; preview: string }[]>([])
+  const [uploadedImages, setUploadedImages] = useState<{ file?: File; preview: string; isExisting?: boolean }[]>([])
   const [guidelinesChecked, setGuidelinesChecked] = useState(false)
   const [isDragging, setIsDragging] = useState(false);
+
   const isAccessories = selectedCategoryType === "accessories"
 
   const subcategories = useMemo(() => {
@@ -100,6 +104,55 @@ export function AdForm({
   })
 
   const { register, handleSubmit, formState: { errors }, setValue, reset, setError, watch } = form
+
+  useEffect(() => {
+    if (!initialData) return
+
+    // Safely resolve nested objects — API returns category/subcategory/brand as objects
+    const categoryId   = initialData.category?.id    ?? initialData.category_id    ?? 0
+    const subcategoryId = initialData.subcategory?.id ?? initialData.subcategory_id ?? 0
+    const brandId      = initialData.brand?.id        ?? initialData.brand_id        ?? undefined
+    const categoryType = initialData.category?.type   ?? ""
+
+    reset({
+      title:              initialData.title              ?? "",
+      description:        initialData.description        ?? "",
+      price:              initialData.price              ?? undefined,
+      negotiable:         initialData.negotiable === 1 || initialData.negotiable === true,
+      condition:          initialData.condition          ?? undefined,
+      usage:              initialData.usage              ?? "",
+      mileage:            initialData.mileage            ?? undefined,
+      mileage_unit:       initialData.mileage_unit       ?? "",
+      // API returns manufacturing_year as string "2000" — coerce to number
+      manufacturing_year: initialData.manufacturing_year ? Number(initialData.manufacturing_year) : undefined,
+      final_drive_system: initialData.final_drive_system ?? "",
+      wheels:             initialData.wheels             ?? "",
+      engine_size:        initialData.engine_size        ?? "",
+      warranty:           initialData.warranty           ?? "",
+      seller_type:        initialData.seller_type        ?? "",
+      address:            initialData.address            ?? "",
+      lat:                initialData.lat                ?? undefined,
+      lng:                initialData.lng                ?? undefined,
+      category_id:        categoryId,
+      subcategory_id:     subcategoryId,
+      brand_id:           brandId,
+      images:             [],
+    })
+
+    setSelectedCategoryId(categoryId)
+    setSelectedCategoryType(categoryType)
+
+    if (initialData.product_images?.length) {
+      const existing = initialData.product_images.map((url: string) => ({
+        preview: url,
+        isExisting: true,
+      }))
+      setUploadedImages(existing)
+      setValue("images", [new File([], "placeholder")] as any)
+    }
+
+    setGuidelinesChecked(true)
+  }, [initialData, reset, setValue])
 
   const handleCategoryChange = (categoryId: number) => {
     const category = categories.find((c) => c.id === categoryId)
@@ -141,7 +194,9 @@ export function AdForm({
     const newImages = filteredFiles.map((file) => ({ file, preview: URL.createObjectURL(file) }))
     const updatedImages = [...uploadedImages, ...newImages]
     setUploadedImages(updatedImages)
-    setValue("images", updatedImages.map((img) => img.file), { shouldValidate: true })
+
+    const filesOnly = updatedImages.filter(img => img.file).map(img => img.file as File)
+    setValue("images", filesOnly, { shouldValidate: true })
   }, [uploadedImages, setValue, setError])
 
   const handleImageUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -149,15 +204,8 @@ export function AdForm({
     event.target.value = ""
   }, [processFiles])
 
-  const onDragOver = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(true)
-  }
-
-  const onDragLeave = () => {
-    setIsDragging(false)
-  }
-
+  const onDragOver = (e: React.DragEvent) => { e.preventDefault(); setIsDragging(true) }
+  const onDragLeave = () => { setIsDragging(false) }
   const onDrop = (e: React.DragEvent) => {
     e.preventDefault()
     setIsDragging(false)
@@ -168,7 +216,8 @@ export function AdForm({
   const removeImage = useCallback((index: number) => {
     setUploadedImages((prev) => {
       const newImages = prev.filter((_, i) => i !== index)
-      setValue("images", newImages.map((img) => img.file), { shouldValidate: true })
+      const filesOnly = newImages.filter(img => img.file).map(img => img.file as File)
+      setValue("images", filesOnly, { shouldValidate: true })
       return newImages
     })
   }, [setValue])
@@ -188,19 +237,17 @@ export function AdForm({
     formDataToSend.set("user_type", "user")
     formDataToSend.set("business_id", profileData?.id || "")
 
-    data.images.forEach((image, index) => {
-      formDataToSend.append(`product_images[${index}]`, image)
+    let fileCount = 0;
+    uploadedImages.forEach((img) => {
+      if (img.file) {
+        formDataToSend.append(`product_images[${fileCount}]`, img.file)
+        fileCount++
+      } else if (img.isExisting) {
+        formDataToSend.append(`existing_images[]`, img.preview)
+      }
     })
 
-    await addProduct(formDataToSend, {
-      onSuccess: () => {
-        reset()
-        setUploadedImages([])
-        setGuidelinesChecked(false)
-        setSelectedCategoryId(0)
-        setSelectedCategoryType("")
-      },
-    })
+    onSubmitAction(formDataToSend)
   }
 
   const onFormSubmit = (e: React.FormEvent) => {
@@ -232,7 +279,8 @@ export function AdForm({
         >
           <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
           <p className="text-black mb-2">Drag & drop images here</p>
-          <input type="file" accept=".png,.jpg,.jpeg" multiple onChange={handleImageUpload} className="hidden" id="image-upload" disabled={isPending} />          <label htmlFor="image-upload">
+          <input type="file" accept=".png,.jpg,.jpeg" multiple onChange={handleImageUpload} className="hidden" id="image-upload" disabled={isPending} />
+          <label htmlFor="image-upload">
             <Button type="button" variant="outline" className="mt-4 rounded-none" onClick={() => document.getElementById("image-upload")?.click()} disabled={isPending}>
               Upload Images
             </Button>
@@ -241,6 +289,7 @@ export function AdForm({
 
         {errors.images && <p className="text-red-500 text-sm mt-2 font-medium">{errors.images.message}</p>}
         <p className="text-[11px] text-gray-500 mt-2">Supported formats: PNG, JPG, JPEG (Max 2MB)</p>
+
         <div className="flex space-x-2 mt-[12px]">
           {Array.from({ length: 5 }).map((_, index) => (
             <div key={index} className="w-[58px] h-[58px] bg-gray-50 border-[2px] border-[#EAEEF5] flex items-center justify-center overflow-hidden relative">
@@ -424,15 +473,21 @@ export function AdForm({
             label="Price"
             {...register("price", { valueAsNumber: true })}
             onKeyDown={(e) => {
-              if (["e", "E", "+", "-"].includes(e.key)) {
-                e.preventDefault();
-              }
+              if (["e", "E", "+", "-"].includes(e.key)) e.preventDefault()
             }}
             error={errors.price?.message}
             required
             disabled={isPending}
           />
-          <LocationInput setValue={setValue} register={register} errors={errors} isPending={isPending} />
+          <LocationInput
+            setValue={setValue}
+            register={register}
+            errors={errors}
+            isPending={isPending}
+            initialAddress={initialData?.address}
+            initialLat={initialData?.lat}
+            initialLng={initialData?.lng}
+          />
         </div>
       </div>
 
@@ -441,8 +496,8 @@ export function AdForm({
           <Checkbox id="guidelines" checked={guidelinesChecked} required onCheckedChange={(c) => setGuidelinesChecked(c === true)} disabled={isPending} />
           <Label htmlFor="guidelines" className="text-sm leading-none">I confirm this ad follows guidelines</Label>
         </div>
-        <Button type="submit" className="w-full bg-black text-white disabled:hover:text-white h-[48px] mt-8 rounded-none" disabled={isPending}>
-          {isPending ? "Submitting..." : "Submit Ad"}
+        <Button type="submit" className="w-full bg-black text-white disabled:hover:text-white h-[48px] mt-8 rounded-none" disabled={isPending || !guidelinesChecked}>
+          {isPending ? "Processing..." : isEditMode ? "Update Ad" : "Submit Ad"}
         </Button>
       </div>
     </form>

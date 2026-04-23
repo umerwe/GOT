@@ -13,10 +13,11 @@ import { useGetProfile } from "@/hooks/useProfile"
 
 interface MessageFormProps {
   receiverId: string
+  productId?: number
   onMessageSent?: (newMessage: Message) => void
 }
 
-const MessageForm = ({ receiverId, onMessageSent }: MessageFormProps) => {
+const MessageForm = ({ receiverId, productId, onMessageSent }: MessageFormProps) => {
   const { data: profileData = [] } = useGetProfile();
 
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -54,6 +55,10 @@ const MessageForm = ({ receiverId, onMessageSent }: MessageFormProps) => {
   const onSubmit = async (data: MessageFormData) => {
     const formData = new FormData()
     formData.append("receiver_id", receiverId)
+
+    if (productId) {
+      formData.append("product_id", productId.toString())
+    }
 
     if (data.message?.trim()) {
       formData.append("message", data.message.trim())

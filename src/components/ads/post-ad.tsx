@@ -5,30 +5,39 @@ import { useAddProduct } from "@/hooks/useProduct"
 import { useGetBrands } from "@/hooks/useBrand"
 import AuthGuard from "@/common/auth-guard"
 import { AdForm } from "@/components/forms/post-ad-form"
+import { useRouter } from "next/navigation"
 
 export default function PostAd() {
+  const router = useRouter()
   const { data: categories = [], isLoading: isCategoriesLoading } = useGetCategories()
   const { data: brandsData = [], isLoading: isBrandsLoading } = useGetBrands()
   const { mutate: addProduct, isPending } = useAddProduct()
 
+  const handleCreateProduct = (formData: FormData) => {
+    addProduct(formData, {
+      onSuccess: () => {
+        // Redirect user after successful creation
+        router.push("/dashboard/my-ads")
+      },
+    })
+  }
+
   return (
     <AuthGuard>
-      <div className="bg-[#F3F4F6]">
-        <div className="">
-          <div className="lg:col-span-3">
-            <div className="mb-[5px]">
-              <h2 className="text-[20px] mb-[10px]">Post New Ad</h2>
-            </div>
-            <div className="bg-white p-[20px] md:p-[40px]">
-              <AdForm
-                categories={categories}
-                isCategoriesLoading={isCategoriesLoading}
-                brandsData={brandsData}
-                isBrandsLoading={isBrandsLoading}
-                addProduct={addProduct}
-                isPending={isPending}
-              />
-            </div>
+      <div className="bg-[#F3F4F6] min-h-screen">
+        <div className="max-w-4xl mx-auto py-8 px-4">
+          <div className="mb-[15px]">
+            <h2 className="text-[20px] font-bold text-black">Post New Ad</h2>
+          </div>
+          <div className="bg-white p-[20px] md:p-[40px] shadow-sm border border-gray-100">
+            <AdForm
+              categories={categories}
+              isCategoriesLoading={isCategoriesLoading}
+              brandsData={brandsData}
+              isBrandsLoading={isBrandsLoading}
+              onSubmitAction={handleCreateProduct} // Changed prop name to match refactored form
+              isPending={isPending}
+            />
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@
 
 import AdsTable from '@/components/current-ads'
 import { useParams } from 'next/navigation'
+
 const MyAds = () => {
     const params = useParams()
     const statusName = params.name as string
@@ -19,17 +20,6 @@ const MyAds = () => {
                 <h2 className="text-[20px] capitalize">
                     {displayTitle}
                 </h2>
-                {/* <Select>
-                    <SelectTrigger className="w-[156px] h-[36px] text-[14px] font-normal bg-white border-[#E5E7EB] text-[#0E1620]">
-                        <SelectValue placeholder="Sort by" className="" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="newest">Newest</SelectItem>
-                        <SelectItem value="oldest">Oldest</SelectItem>
-                        <SelectItem value="price-high">Price: High to Low</SelectItem>
-                        <SelectItem value="price-low">Price: Low to High</SelectItem>
-                    </SelectContent>
-                </Select> */}
             </div>
 
             <AdsTable selectedStatus={statusName === "all" ? undefined : statusName} />

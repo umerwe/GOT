@@ -89,11 +89,12 @@ export default function Listing({ product }: ProductDetailsProps) {
           id: product.user.id,
           name: product.user.name,
           profile_image: product.user.profile_image,
+          product_id: product.id,
         })
       )
     }
 
-    router.push(`/chat/${product?.seller?.id}`)
+    router.push(`/chat/${product?.seller?.id}?product_id=${product.id}`)
   }
 
   const phoneNumber = product.seller?.phoneNumber;
@@ -446,7 +447,7 @@ export default function Listing({ product }: ProductDetailsProps) {
             <DialogTitle className="text-xl font-bold mb-2">Safety Policy</DialogTitle>
             <DialogDescription asChild>
               <div
-                className="text-gray-600 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar"
+                className="prose prose-lg text-gray-600 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar"
                 dangerouslySetInnerHTML={{ __html: configData?.safety_policy || "" }}
               />
             </DialogDescription>

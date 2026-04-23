@@ -23,7 +23,7 @@ interface Product {
   }
   price: number;
 
-  status?: "pending" | "approved" | "rejected" | "expired";
+  status?: "pending" | "approved" | "rejected" | "expired" | "inactive";
   is_featured?: number;
   category?: {
     id: number;

@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getProducts, getUserProducts, getProduct, addProduct, updateUserProduct, deleteUserProduct, getBusinessProducts, getBusinessProduct, activateProduct, deactivateProduct } from "@/services/products";
+import { getProducts, getUserProducts, getProduct, addProduct, updateUserProduct, deleteUserProduct, getBusinessProducts, getBusinessProduct, activateProduct, deactivateProduct, makeProductFeatured } from "@/services/products";
 import { toast } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
@@ -159,6 +159,25 @@ export const useDeactivateProduct = () => {
     onError: (err: AxiosError<{ message: string }>) => {
       toast({
         title: "Failed to Deactivate Product",
+        description: `${err?.response?.data?.message}`,
+        variant: "destructive",
+      });
+    },
+  });
+};
+
+export const useMakeProductFeatured = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (productId: string) => makeProductFeatured(productId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userProducts"] });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      queryClient.invalidateQueries({ queryKey: ["product"] });
+    },
+    onError: (err: AxiosError<{ message: string }>) => {
+      toast({
+        title: "Failed to Feature Product",
         description: `${err?.response?.data?.message}`,
         variant: "destructive",
       });

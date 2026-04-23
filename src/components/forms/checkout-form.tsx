@@ -42,7 +42,7 @@ const STRIPE_FIELD_ERRORS: Record<string, string> = {
   cardCvc: "Please enter your security code",
 };
 
-export default function PaymentForm({ productId }: { productId?: string }) {
+export default function PaymentForm({ productId, cartItems, subTotal }: { productId?: string, cartItems?: any[], subTotal?: number }) {
   const router = useRouter();
   const stripe = useStripe();
   const elements = useElements();
@@ -131,21 +131,33 @@ export default function PaymentForm({ productId }: { productId?: string }) {
         }
 
       } else {
-        const { error, paymentMethod } = await stripe.createPaymentMethod({
-          type: "card",
-          card: elements.getElement(CardNumberElement)!,
-          billing_details: {
-            email: values.email,
-            phone: values.phone,
-            address: { postal_code: values.postalCode },
+        const res = await api.post("/create-payment-intent", {
+          amount: subTotal,
+          products: cartItems?.map((item) => ({
+            product_id: item.id,
+            quantity: item.quantity,
+            price: item.price,
+          })),
+          currency: "aed",
+        });
+        const clientSecret = res.data.client_secret;
+
+        const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+          payment_method: {
+            card: elements.getElement(CardNumberElement)!,
+            billing_details: {
+              email: values.email,
+              phone: values.phone,
+              address: { postal_code: values.postalCode },
+            },
           },
         });
 
         if (error) {
           toast({ title: "Payment Error", description: error.message, variant: "destructive" });
           setLoading(false);
-        } else {
-          router.push(`/success?tid=${paymentMethod.id}`);
+        } else if (paymentIntent?.status === "succeeded") {
+          router.push(`/success?tid=${paymentIntent.id}`);
         }
       }
 
@@ -165,13 +177,13 @@ export default function PaymentForm({ productId }: { productId?: string }) {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          setSubmitted(true); // ← fires ALWAYS, before Zod even runs
+          setSubmitted(true);
           handleSubmit(onSubmit)(e);
         }}
         className="space-y-[20px]"
       >
         {/* Method Selection */}
-        <div className="flex gap-4 w-full sm:w-[380px]">
+        {/* <div className="flex gap-4 w-full sm:w-[380px]">
           <button
             type="button"
             className="flex flex-col gap-2 p-2 border-2 border-[#F2A416] bg-white text-left w-[140px]"
@@ -179,7 +191,7 @@ export default function PaymentForm({ productId }: { productId?: string }) {
             <IoCard className="text-gray-600" size={24} />
             <span className="font-medium text-[#F2A416]">Card</span>
           </button>
-        </div>
+        </div> */}
 
         <div className="space-y-[20px]">
           {/* Card Number */}
@@ -329,9 +341,6 @@ export default function PaymentForm({ productId }: { productId?: string }) {
                 <select className="w-full h-[54px] px-4 border border-gray-300 appearance-none bg-white focus:outline-none focus:border-gray-900">
                   <option>United Arab Emirates</option>
                 </select>
-                {/* <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                  <ChevronDown className="w-4 h-4 text-gray-400" />
-                </div> */}
               </div>
             </div>
 

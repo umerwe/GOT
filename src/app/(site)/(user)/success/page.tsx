@@ -2,7 +2,7 @@
 
 import { useEffect, Suspense, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useAppSelector } from "@/store/hooks";
 import Container from "@/components/container";
 import Footer from "@/components/layout/footer";
 import { CheckCircle2 } from "lucide-react";

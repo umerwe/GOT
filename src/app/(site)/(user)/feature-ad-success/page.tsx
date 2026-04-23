@@ -7,11 +7,14 @@ import Footer from "@/components/layout/footer";
 import { CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import api from "@/lib/axios";
+import { useMakeProductFeatured } from "@/hooks/useProduct";
 
 function FeatureAdSuccessContent() {
   const searchParams = useSearchParams();
   const productId = searchParams.get("product_id");
+
+  const { mutate: makeProductFeatured } = useMakeProductFeatured();
+
 
   const hasCalled = useRef(false);
 
@@ -20,14 +23,9 @@ function FeatureAdSuccessContent() {
 
     hasCalled.current = true;
 
-    api.post("/make-product-featured", {
-      product_id: productId,
-    }).catch((err) => {
-      console.error("Feature ad update failed:", err);
-      hasCalled.current = false;
-    });
+    makeProductFeatured(productId);
 
-  }, []);
+  }, [productId, makeProductFeatured]);
 
   return (
     <div className="max-w-[540px] w-full border border-gray-200 p-[30px] md:p-[50px] text-center space-y-8 bg-white shadow-sm mt-10 mb-20 mx-auto">

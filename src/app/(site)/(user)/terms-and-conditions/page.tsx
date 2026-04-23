@@ -27,7 +27,7 @@ const TermsAndCondition = () => {
       </Container>
       <Container className='mt-4 mb-16 sm:px-[189px]'>
         <div
-          className="prose prose-lg text-gray-800 leading-relaxed bg-white rounded-xl"
+          className="prose prose-lg max-w-none text-gray-800 leading-relaxed bg-white rounded-xl"
           dangerouslySetInnerHTML={{ __html: termsData }}
         />
       </Container>
