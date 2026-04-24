@@ -11,6 +11,7 @@ import { useToggleWishlist, useGetWishlist } from "@/hooks/favorites/useWishlist
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import LoginDialog from "@/components/dialogs/loginDialog";
+import { useRouter } from "next/navigation";
 
 interface GridCardProps {
   isHome?: boolean;
@@ -36,6 +37,7 @@ export default function GridCard({
   const { data: wishlistData } = useGetWishlist();
   const {mutate: toggleWishlistMutation,isPending} = useToggleWishlist();
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
+  const router = useRouter();
 
   const wishlistItems = wishlistData?.data;
 
@@ -53,6 +55,12 @@ export default function GridCard({
     }
 
     toggleWishlistMutation(String(product.id));
+  };
+
+  const handleBusinessClick = (e: React.MouseEvent, sellerId: number | undefined) => {
+    e.preventDefault();
+    e.stopPropagation();
+    router.push(`/business/${sellerId}`);
   };
 
   return (
@@ -114,7 +122,10 @@ export default function GridCard({
                       </div>
 
                       {(businessLogo || isPrivate) && (
-                        <Link href={`/business/${product?.seller?.id}`} className="flex-shrink-0 w-[50px] h-[50px]">
+                        <div 
+                          onClick={(e) => handleBusinessClick(e, product?.seller?.id)}
+                          className="flex-shrink-0 w-[50px] h-[50px] cursor-pointer"
+                        >
                           <Image
                             src={product?.seller?.profile_image || "/fallback.png"}
                             alt="Business Logo"
@@ -122,7 +133,7 @@ export default function GridCard({
                             height={256}
                             className="w-full h-full object-cover"
                           />
-                        </Link>
+                        </div>
                       )}
                     </div>
                   </CardContent>

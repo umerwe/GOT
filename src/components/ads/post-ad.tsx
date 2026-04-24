@@ -16,8 +16,7 @@ export default function PostAd() {
   const handleCreateProduct = (formData: FormData) => {
     addProduct(formData, {
       onSuccess: () => {
-        // Redirect user after successful creation
-        router.push("/dashboard/my-ads")
+        router.push("/dashboard/post-ad/thank-you")
       },
     })
   }
@@ -35,7 +34,7 @@ export default function PostAd() {
               isCategoriesLoading={isCategoriesLoading}
               brandsData={brandsData}
               isBrandsLoading={isBrandsLoading}
-              onSubmitAction={handleCreateProduct} // Changed prop name to match refactored form
+              onSubmitAction={handleCreateProduct}
               isPending={isPending}
             />
           </div>

@@ -1,7 +1,7 @@
 "use client"
 import { useGetBrands } from "@/hooks/useBrand"
 import { useGetCategories } from "@/hooks/useCategories"
-import { useGetBusinessProducts } from "@/hooks/useProduct"
+import { useGetBusinessProducts, useGetSellerProducts } from "@/hooks/useProduct"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import Pagination from "@/components/ui/pagination"
@@ -26,6 +26,7 @@ import MyImage from "@/components/custom/MyImage"
 import { BiSolidGrid } from "react-icons/bi"
 import { BsFilterLeft } from "react-icons/bs"
 import { Button } from "@/components/ui/button"
+import Image from "@/components/custom/MyImage"
 
 export default function CategoryLayout() {
   const { category } = useParams()
@@ -46,6 +47,9 @@ export default function CategoryLayout() {
   // Client-side pagination map for each business's products (6 per page)
   const [paginationMap, setPaginationMap] = useState<Record<number | string, number>>({});
 
+  // Seller products pagination (for Private Sellers card)
+  const [sellerPage, setSellerPage] = useState(1);
+
   const handleBusinessPaginate = (businessId: number, dir: number) => {
     setPaginationMap((prev) => ({
       ...prev,
@@ -53,9 +57,12 @@ export default function CategoryLayout() {
     }));
   };
 
+  const handleSellerPaginate = (dir: number) => {
+    setSellerPage((prev) => prev + dir);
+  };
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
-    // Reset per-business pagination when server page changes
     setPaginationMap({})
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
@@ -97,12 +104,35 @@ export default function CategoryLayout() {
     return f;
   }, [selectedFilters, stateParam, searchParam, sortBy, currentPage, itemsPerPage])
 
-  const { data: businessResponse, isLoading: isProductsLoading } = useGetBusinessProducts(appliedFilters);
+  const { data: businessResponse, isLoading: isProductsLoading } = useGetBusinessProducts(
+    {
+      ...appliedFilters,
+      user_type: "business"
+    }
+  );
+
+  // Seller products — shown only on last page, same filters applied
+  const { data: sellerResponse, isLoading: sellerLoading } = useGetSellerProducts({
+    page: sellerPage,
+    per_page: 6,
+    ...(appliedFilters.category_id ? { category_id: appliedFilters.category_id } : {}),
+    ...(appliedFilters.brand_id ? { brand_id: appliedFilters.brand_id } : {}),
+    ...(appliedFilters.min_price ? { min_price: appliedFilters.min_price } : {}),
+    ...(appliedFilters.max_price ? { max_price: appliedFilters.max_price } : {}),
+    ...(appliedFilters.sort ? { sort: appliedFilters.sort } : {}),
+    ...(appliedFilters.state ? { state: appliedFilters.state } : {}),
+    ...(appliedFilters.search ? { search: appliedFilters.search } : {}),
+  });
 
   const businesss = useMemo(() => businessResponse?.data ?? [], [businessResponse])
 
   const totalPages = businessResponse?.pagination?.totalPages ?? 1
   const totalItems = businessResponse?.pagination?.total_items || 0
+
+  const isLastPage = currentPage >= totalPages
+
+  const sellerProducts = sellerResponse?.data || [];
+  const sellerPagination = sellerResponse?.pagination;
 
   const startItem = totalItems === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1
   const endItem = Math.min(currentPage * itemsPerPage, totalItems)
@@ -145,11 +175,10 @@ export default function CategoryLayout() {
     setIsMobileFilterOpen(false);
   }
 
-  const isNotFound = !isProductsLoading && businesss.length === 0
+  const isNotFound = !isProductsLoading && !sellerLoading && businesss.length === 0 && sellerProducts.length === 0
 
   const RightControls = () => (
     <div className="flex items-center gap-4 text-[13px] text-gray-500">
-      {/* Sort Logic */}
       <div className="flex items-center gap-2">
         <span>Sort By:</span>
         <div className="relative">
@@ -168,7 +197,6 @@ export default function CategoryLayout() {
         </div>
       </div>
 
-      {/* Items Per Page Logic */}
       <div className="hidden sm:flex items-center gap-2">
         <span>Show:</span>
         <div className="relative">
@@ -188,7 +216,6 @@ export default function CategoryLayout() {
         </div>
       </div>
 
-      {/* View Mode Toggle */}
       <div className="flex items-center gap-2 pl-2 border-l border-gray-300 ml-2">
         <button
           onClick={() => setViewMode("grid")}
@@ -243,6 +270,69 @@ export default function CategoryLayout() {
       </div>
     );
   };
+
+  // Reusable Private Sellers card — same UI as business cards
+  const PrivateSellersCard = () => (
+    <div className='bg-[#F5F5F5] pt-[19px] px-[14px] pb-[30px] rounded-none'>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-[23px]">
+        <div className="flex items-center gap-3">
+          <div className="relative h-[56px] w-[56px]">
+            <Image
+              src="/hero-img.png"
+              alt="Private Sellers"
+              width={256}
+              height={256}
+              className="rounded-full w-14 h-14 object-cover bg-white border border-gray-200"
+            />
+          </div>
+          <div>
+            <h1 className="text-lg font-bold text-black">Private Sellers</h1>
+            <p className="text-[#636E7E] text-sm">Individual listings from across the community</p>
+          </div>
+        </div>
+
+        {(sellerProducts.length > 0 || sellerLoading) && (
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="icon"
+              className="rounded-full h-8 w-8 bg-white"
+              onClick={() => handleSellerPaginate(-1)}
+              disabled={sellerPage <= 1 || sellerLoading}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="rounded-full h-8 w-8 bg-white"
+              onClick={() => handleSellerPaginate(1)}
+              disabled={!sellerPagination || sellerPage >= sellerPagination.totalPages || sellerLoading}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
+      </div>
+
+      {viewMode === 'grid' ? (
+        <GridCard
+          products={sellerProducts as Product[]}
+          isLoading={sellerLoading}
+          count={6}
+          isAdsPage={true}
+          isSecond={true}
+          isPrivate={true}
+        />
+      ) : (
+        <ListCard
+          products={sellerProducts as Product[]}
+          isLoading={sellerLoading}
+          count={4}
+        />
+      )}
+    </div>
+  );
 
   return (
     <div className="px-[17px] pt-6 pb-[60px]">
@@ -322,20 +412,19 @@ export default function CategoryLayout() {
                 return (
                   <div key={business.id} className='bg-[#F5F5F5] pt-[19px] px-[14px] pb-[30px] rounded-none'>
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-[23px]">
-                      <Link href={`/business/${business.id}`} className="flex items-center gap-3">
-                        <div className="relative h-[56px] w-[56px]">
+                      <div className="flex items-center gap-3">
+                        <Link href={`/business/${business.id}`} className="relative h-[56px] w-[56px] flex-shrink-0">
                           <MyImage src={business.logo || "/default-avatar.png"} alt={business.name} fill className="rounded-full object-contain bg-white" />
                           <div className="absolute bottom-1 right-0 bg-[#E9A426] rounded-full p-0.5 border-2 border-white">
                             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-black"><polyline points="20 6 9 17 4 12"></polyline></svg>
                           </div>
-                        </div>
-                        <div>
+                        </Link>
+                        <Link href={`/business/${business.id}`} className="min-w-0">
                           <h1 className="text-lg font-bold text-black capitalize">{business.name}</h1>
-                          <p className="text-[#636E7E] text-sm">{business.address}</p>
-                        </div>
-                      </Link>
+                          <p className="text-[#636E7E] text-sm truncate">{business.address}</p>
+                        </Link>
+                      </div>
 
-                      {/* Client-side pagination arrows for this business's products */}
                       {totalProducts > 6 && (
                         <div className="flex items-center gap-2">
                           <Button
@@ -368,6 +457,10 @@ export default function CategoryLayout() {
                   </div>
                 );
               })}
+
+              {/* Private Sellers card — only rendered on the last page */}
+              {isLastPage && <PrivateSellersCard />}
+
               <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
             </div>
           ) : (

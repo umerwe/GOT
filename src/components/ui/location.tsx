@@ -12,7 +12,6 @@ type SetValueType = UseFormSetValue<PostAdFormData>
 
 export function LocationInput({
   setValue,
-  register,
   errors,
   isPending,
   initialAddress,
@@ -47,21 +46,24 @@ export function LocationInput({
 
       if (data.status === "OK" && data.results.length > 0) {
         // --- UAE ONLY CHECK ---
-        const isInUAE = data.results[0].address_components.some((component: google.maps.GeocoderAddressComponent) => 
+        const isInUAE = data.results[0].address_components.some((component: google.maps.GeocoderAddressComponent) =>
           component.types.includes("country") && component.short_name === "AE"
         )
 
         if (!isInUAE) {
-          toast({ 
-            title: "Invalid Location", 
-            description: "Currently, we only support locations within the United Arab Emirates.", 
-            variant: "destructive" 
+          toast({
+            title: "Invalid Location",
+            description: "Currently, we only support locations within the United Arab Emirates.",
+            variant: "destructive"
           })
           return
         }
         // -----------------------
 
+        // UPDATED: Look for establishments/POI first so restaurants are identified correctly on click
         const specificResult = data.results.find((result: google.maps.GeocoderResult) =>
+          result.types.includes("point_of_interest") ||
+          result.types.includes("establishment") ||
           result.types.includes("street_address") ||
           result.types.includes("route") ||
           result.types.includes("premise")
@@ -144,10 +146,12 @@ export function LocationInput({
   useEffect(() => {
     if (!isMapReady || !inputRef.current || !window.google) return
 
+    // UPDATED: Changed types to an empty array to include establishments (restaurants, etc.)
+    // and added "name" to fields.
     const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, {
-      types: ["geocode"],
-      fields: ["formatted_address", "geometry"],
-      componentRestrictions: { country: "ae" }, // Manual search is restricted here
+      types: [],
+      fields: ["formatted_address", "geometry", "name"],
+      componentRestrictions: { country: "ae" },
     })
 
     autocomplete.addListener("place_changed", () => {
@@ -155,6 +159,8 @@ export function LocationInput({
       if (place.geometry?.location) {
         const newLat = place.geometry.location.lat()
         const newLng = place.geometry.location.lng()
+
+        // Use the formatted address which now includes establishment names if found
         const address = place.formatted_address || ""
 
         if (inputRef.current) inputRef.current.value = address
@@ -210,9 +216,8 @@ export function LocationInput({
             placeholder="Enter location"
             disabled={isLoading || isPending}
             autoComplete="off"
-            className={`flex h-[48px] w-full border-[2px] bg-white pl-3 pr-12 text-sm outline-none transition-all ${
-              errors.address ? "border-red-500" : "border-[#C7CBD2]"
-            }`}
+            className={`flex h-[48px] w-full border-[2px] bg-white pl-3 pr-12 text-sm outline-none transition-all ${errors.address ? "border-red-500" : "border-[#C7CBD2]"
+              }`}
           />
           <div className="absolute right-3 top-1/2 -translate-y-1/2">
             <MapPin className="w-5 h-5 text-gray-400" />

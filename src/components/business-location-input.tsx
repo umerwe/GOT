@@ -38,7 +38,7 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
     init();
   }, [mapsLoader]);
 
-  // --- Handle Geocoding with UAE Restriction ---
+  // --- Handle Geocoding with UAE Restriction & POI Support ---
   const handleReverseGeocode = async (lat: number, lng: number) => {
     try {
       const res = await fetch(
@@ -46,11 +46,9 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
       );
       const data = await res.json();
       
-      if (data.status === "OK" && data.results[0]) {
-        const firstResult: google.maps.GeocoderResult = data.results[0];
-
-        // UAE ONLY CHECK - Correctly typed component
-        const isInUAE = firstResult.address_components.some((component: google.maps.GeocoderAddressComponent) => 
+      if (data.status === "OK" && data.results.length > 0) {
+        // UAE ONLY CHECK
+        const isInUAE = data.results[0].address_components.some((component: google.maps.GeocoderAddressComponent) => 
           component.types.includes("country") && component.short_name === "AE"
         );
 
@@ -63,7 +61,15 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
           return;
         }
 
-        const addr = firstResult.formatted_address;
+        // UPDATED: Priority check for establishments (restaurants/businesses)
+        const specificResult = data.results.find((result: google.maps.GeocoderResult) =>
+          result.types.includes("point_of_interest") ||
+          result.types.includes("establishment") ||
+          result.types.includes("street_address") ||
+          result.types.includes("premise")
+        ) || data.results[0];
+
+        const addr = specificResult.formatted_address;
         if (inputRef.current) inputRef.current.value = addr;
         updateMap(lat, lng, addr);
       }
@@ -94,7 +100,6 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
         draggable: true,
       });
 
-      // Click listener to move pointer
       mapInstance.current.addListener("click", (e: google.maps.MapMouseEvent) => {
         if (e.latLng) {
           handleReverseGeocode(e.latLng.lat(), e.latLng.lng());
@@ -116,9 +121,10 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
   useEffect(() => {
     if (!isMapReady || !inputRef.current || !window.google) return;
 
+    // UPDATED: types: [] allows searching for establishments/restaurants
     const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, {
-      types: ["geocode"],
-      fields: ["formatted_address", "geometry"],
+      types: [], 
+      fields: ["formatted_address", "geometry", "name"],
       componentRestrictions: { country: "ae" },
     });
 
@@ -166,7 +172,7 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
   return (
     <div className="space-y-4">
       <div className="w-full">
-        <Label htmlFor="address">Business Address</Label>
+        <Label htmlFor="address" className="text-[14px]">Business Address</Label>
         <div className="relative mt-1">
           <input
             id="address"
@@ -175,13 +181,15 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
             placeholder="Search business location"
             disabled={isPending}
             autoComplete="off"
-            className="flex h-[48px] w-full border-[#C7CBD2] border-[2px] bg-white pl-3 pr-12 text-sm outline-none focus:border-gray-500 disabled:opacity-50 transition-all"
+            className={`flex h-[48px] w-full border-[2px] bg-white pl-3 pr-12 text-sm outline-none transition-all ${
+              errors.address ? "border-red-500" : "border-[#C7CBD2]"
+            } focus:border-gray-500 disabled:opacity-50`}
           />
           <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
             <MapPin className="w-5 h-5 text-gray-400" />
           </div>
         </div>
-        {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>}
+        {errors.address && <p className="text-red-500 text-sm mt-1.5">{errors.address.message}</p>}
       </div>
 
       <div className={`w-full h-[300px] border-2 border-dashed border-gray-300 bg-gray-50 flex flex-col items-center justify-center text-center gap-2 ${hasLocation ? "hidden" : ""}`}>
@@ -202,7 +210,7 @@ export function BusinessLocationInput({ setValue, errors, isPending }: LocationI
         className="w-full bg-black text-white h-[48px] text-sm font-semibold cursor-pointer hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
       >
         {isLoading ? (
-          <div className="animate-spin h-4 w-4 border-2 border-white  border-t-transparent rounded-full" />
+          <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
         ) : null}
         {isLoading ? "Locating..." : "Use Current Location"}
       </button>

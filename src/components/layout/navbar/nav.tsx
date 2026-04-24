@@ -30,7 +30,7 @@ const Navbar = () => {
 
   const isHome = pathname === "/";
   const textColor = isHome ? "text-black sm:text-white" : "text-black";
-  const showNavLinks = pathname.startsWith("/categories") || pathname.startsWith("/listing") || pathname.startsWith("/privacy") || pathname.startsWith("/terms");
+  const showNavLinks = pathname.startsWith("/privacy") || pathname.startsWith("/terms");
 
   const handleProtectedAction = (path: string) => {
     if (!isAuth) {

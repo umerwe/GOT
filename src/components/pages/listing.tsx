@@ -63,7 +63,7 @@ export default function Listing({ product }: ProductDetailsProps) {
   const [showSafetyDialog, setShowSafetyDialog] = useState(false)
 
   const isAccessories = product?.category?.type === "accessories"
-  
+
   // Check favorite status using API data
   const isFavorite = wishlistData?.data?.some((item: WishlistItem) => item.id === product.id);
 
@@ -181,39 +181,39 @@ export default function Listing({ product }: ProductDetailsProps) {
               {
                 product?.product_images?.length && product?.product_images.length > 1 && (
                   <>
-                <button
-                  disabled={(product.product_images?.length || 0) <= 1}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handlePrevImage()
-                  }}
-                  className={cn(
-                    "absolute left-4 top-1/2 -translate-y-1/2 p-2 shadow-md transition-all",
-                    "bg-white hover:bg-gray-100",
-                    "cursor-pointer",
-                    (product.product_images?.length || 0) <= 1 &&
-                    "cursor-not-allowed"
-                  )}
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
+                    <button
+                      disabled={(product.product_images?.length || 0) <= 1}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handlePrevImage()
+                      }}
+                      className={cn(
+                        "absolute left-4 top-1/2 -translate-y-1/2 p-2 shadow-md transition-all",
+                        "bg-white hover:bg-gray-100",
+                        "cursor-pointer",
+                        (product.product_images?.length || 0) <= 1 &&
+                        "cursor-not-allowed"
+                      )}
+                    >
+                      <ChevronLeft className="w-5 h-5" />
+                    </button>
 
-                <button
-                  disabled={(product.product_images?.length || 0) <= 1}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleNextImage()
-                  }}
-                  className={cn(
-                    "absolute right-4 top-1/2 -translate-y-1/2 p-2 shadow-md transition-all",
-                    "bg-white hover:bg-gray-100",
-                    "cursor-pointer",
-                    (product.product_images?.length || 0) <= 1 &&
-                    "cursor-not-allowed"
-                  )}
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
+                    <button
+                      disabled={(product.product_images?.length || 0) <= 1}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleNextImage()
+                      }}
+                      className={cn(
+                        "absolute right-4 top-1/2 -translate-y-1/2 p-2 shadow-md transition-all",
+                        "bg-white hover:bg-gray-100",
+                        "cursor-pointer",
+                        (product.product_images?.length || 0) <= 1 &&
+                        "cursor-not-allowed"
+                      )}
+                    >
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
                   </>
                 )
               }
@@ -224,7 +224,7 @@ export default function Listing({ product }: ProductDetailsProps) {
           <div className="border-2 border-gray-200 rounded-none p-6 bg-white">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-y-6 gap-x-4">
               <SpecBox label="Usage" value={product.usage ? formatLabel(product.usage) : "-"} />
-              <SpecBox label="Condition" value={product.condition} />
+              <SpecBox label="Condition" value={`${product.condition}/10`} />
               {!isAccessories && (
                 <SpecBox
                   label="Mileage"
@@ -284,14 +284,14 @@ export default function Listing({ product }: ProductDetailsProps) {
             </h3>
 
             <div className="text-[13px] text-[#636E7E] flex flex-wrap gap-x-2">
-             {
-              product.brand?.title && (
-                <>
-                  <span>{product.brand?.title}</span>
-                  <span>•</span>
-                </>
-              )
-             }
+              {
+                product.brand?.title && (
+                  <>
+                    <span>{product.brand?.title}</span>
+                    <span>•</span>
+                  </>
+                )
+              }
               <span>{product.condition}/10</span>
               <span>•</span>
               <span>{product.category?.title}</span>
@@ -423,15 +423,15 @@ export default function Listing({ product }: ProductDetailsProps) {
 
           {/* Add to Cart Button */}
           {
-            product.seller?.user_type === "business" &&
-            <Button
-              variant="outline"
-              onClick={handleAddToCart}
-              className="w-full cursor-pointer rounded-none border-3 border-[#E9A426] text-[#E9A426] hover:bg-orange-50/30 hover:text-[#E9A426]/80 text-base h-[54px] font-medium"
-            >
-              Add to Cart
-            </Button>
-          }
+            (product.seller?.user_type === "business" && configData?.checkout_enabled) && (
+              <Button
+                variant="outline"
+                onClick={handleAddToCart}
+                className="w-full cursor-pointer rounded-none border-3 border-[#E9A426] text-[#E9A426] hover:bg-orange-50/30 hover:text-[#E9A426]/80 text-base h-[54px] font-medium"
+              >
+                Add to Cart
+              </Button>
+            )}
         </div>
       </div>
 

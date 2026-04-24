@@ -1,6 +1,6 @@
 "use client"
 
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { useGetProduct, useUpdateUserProduct } from "@/hooks/useProduct"
 import { useGetCategories } from "@/hooks/useCategories"
 import { useGetBrands } from "@/hooks/useBrand"
@@ -9,7 +9,9 @@ import AuthGuard from "@/common/auth-guard"
 import SkeletonLoader from "@/common/skeleton-loader"
 
 export default function EditAdPage() {
-  const { id } = useParams()
+  const { id } = useParams();
+  const router = useRouter();
+  
   const { data: product, isLoading: isProductLoading } = useGetProduct(id as string)
   const { data: categories = [], isLoading: isCategoriesLoading } = useGetCategories()
   const { data: brandsData = [], isLoading: isBrandsLoading } = useGetBrands()
@@ -18,7 +20,7 @@ export default function EditAdPage() {
   const handleUpdate = (formData: FormData) => {
     updateProduct({ id: Number(id), formData }, {
       onSuccess: () => {
-        // Optional: toast success or redirect
+        router.push("/dashboard/status/all")
       }
     })
   }
