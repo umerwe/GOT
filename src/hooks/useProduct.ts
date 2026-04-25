@@ -69,6 +69,9 @@ export const useAddProduct = () => {
   return useMutation({
     mutationFn: addProduct,
     onSuccess: () => {
+       toast({
+        title: "Product Added Successfully"
+      })
       queryClient.invalidateQueries({ queryKey: ["userProducts"] })
       queryClient.invalidateQueries({ queryKey: ["products"] })
     },

@@ -5,6 +5,7 @@ import Image from "@/components/custom/MyImage";
 import Link from "next/link";
 import { useAppSelector } from "@/store/hooks"
 import { toast } from "@/components/ui/toast";
+import { useGetConfig } from "@/hooks/useConfig";
 
 interface CartCardProps {
   id: number;
@@ -33,6 +34,7 @@ export default function CartCard({
   onRemove,
   onAction,
 }: CartCardProps) {
+  const { data: configData } = useGetConfig();
   const cartItems = useAppSelector((state) => state.cart.items);
 
   const handleAddToCartClick = () => {
@@ -55,7 +57,7 @@ export default function CartCard({
       });
       return;
     }
-    
+
     // If all checks pass, trigger the action
     onAction?.(id);
   };
@@ -122,13 +124,14 @@ export default function CartCard({
               </button>
             </div>
           ) : (
+            !!configData?.checkout_enabled ?
             <button
               onClick={handleAddToCartClick}
-              className="flex items-center gap-2 text-sm font-bold text-[#E9A426] hover:underline cursor-pointer" 
+              className="flex items-center gap-2 text-sm font-bold text-[#E9A426] hover:underline cursor-pointer"
             >
               <ShoppingCart size={18} />
               Add to Cart
-            </button>
+            </button> : null
           )}
         </div>
       </div>
