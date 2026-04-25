@@ -64,7 +64,6 @@ export const useGetProduct = (id: string) => {
 };
 
 export const useAddProduct = () => {
-  const router = useRouter()
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -72,7 +71,6 @@ export const useAddProduct = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["userProducts"] })
       queryClient.invalidateQueries({ queryKey: ["products"] })
-      router.push("/dashboard/post-ad/thank-you")
     },
     onError: (err: AxiosError<{ message: string }>) => {
       toast({
