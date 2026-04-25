@@ -15,6 +15,7 @@ import { useGetProfile } from "@/hooks/useProfile";
 
 const Navbar = () => {
   const { data, isLoading } = useGetProfile();
+
   const router = useRouter();
 
   const token = useAppSelector((state) => state.auth.token);

@@ -11,27 +11,18 @@ import { useAppSelector } from "@/store/hooks";
 import { useGetConfig } from "@/hooks/useConfig";
 import { useSearchParams } from "next/navigation";
 
-// ── Skeleton that mirrors the real layout ──────────────────────────
 function CheckoutSkeleton() {
   return (
     <div className="flex flex-col lg:flex-row gap-[30px] items-start justify-center">
-      {/* Left: PaymentForm skeleton */}
       <div className="w-full lg:w-[490px] shrink-0 border border-gray-200 p-[30px] bg-white space-y-[20px]">
-        {/* Title */}
         <div className="h-6 w-24 bg-gray-200 animate-pulse rounded" />
         <div className="h-4 w-72 bg-gray-200 animate-pulse rounded" />
         <div className="h-px w-full bg-gray-200" />
-
-        {/* Card method button */}
         <div className="h-[70px] w-[140px] bg-gray-200 animate-pulse rounded" />
-
-        {/* Card number */}
         <div className="space-y-[6px]">
           <div className="h-4 w-20 bg-gray-200 animate-pulse rounded" />
           <div className="h-[54px] w-full bg-gray-200 animate-pulse rounded" />
         </div>
-
-        {/* Expiry + CVC */}
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-[6px]">
             <div className="h-4 w-24 bg-gray-200 animate-pulse rounded" />
@@ -42,23 +33,14 @@ function CheckoutSkeleton() {
             <div className="h-[54px] w-full bg-gray-200 animate-pulse rounded" />
           </div>
         </div>
-
-        {/* Email */}
         <div className="h-[54px] w-full bg-gray-200 animate-pulse rounded" />
-        {/* Phone */}
         <div className="h-[54px] w-full bg-gray-200 animate-pulse rounded" />
-
-        {/* Country + Postal */}
         <div className="grid grid-cols-[1.8fr_1fr] gap-4">
           <div className="h-[54px] w-full bg-gray-200 animate-pulse rounded" />
           <div className="h-[54px] w-full bg-gray-200 animate-pulse rounded" />
         </div>
-
-        {/* Submit button */}
         <div className="h-[64px] w-full bg-gray-200 animate-pulse rounded" />
       </div>
-
-      {/* Right: OrderSummary skeleton */}
       <div className="w-full lg:w-[380px] shrink-0 lg:mt-[30px]">
         <div className="bg-[#F6F6F6] p-[20px] space-y-[20px]">
           <div className="h-6 w-32 bg-gray-300 animate-pulse rounded" />
@@ -102,10 +84,12 @@ export default function CheckoutPage() {
   const { data, isLoading } = useGetConfig();
   const searchParams = useSearchParams();
   const isFeatureAd = searchParams.get("type") === "feature_ad";
+  const isAdActivation = searchParams.get("type") === "activation";
   const productId = searchParams.get("product_id");
   const FEATURE_AD_FEE = 50;
 
-  const stripePublishableKey = data?.stripe?.publishable_key;
+  const stripePublishableKey = data?.test_stripe?.test_publishable_key;
+  
   const stripePromise = stripePublishableKey ? loadStripe(stripePublishableKey) : null;
 
   const cartItems = useAppSelector((state) => state.cart.items);
@@ -133,13 +117,19 @@ export default function CheckoutPage() {
             <Elements stripe={stripePromise}>
               <div className="flex flex-col lg:flex-row gap-[30px] items-start justify-center">
                 <div className="w-full lg:w-[490px] shrink-0">
-                  <PaymentForm productId={productId || undefined} cartItems={cartItems} subTotal={subTotal} />
+                  <PaymentForm
+                    productId={productId || undefined}
+                    cartItems={cartItems}
+                    subTotal={subTotal}
+                    isAdActivation={isAdActivation}
+                  />
                 </div>
                 <div className="w-full lg:w-[380px] shrink-0 lg:mt-[30px]">
                   <OrderSummary
                     cartItems={cartItems}
                     subtotal={totalWithFee}
                     isFeatureAd={isFeatureAd}
+                    isAdActivation={isAdActivation}
                     featureAdFee={FEATURE_AD_FEE}
                   />
                 </div>

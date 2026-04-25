@@ -4,6 +4,7 @@ interface Category {
   image: string;
   position: number;
   status: number;
+  type: string;
   created_at: string;
   updated_at: string;
   child?: Category[];
@@ -29,7 +30,7 @@ interface Product {
     id: number;
     title: string;
     image: string;
-    type : string;
+    type: string;
   };
   subcategory?: {
     id: number;
@@ -75,6 +76,10 @@ interface Product {
   rating?: number;
   reviewCount?: number;
   ratingOutOf?: string | number;
+  negotiable?: number | boolean;
+  category_id?: number;
+  subcategory_id?: number;
+  brand_id?: number;
 }
 
 interface ProductFilters {

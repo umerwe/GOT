@@ -1,14 +1,24 @@
 "use client";
 
-import { AlertCircle,  } from "lucide-react";
+import { AlertCircle, } from "lucide-react";
 
 interface NotFoundWrapperProps {
   itemName?: string;
-  className ?: string
+  className?: string
+  isFeatured?: boolean;
 }
 
-export default function NotFoundWrapper({ itemName ,className = ""}: NotFoundWrapperProps) {
+export default function NotFoundWrapper({ itemName, className = "", isFeatured = false }: NotFoundWrapperProps) {
 
+  if (isFeatured) {
+    return (
+      <div className={`flex flex-col justify-center items-center ${className} p-6 pb-0`}>
+        <h1 className="text-xl font-semibold text-gray-600 mb-2">
+          No featured ads at the moment
+        </h1>
+      </div>
+    );
+  }
   return (
     <div className={`flex flex-col justify-center items-center ${className} p-6 pb-0`}>
       <AlertCircle className="w-16 h-16 text-solid mb-3 animate-bounce" />

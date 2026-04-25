@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getProducts, getUserProducts, getProduct, addProduct, updateUserProduct, deleteUserProduct, getBusinessProducts, getBusinessProduct, activateProduct, deactivateProduct, makeProductFeatured, getSellerProducts, getFeaturedProducts } from "@/services/products";
+import { getProducts, getUserProducts, getProduct, addProduct, updateUserProduct, deleteUserProduct, getBusinessProducts, getBusinessProduct, activateProduct, deactivateProduct, makeProductFeatured, getSellerProducts, getFeaturedProducts, getMyTierInfo, activateExtraAd } from "@/services/products";
 import { toast } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
@@ -70,13 +70,9 @@ export const useAddProduct = () => {
   return useMutation({
     mutationFn: addProduct,
     onSuccess: () => {
-      toast({
-        title: "Product Added",
-        description: "Your product has been successfully added!",
-      })
-      router.push("/dashboard/post-ad/thank-you")
       queryClient.invalidateQueries({ queryKey: ["userProducts"] })
       queryClient.invalidateQueries({ queryKey: ["products"] })
+      router.push("/dashboard/post-ad/thank-you")
     },
     onError: (err: AxiosError<{ message: string }>) => {
       toast({
@@ -198,7 +194,31 @@ export const useMakeProductFeatured = () => {
 
 export const useGetFeaturedProducts = (filters?: ProductFilters) => {
   return useQuery({
-    queryKey: ["featuredProducts",filters],
+    queryKey: ["featuredProducts", filters],
     queryFn: () => getFeaturedProducts(filters),
+  });
+};
+
+export const useGetMyTierInfo = () => {
+  return useQuery({
+    queryKey: ["myTierInfo"],
+    queryFn: () => getMyTierInfo(),
+  });
+};
+
+export const useActivateExtraAd = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: activateExtraAd,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["myTierInfo"] });
+    },
+    onError: (err: AxiosError<{ message: string }>) => {
+      toast({
+        title: "Failed to Activate Extra Ad",
+        description: `${err?.response?.data?.message}`,
+        variant: "destructive",
+      });
+    },
   });
 };

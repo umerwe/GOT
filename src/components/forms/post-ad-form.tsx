@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Upload, X } from "lucide-react"
+import { Upload, X, AlertCircle } from "lucide-react"
 import Image from "@/components/custom/MyImage"
 import { SelectField } from "@/components/ui/select-field"
 import { Input } from "@/components/ui/input"
@@ -18,56 +18,16 @@ import { LocationInput } from "../ui/location"
 import { useGetConfig } from "@/hooks/useConfig"
 import { cn } from "@/lib/utils"
 import { useGetProfile } from "@/hooks/useProfile"
-
-interface Category {
-  id: number
-  title: string
-  type?: string
-  child?: Category[]
-}
-
-interface Brand {
-  id: number
-  title: string
-}
-
-export interface Product {
-  id: number
-  title: string
-  description: string
-  price: number
-  negotiable: number | boolean
-  condition: number
-  usage: string
-  mileage?: number
-  mileage_unit?: string
-  manufacturing_year: string | number
-  final_drive_system?: string
-  wheels?: string
-  engine_size?: string
-  warranty?: string
-  seller_type?: string
-  address: string
-  lat: number
-  lng: number
-  category_id: number
-  subcategory_id: number
-  brand_id?: number
-  product_images: string[]
-  category?: {
-    id: number
-    title: string
-    type: string
-  }
-  subcategory?: {
-    id: number
-    title: string
-  }
-  brand?: {
-    id: number
-    title: string
-  }
-}
+import { useRouter } from "next/navigation"
+import { set } from "idb-keyval"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
 interface AdFormProps {
   categories: Category[]
@@ -77,6 +37,8 @@ interface AdFormProps {
   onSubmitAction: (data: FormData) => void
   isPending: boolean
   initialData?: Product
+  limitReached?: boolean
+  limitMessage?: string
 }
 
 const NON_ACCESSORIES_FIELDS = [
@@ -84,6 +46,9 @@ const NON_ACCESSORIES_FIELDS = [
 ] as const
 
 type NonAccessoriesField = typeof NON_ACCESSORIES_FIELDS[number]
+
+const DRAFT_STORAGE_KEY = "ad_form_draft";
+const DRAFT_IMAGES_KEY = "ad_form_images_draft";
 
 export function AdForm({
   categories,
@@ -93,11 +58,14 @@ export function AdForm({
   onSubmitAction,
   isPending,
   initialData,
+  limitReached,
+  limitMessage,
 }: AdFormProps) {
+  const router = useRouter();
   const { data: profileData } = useGetProfile();
-  const { data: config } = useGetConfig()
-  const configData = config as ConfigData;
+  const { data: config } = useGetConfig();
 
+  const configData = config as ConfigData;
   const isEditMode = !!initialData;
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0)
@@ -105,6 +73,7 @@ export function AdForm({
   const [uploadedImages, setUploadedImages] = useState<{ file?: File; preview: string; isExisting?: boolean }[]>([])
   const [guidelinesChecked, setGuidelinesChecked] = useState(false)
   const [isDragging, setIsDragging] = useState(false);
+  const [showLimitDialog, setShowLimitDialog] = useState(false);
 
   const isAccessories = selectedCategoryType === "accessories"
 
@@ -143,10 +112,42 @@ export function AdForm({
 
   const { register, handleSubmit, formState: { errors }, setValue, reset, setError, watch } = form
 
+  const allFields = watch();
+  
+// SAVE TEXT TO LOCAL STORAGE
+useEffect(() => {
+  if (isEditMode) return;
+  const { images, ...formDataOnly } = allFields;
+  localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify({
+    ...formDataOnly,
+    business_id: profileData?.id || "",
+  }));
+}, [allFields, isEditMode, profileData?.id]);
+
+// SAVE IMAGES TO INDEXEDDB — store as ArrayBuffer + metadata
+useEffect(() => {
+  if (isEditMode) return;
+
+  const saveImages = async () => {
+    const filesToSave = await Promise.all(
+      uploadedImages
+        .filter(img => img.file)
+        .map(async (img) => {
+          const file = img.file as File;
+          const buffer = await file.arrayBuffer();
+          return { name: file.name, type: file.type, size: file.size, buffer };
+        })
+    );
+    // ✅ use top-level import directly, no dynamic re-import
+    set(DRAFT_IMAGES_KEY, filesToSave);
+  };
+
+  saveImages();
+}, [uploadedImages, isEditMode]);
+
   useEffect(() => {
     if (!initialData) return
 
-    // Safely resolve nested objects — API returns category/subcategory/brand as objects
     const categoryId = initialData.category?.id ?? initialData.category_id ?? 0
     const subcategoryId = initialData.subcategory?.id ?? initialData.subcategory_id ?? 0
     const brandId = initialData.brand?.id ?? initialData.brand_id ?? undefined
@@ -161,7 +162,6 @@ export function AdForm({
       usage: initialData.usage ?? "",
       mileage: initialData.mileage ?? undefined,
       mileage_unit: initialData.mileage_unit ?? "",
-      // API returns manufacturing_year as string "2000" — coerce to number
       manufacturing_year: initialData.manufacturing_year ? Number(initialData.manufacturing_year) : undefined,
       final_drive_system: initialData.final_drive_system ?? "",
       wheels: initialData.wheels ?? "",
@@ -261,6 +261,12 @@ export function AdForm({
   }, [setValue])
 
   const onSubmit = async (data: PostAdFormData) => {
+    // Check limit only after all details are entered and valid
+    if (limitReached && !isEditMode) {
+      setShowLimitDialog(true)
+      return
+    }
+
     const formDataToSend = new FormData()
 
     Object.entries(data).forEach(([key, value]) => {
@@ -285,6 +291,9 @@ export function AdForm({
       }
     })
 
+    // Cleanup drafts on success
+    // localStorage.removeItem(DRAFT_STORAGE_KEY);
+    // await del(DRAFT_IMAGES_KEY);
     onSubmitAction(formDataToSend)
   }
 
@@ -301,243 +310,279 @@ export function AdForm({
   }
 
   return (
-    <form onSubmit={onFormSubmit} className="space-y-8">
-      {/* Photos Section */}
-      <div>
-        <h4 className="text-[16px] mb-[2.5px]">Photos <span className="text-red-500">*</span></h4>
-        <div
-          onDragOver={onDragOver}
-          onDragLeave={onDragLeave}
-          onDrop={onDrop}
-          className={cn(
-            "border-2 border-dashed p-8 text-center transition-colors duration-200",
-            isDragging ? "border-yellow-500 bg-yellow-50/50" : "border-gray-300 bg-gray-50/50",
-            isPending && "opacity-50 cursor-not-allowed"
-          )}
-        >
-          <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-black mb-2">Drag & drop images here</p>
-          <input type="file" accept=".png,.jpg,.jpeg" multiple onChange={handleImageUpload} className="hidden" id="image-upload" disabled={isPending} />
-          <label htmlFor="image-upload">
-            <Button type="button" variant="outline" className="mt-4 rounded-none" onClick={() => document.getElementById("image-upload")?.click()} disabled={isPending}>
-              Upload Images
-            </Button>
-          </label>
-        </div>
-
-        {errors.images && <p className="text-red-500 text-sm mt-2 font-medium">{errors.images.message}</p>}
-        <p className="text-[11px] text-gray-500 mt-2">Supported formats: PNG, JPG, JPEG (Max 2MB)</p>
-
-        <div className="flex space-x-2 mt-[12px]">
-          {Array.from({ length: 5 }).map((_, index) => (
-            <div key={index} className="w-[58px] h-[58px] bg-gray-50 border-[2px] border-[#EAEEF5] flex items-center justify-center overflow-hidden relative">
-              {index < uploadedImages.length && (
-                <>
-                  <Image src={uploadedImages[index].preview} alt="Thumb" fill className="object-cover" />
-                  <Button type="button" variant="ghost" size="icon" className="absolute -top-1 -right-1 h-5 w-5 bg-white shadow-sm" onClick={() => removeImage(index)} disabled={isPending}>
-                    <X className="h-3 w-3 text-red-500" />
-                  </Button>
-                </>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Product Details */}
-      <div>
-        <h2 className="text-[20px] font-semibold mb-[13.5px]">Product Details</h2>
-        <div className="space-y-[16.5px]">
-          <Input id="title" label="Title" {...register("title")} required error={errors.title?.message} disabled={isPending} />
-
-          <SelectField
-            id="category_id"
-            label="Category"
-            options={categories.map((cat) => ({ value: cat.id, label: cat.title }))}
-            value={selectedCategoryId || ""}
-            onChange={(e) => handleCategoryChange(Number(e.target.value))}
-            disabled={isCategoriesLoading || isPending}
-            required
-            error={errors.category_id?.message}
-          />
-
-          <SelectField
-            id="subcategory_id"
-            label="SubCategory"
-            options={subcategories.map((sub) => ({ value: sub.id, label: sub.title }))}
-            {...register("subcategory_id", { setValueAs: (v) => v === "" ? 0 : Number(v) })}
-            value={watch("subcategory_id") || ""}
-            disabled={!selectedCategoryId || subcategories.length === 0 || isPending}
-            error={errors.subcategory_id?.message}
-          />
-
-           {!isAccessories && (
-            <SelectField
-              id="brand_id"
-              label="Brand"
-              options={brandsData.map((brand) => ({ value: brand.id, label: brand.title }))}
-              {...register("brand_id", { setValueAs: (v) => v === "" ? undefined : Number(v) })}
-              value={watch("brand_id") ?? ""}
-              disabled={isBrandsLoading || isPending}
-              error={errors.brand_id?.message}
-            />
-          )}
-
-          <SelectField
-            id="condition"
-            label="Condition (1-10)"
-            options={Array.from({ length: 10 }, (_, i) => ({ value: i + 1, label: String(i + 1) }))}
-            {...register("condition", { setValueAs: (v) => v === "" ? undefined : Number(v) })}
-            value={watch("condition") ?? ""}
-            required
-            disabled={isPending}
-            error={errors.condition?.message}
-          />
-
-          <div>
-            <Label htmlFor="description">Description</Label>
-            <Textarea id="description" className="min-h-[120px] mt-1" {...register("description")} disabled={isPending} />
-            {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description.message}</p>}
+    <>
+      <form onSubmit={onFormSubmit} className="space-y-8">
+        {/* Photos Section */}
+        <div>
+          <h4 className="text-[16px] mb-[2.5px]">Photos <span className="text-red-500">*</span></h4>
+          <div
+            onDragOver={onDragOver}
+            onDragLeave={onDragLeave}
+            onDrop={onDrop}
+            className={cn(
+              "border-2 border-dashed p-8 text-center transition-colors duration-200",
+              isDragging ? "border-yellow-500 bg-yellow-50/50" : "border-gray-300 bg-gray-50/50",
+              isPending && "opacity-50 cursor-not-allowed"
+            )}
+          >
+            <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <p className="text-black mb-2">Drag & drop images here</p>
+            <input type="file" accept=".png,.jpg,.jpeg" multiple onChange={handleImageUpload} className="hidden" id="image-upload" disabled={isPending} />
+            <label htmlFor="image-upload">
+              <Button type="button" variant="outline" className="mt-4 rounded-none" onClick={() => document.getElementById("image-upload")?.click()} disabled={isPending}>
+                Upload Images
+              </Button>
+            </label>
           </div>
 
-          <SelectField
-            id="usage"
-            label="Usage"
-            options={configData?.product_options?.usage?.map((o) => ({ value: o.id, label: o.title })) || []}
-            {...register("usage")}
-            value={watch("usage") || ""}
-            disabled={isPending}
-            error={errors.usage?.message}
-          />
+          {errors.images && <p className="text-red-500 text-sm mt-2 font-medium">{errors.images.message}</p>}
+          <p className="text-[11px] text-gray-500 mt-2">Supported formats: PNG, JPG, JPEG (Max 2MB)</p>
 
-          {!isAccessories && (
-            <>
-              <Input
-                id="mileage"
-                type="number"
-                label="Mileage"
-                min={0}
-                defaultValue={0}
-                {...register("mileage", { valueAsNumber: true })}
-                error={errors.mileage?.message}
-                disabled={isPending}
-              />
-              <SelectField
-                id="mileage_unit"
-                label="Mileage Unit"
-                options={configData?.product_options?.mileage_unit?.map((o) => ({ value: o.id, label: o.title })) || []}
-                {...register("mileage_unit")}
-                value={watch("mileage_unit") || ""}
-                disabled={isPending}
-                error={errors.mileage_unit?.message}
-              />
-            </>
-          )}
-
-          <Input
-            id="manufacturing_year"
-            type="number"
-            label="Manufacturing Year"
-            min={1950}
-            max={2050}
-            {...register("manufacturing_year", { valueAsNumber: true })}
-            error={errors.manufacturing_year?.message}
-            required
-            disabled={isPending}
-          />
-
-          {!isAccessories && (
-            <>
-              <SelectField
-                id="final_drive_system"
-                label="Final Drive System"
-                options={configData?.product_options?.final_drive_system?.map((o) => ({ value: o.id, label: o.title })) || []}
-                {...register("final_drive_system")}
-                value={watch("final_drive_system") || ""}
-                disabled={isPending}
-                error={errors.final_drive_system?.message}
-              />
-              <SelectField
-                id="wheels"
-                label="Wheels"
-                options={configData?.product_options?.wheels?.map((o) => ({ value: o.id, label: o.title })) || []}
-                {...register("wheels")}
-                value={watch("wheels") || ""}
-                disabled={isPending}
-                error={errors.wheels?.message}
-              />
-              <SelectField
-                id="engine_size"
-                label="Engine Size"
-                options={configData?.product_options?.engine_size?.map((o) => ({ value: o.id, label: o.title })) || []}
-                {...register("engine_size")}
-                value={watch("engine_size") || ""}
-                disabled={isPending}
-                error={errors.engine_size?.message}
-              />
-            </>
-          )}
-
-          <SelectField
-            id="warranty"
-            label="Warranty"
-            options={configData?.product_options?.warranty?.map((o) => ({ value: o.id, label: o.title })) || []}
-            {...register("warranty")}
-            value={watch("warranty") || ""}
-            disabled={isPending}
-            error={errors.warranty?.message}
-          />
-
-          <SelectField
-            id="seller_type"
-            label="Seller Type"
-            options={configData?.product_options?.seller_type?.map((o) => ({ value: o.id, label: o.title })) || []}
-            {...register("seller_type")}
-            value={watch("seller_type") || ""}
-            disabled={isPending}
-            error={errors.seller_type?.message}
-          />
+          <div className="flex space-x-2 mt-[12px]">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <div key={index} className="w-[58px] h-[58px] bg-gray-50 border-[2px] border-[#EAEEF5] flex items-center justify-center overflow-hidden relative">
+                {index < uploadedImages.length && (
+                  <>
+                    <Image src={uploadedImages[index].preview} alt="Thumb" fill className="object-cover" />
+                    <Button type="button" variant="ghost" size="icon" className="absolute -top-1 -right-1 h-5 w-5 bg-white shadow-sm" onClick={() => removeImage(index)} disabled={isPending}>
+                      <X className="h-3 w-3 text-red-500" />
+                    </Button>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
 
-      <div>
-        <h2 className="text-[20px] mb-[13.5px]">Price & Location</h2>
-        <div className="space-y-[16.5px]">
-          <Input
-            id="price"
-            type="number"
-            min={1}
-            defaultValue={1}
-            label="Price"
-            {...register("price", { valueAsNumber: true })}
-            onKeyDown={(e) => {
-              if (["e", "E", "+", "-"].includes(e.key)) e.preventDefault()
-            }}
-            error={errors.price?.message}
-            required
-            disabled={isPending}
-          />
-          <LocationInput
-            setValue={setValue}
-            register={register}
-            errors={errors}
-            isPending={isPending}
-            initialAddress={initialData?.address}
-            initialLat={initialData?.lat}
-            initialLng={initialData?.lng}
-          />
-        </div>
-      </div>
+        {/* Product Details */}
+        <div>
+          <h2 className="text-[20px] font-semibold mb-[13.5px]">Product Details</h2>
+          <div className="space-y-[16.5px]">
+            <Input id="title" label="Title" {...register("title")} required error={errors.title?.message} disabled={isPending} />
 
-      <div>
-        <div className="flex space-x-3 items-start">
-          <Checkbox id="guidelines" checked={guidelinesChecked} required onCheckedChange={(c) => setGuidelinesChecked(c === true)} disabled={isPending} />
-          <Label htmlFor="guidelines" className="text-sm leading-none">I confirm this ad follows guidelines</Label>
+            <SelectField
+              id="category_id"
+              label="Category"
+              options={categories.map((cat) => ({ value: cat.id, label: cat.title }))}
+              value={selectedCategoryId || ""}
+              onChange={(e) => handleCategoryChange(Number(e.target.value))}
+              disabled={isCategoriesLoading || isPending}
+              required
+              error={errors.category_id?.message}
+            />
+
+            <SelectField
+              id="subcategory_id"
+              label="SubCategory"
+              options={subcategories.map((sub) => ({ value: sub.id, label: sub.title }))}
+              {...register("subcategory_id", { setValueAs: (v) => v === "" ? 0 : Number(v) })}
+              value={watch("subcategory_id") || ""}
+              disabled={!selectedCategoryId || subcategories.length === 0 || isPending}
+              error={errors.subcategory_id?.message}
+            />
+
+            {!isAccessories && (
+              <SelectField
+                id="brand_id"
+                label="Brand"
+                options={brandsData.map((brand) => ({ value: brand.id, label: brand.title }))}
+                {...register("brand_id", { setValueAs: (v) => v === "" ? undefined : Number(v) })}
+                value={watch("brand_id") ?? ""}
+                disabled={isBrandsLoading || isPending}
+                error={errors.brand_id?.message}
+              />
+            )}
+
+            <SelectField
+              id="condition"
+              label="Condition (1-10)"
+              options={Array.from({ length: 10 }, (_, i) => ({ value: i + 1, label: String(i + 1) }))}
+              {...register("condition", { setValueAs: (v) => v === "" ? undefined : Number(v) })}
+              value={watch("condition") ?? ""}
+              required
+              disabled={isPending}
+              error={errors.condition?.message}
+            />
+
+            <div>
+              <Label htmlFor="description">Description</Label>
+              <Textarea id="description" className="min-h-[120px] mt-1" {...register("description")} disabled={isPending} />
+              {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description.message}</p>}
+            </div>
+
+            <SelectField
+              id="usage"
+              label="Usage"
+              options={configData?.product_options?.usage?.map((o) => ({ value: o.id, label: o.title })) || []}
+              {...register("usage")}
+              value={watch("usage") || ""}
+              disabled={isPending}
+              error={errors.usage?.message}
+            />
+
+            {!isAccessories && (
+              <>
+                <Input
+                  id="mileage"
+                  type="number"
+                  label="Mileage"
+                  min={0}
+                  defaultValue={0}
+                  {...register("mileage", { valueAsNumber: true })}
+                  error={errors.mileage?.message}
+                  disabled={isPending}
+                />
+                <SelectField
+                  id="mileage_unit"
+                  label="Mileage Unit"
+                  options={configData?.product_options?.mileage_unit?.map((o) => ({ value: o.id, label: o.title })) || []}
+                  {...register("mileage_unit")}
+                  value={watch("mileage_unit") || ""}
+                  disabled={isPending}
+                  error={errors.mileage_unit?.message}
+                />
+              </>
+            )}
+
+            <Input
+              id="manufacturing_year"
+              type="number"
+              label="Manufacturing Year"
+              min={1950}
+              max={2050}
+              {...register("manufacturing_year", { valueAsNumber: true })}
+              error={errors.manufacturing_year?.message}
+              required
+              disabled={isPending}
+            />
+
+            {!isAccessories && (
+              <>
+                <SelectField
+                  id="final_drive_system"
+                  label="Final Drive System"
+                  options={configData?.product_options?.final_drive_system?.map((o) => ({ value: o.id, label: o.title })) || []}
+                  {...register("final_drive_system")}
+                  value={watch("final_drive_system") || ""}
+                  disabled={isPending}
+                  error={errors.final_drive_system?.message}
+                />
+                <SelectField
+                  id="wheels"
+                  label="Wheels"
+                  options={configData?.product_options?.wheels?.map((o) => ({ value: o.id, label: o.title })) || []}
+                  {...register("wheels")}
+                  value={watch("wheels") || ""}
+                  disabled={isPending}
+                  error={errors.wheels?.message}
+                />
+                <SelectField
+                  id="engine_size"
+                  label="Engine Size"
+                  options={configData?.product_options?.engine_size?.map((o) => ({ value: o.id, label: o.title })) || []}
+                  {...register("engine_size")}
+                  value={watch("engine_size") || ""}
+                  disabled={isPending}
+                  error={errors.engine_size?.message}
+                />
+              </>
+            )}
+
+            <SelectField
+              id="warranty"
+              label="Warranty"
+              options={configData?.product_options?.warranty?.map((o) => ({ value: o.id, label: o.title })) || []}
+              {...register("warranty")}
+              value={watch("warranty") || ""}
+              disabled={isPending}
+              error={errors.warranty?.message}
+            />
+
+            <SelectField
+              id="seller_type"
+              label="Seller Type"
+              options={configData?.product_options?.seller_type?.map((o) => ({ value: o.id, label: o.title })) || []}
+              {...register("seller_type")}
+              value={watch("seller_type") || ""}
+              disabled={isPending}
+              error={errors.seller_type?.message}
+            />
+          </div>
         </div>
-        <Button type="submit" className="w-full bg-black text-white disabled:hover:text-white h-[48px] mt-8 rounded-none" disabled={isPending || !guidelinesChecked}>
-          {isPending ? "Processing..." : isEditMode ? "Update Ad" : "Submit Ad"}
-        </Button>
-      </div>
-    </form>
+
+        <div>
+          <h2 className="text-[20px] mb-[13.5px]">Price & Location</h2>
+          <div className="space-y-[16.5px]">
+            <Input
+              id="price"
+              type="number"
+              min={1}
+              defaultValue={1}
+              label="Price"
+              {...register("price", { valueAsNumber: true })}
+              onKeyDown={(e) => {
+                if (["e", "E", "+", "-"].includes(e.key)) e.preventDefault()
+              }}
+              error={errors.price?.message}
+              required
+              disabled={isPending}
+            />
+            <LocationInput
+              setValue={setValue}
+              register={register}
+              errors={errors}
+              isPending={isPending}
+              initialAddress={initialData?.address}
+              initialLat={initialData?.lat}
+              initialLng={initialData?.lng}
+            />
+          </div>
+        </div>
+
+        <div>
+          <div className="flex space-x-3 items-start">
+            <Checkbox id="guidelines" checked={guidelinesChecked} required onCheckedChange={(c) => setGuidelinesChecked(c === true)} disabled={isPending} />
+            <Label htmlFor="guidelines" className="text-sm leading-none">I confirm this ad follows guidelines</Label>
+          </div>
+          <Button type="submit" className="w-full bg-black text-white disabled:hover:text-white h-[48px] mt-8 rounded-none" disabled={isPending || !guidelinesChecked}>
+            {isPending ? "Processing..." : isEditMode ? "Update Ad" : "Submit Ad"}
+          </Button>
+        </div>
+      </form>
+
+      <Dialog open={showLimitDialog} onOpenChange={setShowLimitDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader className="flex flex-col items-center justify-center text-center">
+            <div className="bg-orange-100 p-3 rounded-full mb-4">
+              <AlertCircle className="h-8 w-8 text-orange-600" />
+            </div>
+            <DialogTitle className="text-xl font-bold">Limit Reached</DialogTitle>
+            <DialogDescription className="text-gray-600 mt-2">
+              {limitMessage || "You have reached your free ad post limit."}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="mt-6 flex flex-col sm:flex-row gap-3">
+            <Button
+              type="button"
+              variant="outline"
+              className="flex-1 rounded-none"
+              onClick={() => {
+                setShowLimitDialog(false)
+                router.push("/dashboard/my-ads")
+              }}
+            >
+              View My Ads
+            </Button>
+            <Button
+              type="button"
+              className="flex-1 bg-[#E9A426] hover:bg-[#d8931d] text-white rounded-none"
+              onClick={() => router.push("/checkout?type=activation")}
+            >
+              Get More Ads
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }

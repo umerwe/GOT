@@ -105,3 +105,13 @@ export const getFeaturedProducts = async (filters: ProductFilters = {}) => {
   })
   return data
 };
+
+export const getMyTierInfo = async () => {
+  const { data } = await api.get("/my-tier-info");
+  return data.data;
+};
+
+export const activateExtraAd = async () => {
+  const { data } = await api.post("/activate-extra-ad");
+  return data;
+};

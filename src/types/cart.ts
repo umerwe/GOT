@@ -16,5 +16,6 @@ export interface OrderSummaryProps {
   subtotal: number;
   isCartPage?: boolean;
   isFeatureAd?: boolean;
-featureAdFee?: number;
+  featureAdFee?: number;
+  isAdActivation?: boolean;
 }

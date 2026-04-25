@@ -11,20 +11,21 @@ import { cn } from "@/lib/utils"
 import { useState } from "react"
 import LoginDialog from "@/components/dialogs/loginDialog"
 import { formatLabel } from "@/utils/formatLabel"
-import { toggleWishlist } from "@/services/favorites/wishlist"
 
 interface ListCardProps {
     products: Product[]
     isLoading?: boolean
     count?: number
     isHome?: boolean
+    isFeatured ?: boolean
 }
 
 export default function ListCard({
     products,
     isLoading = false,
     count,
-    isHome = true
+    isHome = true,
+    isFeatured = false
 }: ListCardProps) {
     const router = useRouter()
     // 1. Hook to get current wishlist items from API to check "isFavorite"
@@ -48,7 +49,7 @@ export default function ListCard({
     }
 
     if (!products || products.length === 0) {
-        return <NotFoundWrapper className="mt-[15px]" />
+        return <NotFoundWrapper className="mt-[15px]" isFeatured={isFeatured} />
     }
 
     const handleToggleFavorite = (e: React.MouseEvent, product: Product) => {

@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/utils/loginDialog.tss", "src/components/ui/slider.tss", ".next/middleware.ts", "src/auth.ts", "src/store/slices/ConfigSlice.tss", "scripts/inject-env.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/utils/loginDialog.tss", "src/components/ui/slider.tss", ".next/middleware.ts", "src/auth.ts", "src/store/slices/ConfigSlice.tss", "scripts/inject-env.js", "src/app/(site)/(user)/activation-success"],
   "exclude": ["node_modules"]
 }

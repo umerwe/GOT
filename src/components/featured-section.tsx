@@ -63,6 +63,7 @@ export default function Features() {
             <ListCard
                 products={featuresData}
                 isLoading={isLoading}
+                isFeatured={true}
             />
         </div>
     )

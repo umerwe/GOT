@@ -423,7 +423,7 @@ export default function Listing({ product }: ProductDetailsProps) {
 
           {/* Add to Cart Button */}
           {
-            (product.seller?.user_type === "business" && configData?.checkout_enabled) && (
+            !!(product.seller?.user_type === "business" && configData?.checkout_enabled) && (
               <Button
                 variant="outline"
                 onClick={handleAddToCart}

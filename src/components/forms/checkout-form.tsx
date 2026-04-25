@@ -43,7 +43,7 @@ const STRIPE_FIELD_ERRORS: Record<string, string> = {
   cardCvc: "Please enter your security code",
 };
 
-export default function PaymentForm({ productId, cartItems, subTotal }: { productId?: string, cartItems?: CartItem[], subTotal?: number }) {
+export default function PaymentForm({ productId, cartItems, subTotal, isAdActivation }: { productId?: string, cartItems?: CartItem[], subTotal?: number, isAdActivation?: boolean }) {
   const router = useRouter();
   const stripe = useStripe();
   const elements = useElements();
@@ -131,10 +131,35 @@ export default function PaymentForm({ productId, cartItems, subTotal }: { produc
           router.push(`/feature-ad-success?tid=${paymentIntent.id}&product_id=${productId}`);
         }
 
-      } else {
+      }
+      else if (isAdActivation) {
+        const res = await api.post("/stripe/create-featured-intent", {
+          extra_ad: 1,
+        });
+        const clientSecret = res.data.client_secret;
+
+        const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+          payment_method: {
+            card: elements.getElement(CardNumberElement)!,
+            billing_details: {
+              email: values.email,
+              phone: values.phone,
+              address: { postal_code: values.postalCode },
+            },
+          },
+        });
+
+        if (error) {
+          toast({ title: "Payment Error", description: error.message, variant: "destructive" });
+          setLoading(false);
+        } else if (paymentIntent?.status === "succeeded") {
+          router.push(`/activation-success?tid=${paymentIntent.id}`);
+        }
+      }
+      else {
         const res = await api.post("/create-payment-intent", {
           amount: subTotal,
-          products: cartItems?.map((item : CartItem) => ({
+          products: cartItems?.map((item: CartItem) => ({
             product_id: item.id,
             quantity: item.quantity,
             price: item.price,

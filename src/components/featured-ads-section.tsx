@@ -54,7 +54,7 @@ const FeauredAdsSection = () => {
         )}
       </div>
 
-      <GridCard products={products} isLoading={isLoading} isSecond={true} isPrivate={true} />
+      <GridCard products={products} isLoading={isLoading} isSecond={true} isPrivate={true} isFeatured={true} />
     </div>
   );
 };

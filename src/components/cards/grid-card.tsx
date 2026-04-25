@@ -23,6 +23,7 @@ interface GridCardProps {
   businessLogo?: string;
   isBusinessPage?: boolean;
   isPrivate?: boolean;
+  isFeatured?: boolean;
 }
 
 export default function GridCard({
@@ -33,6 +34,7 @@ export default function GridCard({
   businessLogo,
   isBusinessPage = false,
   isPrivate = false,
+  isFeatured = false,
 }: GridCardProps) {
   const { data: wishlistData } = useGetWishlist();
   const {mutate: toggleWishlistMutation,isPending} = useToggleWishlist();
@@ -42,7 +44,7 @@ export default function GridCard({
   const wishlistItems = wishlistData?.data;
 
   if (isLoading) return <SkeletonLoader type="products" count={count} isAdsPage={isAdsPage} />;
-  if (!products || products.length === 0) return <NotFoundWrapper className={isBusinessPage ? "mt-[125px]" : "mt-[15px]"} />;
+  if (!products || products.length === 0) return <NotFoundWrapper className={isBusinessPage ? "mt-[125px]" : "mt-[15px]"} isFeatured={isFeatured} />;
 
   const handleToggleFavorite = (e: React.MouseEvent, product: Product) => {
     e.preventDefault();

@@ -3,10 +3,10 @@
 import { Heart, ShoppingCart, Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NavIconsProps } from "@/types/navbar";
-import { useAppSelector } from "@/store/hooks";
 import { useEffect, useState } from "react";
 import LoginDialog from "@/components/dialogs/loginDialog";
 import { useGetWishlist } from "@/hooks/favorites/useWishlist";
+import { useGetConfig } from "@/hooks/useConfig";
 interface ExtendedNavIconsProps extends NavIconsProps {
     onClose?: () => void;
 }
@@ -20,6 +20,8 @@ const NavIcons = ({
     onClose,
 }: ExtendedNavIconsProps) => {
     const {data} = useGetWishlist();
+    const { data: configData } = useGetConfig();
+
     const favoriteCount = data?.pagination?.wishlist_count || 0;
     const [unreadCount, setUnreadCount] = useState<number>(0);
     const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
@@ -57,8 +59,9 @@ const NavIcons = ({
 
     return (
         <div className="flex items-center gap-4 flex-shrink-0">
-            {/* Cart Icon */}
-            <div
+            {
+                !!configData?.checkout_enabled && 
+                 <div
                 onClick={() => handleClick("/cart")}
                 className="relative cursor-pointer hover:opacity-80"
             >
@@ -69,6 +72,7 @@ const NavIcons = ({
                     </span>
                 )}
             </div>
+            }
 
             {/* Favorites Icon */}
             <div
