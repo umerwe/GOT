@@ -1,6 +1,6 @@
 "use client"
 
-import { Heart, ShoppingCart, Bell } from "lucide-react";
+import { Heart, ShoppingCart, Bell, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NavIconsProps } from "@/types/navbar";
 import { useEffect, useState } from "react";
@@ -73,6 +73,14 @@ const NavIcons = ({
                 )}
             </div>
             }
+
+            {/* Chat Icon */}
+            <div
+                onClick={() => handleClick("/chat")}
+                className="relative cursor-pointer hover:opacity-80"
+            >
+                <MessageCircle className={cn("w-[18.5px] h-[18.5px] stroke-[2.5]", textColor)} />
+            </div>
 
             {/* Favorites Icon */}
             <div

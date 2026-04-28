@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react"
 import { Input } from "@/components/ui/input"
-import { useAppSelector } from "@/store/hooks"
 import SkeletonLoader from "@/common/skeleton-loader"
 import ChatItem from "./chat-item"
 import type { Chat } from "@/types/chat"
@@ -11,7 +10,7 @@ import { useRouter } from "next/navigation"
 import { useGetProfile } from "@/hooks/useProfile"
 
 interface ChatListProps {
-  onChatSelect?: (receiverId: number, chatId: number) => void
+  onChatSelect?: (receiverId: number, chatId: number, productId: number) => void
   currentConversationId?: number | null
   activeReceiverId?: number
   className?: string
@@ -41,7 +40,6 @@ const ChatList = ({
     if (!searchQuery) return inboxData
     return inboxData.filter((chat: Chat) => chat.receiver_name?.toLowerCase().includes(searchQuery.toLowerCase()))
   }, [inboxData, searchQuery])
-
   return (
     <div className={`flex flex-col ${className}`}>
       <div className="flex items-center px-4 py-3 border-b border-gray-200">
@@ -75,7 +73,7 @@ const ChatList = ({
                 key={i}
                 chat={chat}
                 isActive={activeReceiverId === chat.receiver_id}
-                onClick={() => onChatSelect?.(chat.receiver_id, chat.id)}
+                onClick={(receiverId, chatId, productId) => onChatSelect?.(receiverId, chatId, productId)}
                 userId={Number(userId)}
                 unreadCount={
                   chat.id === currentConversationId ? 0 :

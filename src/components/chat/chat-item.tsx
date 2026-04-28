@@ -6,11 +6,12 @@ import { formatRelativeTime } from "@/utils/formatTime"
 import { Chat } from "@/types/chat"
 import { useAppDispatch } from "@/store/hooks"
 import { resetChatCount } from "@/store/slices/ChatSlice"
+import { toast } from "../ui/toast"
 
 interface ChatItemProps {
   chat: Chat
   isActive?: boolean
-  onClick: () => void
+  onClick: (receiverId: number, chatId: number, productId: number) => void
   userId: number
   unreadCount: number
 }
@@ -18,7 +19,16 @@ interface ChatItemProps {
 const ChatItem = ({ chat, isActive = false, onClick, userId, unreadCount }: ChatItemProps) => {
   const dispatch = useAppDispatch()
   const handleClick = () => {
-    onClick()
+    if (!chat?.product?.id) {
+      toast({
+        title: "Product not found",
+        description: "The product you are trying to chat about no longer exists.",
+      })
+      return
+    }
+    
+    onClick(chat.receiver_id, chat.id, chat?.product.id)
+
     dispatch(resetChatCount(chat.receiver_id))
   }
 

@@ -124,18 +124,16 @@ const ConversationPage = () => {
   }, [inboxData, id, dispatch, chatCount]);
 
 
-  const handleChatSelect = async (receiverId: number, chatId?: number) => {
+  const handleChatSelect = async (receiverId: number, chatId?: number, productId?: number) => {
     if (chatId) {
       try {
         await api.get(`/message/get?receiver_id=${receiverId}`)
         dispatch(resetChatCount(receiverId))
-
       } catch {
         console.error("Error fetching messages on chat select")
       }
     }
-    // Router push
-    router.push(`/chat/${receiverId}?conversation_id=${chatId}`)
+    router.push(`/chat/${receiverId}?conversation_id=${chatId}&product_id=${productId}`)
   }
 
 
@@ -162,26 +160,36 @@ const ConversationPage = () => {
 
         {/* Conversation area */}
         <div className={`flex-1 flex flex-col w-full h-full ${id ? "flex" : "hidden md:flex"}`}>
-          <ConversationHeader chatInfo={chatInfo} isLoading={isInboxLoading} />
+          {!productId || !conversationId ? (
+            <div className="flex-1 flex items-center justify-center">
+              <p className="text-gray-500 text-center">
+                Product ID and Conversation ID are required
+              </p>
+            </div>
+          ) : (
+            <>
+              <ConversationHeader chatInfo={chatInfo} isLoading={isInboxLoading} />
 
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto">
-            <MessagesList
-              messages={mergedMessages}
-              isLoading={isMessagesLoading}
-              userId={Number(userId)}
-              chatInfo={chatInfo}
-            />
-          </div>
+              {/* Messages */}
+              <div className="flex-1 overflow-y-auto">
+                <MessagesList
+                  messages={mergedMessages}
+                  isLoading={isMessagesLoading}
+                  userId={Number(userId)}
+                  chatInfo={chatInfo}
+                />
+              </div>
 
-          {/* Form */}
-          <div className="border-t border-gray-200 flex-shrink-0">
-            <MessageForm
-              receiverId={id as string}
-              productId={productId ? Number(productId) : undefined}
-              onMessageSent={handleMessageSent}
-            />
-          </div>
+              {/* Form */}
+              <div className="border-t border-gray-200 flex-shrink-0">
+                <MessageForm
+                  receiverId={id as string}
+                  productId={productId ? Number(productId) : undefined}
+                  onMessageSent={handleMessageSent}
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
     </AuthGuard>

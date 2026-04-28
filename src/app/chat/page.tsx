@@ -13,8 +13,8 @@ const ChatPage = () => {
 
   const { data: inboxData = [], isLoading: isInboxLoading } = useGetChatInbox()
 
-  const handleChatSelect = (receiverId: number, chatId?: number) => {
-    router.push(`/chat/${receiverId}?conversation_id=${chatId}`)
+  const handleChatSelect = (receiverId: number, chatId?: number, productId?: number) => {
+    router.push(`/chat/${receiverId}?conversation_id=${chatId}&product_id=${productId}`)
   }
 
   return (

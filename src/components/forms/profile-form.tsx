@@ -14,13 +14,13 @@ import { capitalizeWords } from "@/utils/capitalizeWords"
 import AuthGuard from "@/common/auth-guard"
 import SkeletonLoader from "@/common/skeleton-loader"
 import { Card, CardContent } from "@/components/ui/card"
-import Link from "next/link"
 import { Eye, EyeOff } from "lucide-react"
 
 interface ProfileForm {
     name: string
     email: string
     phone: string
+    address: string
 }
 
 interface ChangePasswordForm {
@@ -35,6 +35,7 @@ export default function ProfilePage() {
     const changePassword = useChangePassword()
 
     const [isEditOpen, setIsEditOpen] = useState(false)
+    const [isAddressOpen, setIsAddressOpen] = useState(false)
     const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false)
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
     const [showOldPassword, setShowOldPassword] = useState(false)
@@ -46,6 +47,7 @@ export default function ProfilePage() {
             name: data?.name || "",
             email: data?.email || "",
             phone: data?.phoneNumber || "",
+            address: data?.address || "",
         },
     })
 
@@ -64,12 +66,15 @@ export default function ProfilePage() {
         formData.append("name", values.name)
         formData.append("email", values.email)
         formData.append("phone", values.phone)
+        formData.append("address", values.address) // Sending address as text
+
         if (selectedFile) {
             formData.append("profile_image", selectedFile)
         }
         updateProfile.mutate(formData, {
             onSuccess: () => {
                 setIsEditOpen(false)
+                setIsAddressOpen(false)
                 setSelectedFile(null)
                 reset(values)
             },
@@ -80,11 +85,11 @@ export default function ProfilePage() {
         const file = e.target.files?.[0]
         if (file) {
             setSelectedFile(file)
-            // Automatically submit when image is chosen
             const formData = new FormData()
             formData.append("name", data?.name || "")
             formData.append("email", data?.email || "")
             formData.append("phone", data?.phoneNumber || "")
+            formData.append("address", data?.address || "")
             formData.append("profile_image", file)
             updateProfile.mutate(formData)
         }
@@ -95,9 +100,20 @@ export default function ProfilePage() {
             name: data?.name || "",
             email: data?.email || "",
             phone: data?.phoneNumber || "",
+            address: data?.address || "",
         })
         setSelectedFile(null)
         setIsEditOpen(true)
+    }
+
+    const openAddressDialog = () => {
+        reset({
+            name: data?.name || "",
+            email: data?.email || "",
+            phone: data?.phoneNumber || "",
+            address: data?.address || "",
+        })
+        setIsAddressOpen(true)
     }
 
     const openChangePasswordDialog = () => {
@@ -123,13 +139,11 @@ export default function ProfilePage() {
 
                 <div className="bg-white p-[18px] sm:p-[30px] pb-[116px]">
                     <div className="">
-                        {/* --- Header --- */}
                         <div className="flex flex-col space-y-6">
                             {isLoading ? (
                                 <SkeletonLoader type="profile" />
                             ) : (
                                 <>
-                                    {/* --- Profile Image Section --- */}
                                     <div className="flex flex-col items-start space-y-4">
                                         <h3 className="text-sm text-[#000000] capitalize tracking-tight">Profile Image</h3>
                                         <div className="space-y-3">
@@ -154,7 +168,6 @@ export default function ProfilePage() {
                                         </div>
                                     </div>
 
-                                    {/* --- Contact Info & Newsletters Card --- */}
                                     <Card className="bg-white rounded-none border-[3px] border-[#EAEAEA] max-w-[662px]">
                                         <CardContent className="px-[15px] sm:px-[40px] py-[30px] grid grid-cols-1 md:grid-cols-2 gap-8">
                                             <div>
@@ -165,7 +178,7 @@ export default function ProfilePage() {
                                                     <p className="text-[#5E5E5E] font-normal">{data?.phoneNumber}</p>
                                                 </div>
                                                 <div className="flex space-x-4 text-sm font-semibold mt-[10px]">
-                                                    <button onClick={openEditDialog} className="text-[#C17C00] hover:text-hover">
+                                                    <button onClick={openEditDialog} className="text-[#C17C00] cursor-pointer hover:text-hover">
                                                         Edit
                                                     </button>
                                                     <button
@@ -176,37 +189,21 @@ export default function ProfilePage() {
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div className="space-y-[20px]">
-                                                <h3 className="text-sm text-[#000000]">Newsletters</h3>
-                                                <p className="text-gray-600 text-sm">You don&apos;t subscribe to our newsletter.</p>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-
-                                    {/* --- Addresses Card --- */}
-                                    <Card className="bg-white rounded-none border-[3px] border-[#EAEAEA] max-w-[662px]">
-                                        <CardContent className="px-[15px] sm:px-[40px] py-[30px] grid grid-cols-1 md:grid-cols-2 gap-8">
-                                            <div className="space-y-[20px]">
-                                                <h3 className="text-sm text-[#000000]">Default Billing Address</h3>
-                                                <p className="text-[#5E5E5E] text-[14px] font-normal">House #24, Street 5, Islamabad.</p>
-                                                <button className="text-[#C17C00] hover:text-hover font-semibold text-[14px]">
-                                                    Edit Address
-                                                </button>
-                                            </div>
-                                            <div className="space-y-[20px]">
-                                                <h3 className="text-sm text-[#000000]">Default Shipping Address</h3>
-                                                <p className="text-[#5E5E5E] text-[14px] font-normal">221-B, Block L, Islamabad.</p>
-                                                <button className="text-[#C17C00] hover:text-hover font-semibold text-[14px]">
-                                                    Edit Address
-                                                </button>
-                                            </div>
+                                           <div className="space-y-[20px]">
+                                                        <h3 className="text-sm text-[#000000]">Default Address</h3>
+                                                        <p className="text-[#5E5E5E] text-[14px] font-normal">
+                                                            {data?.address || "No address provided."}
+                                                        </p>
+                                                        <button onClick={openAddressDialog} className="text-[#C17C00] cursor-pointer hover:text-hover font-semibold text-[14px]">
+                                                            Edit Address
+                                                        </button>
+                                                    </div>
                                         </CardContent>
                                     </Card>
                                 </>
                             )}
                         </div>
 
-                        {/* Edit Profile Dialog */}
                         <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
                             <DialogContent>
                                 <DialogHeader>
@@ -242,7 +239,33 @@ export default function ProfilePage() {
                             </DialogContent>
                         </Dialog>
 
-                        {/* Change Password Dialog */}
+                        <Dialog open={isAddressOpen} onOpenChange={setIsAddressOpen}>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Edit Address</DialogTitle>
+                                </DialogHeader>
+                                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                                    <div>
+                                        <Label>Address</Label>
+                                        <Input {...register("address")} placeholder="Enter your full address" />
+                                    </div>
+                                    <DialogFooter>
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            className="bg-transparent"
+                                            onClick={() => setIsAddressOpen(false)}
+                                        >
+                                            Cancel
+                                        </Button>
+                                        <Button type="submit" disabled={updateProfile.isPending}>
+                                            {updateProfile.isPending ? "Updating..." : "Update Address"}
+                                        </Button>
+                                    </DialogFooter>
+                                </form>
+                            </DialogContent>
+                        </Dialog>
+
                         <Dialog open={isChangePasswordOpen} onOpenChange={setIsChangePasswordOpen}>
                             <DialogContent>
                                 <DialogHeader>

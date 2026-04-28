@@ -9,6 +9,11 @@ export interface Chat {
     sender_id: number
     created_at: string
   }
+  product: {
+    id: number
+    title: string
+    image: string
+  }
 }
 
 export interface Message {

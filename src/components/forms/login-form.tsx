@@ -43,7 +43,7 @@ export default function LoginForm() {
       <div className="mb-[24px]">
         <h5 className="text-[22px] text-[#000000] h-[35px]">User Login</h5>
         <p className="text-[#000000] text-[14px]">
-          Welcome back. Enter your credentials to access your account
+          Welcome back, Enter your credentials to access your account, If you are a GOT member you can use the same credentials of the GOT app.
         </p>
       </div>
 
