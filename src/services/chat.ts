@@ -5,8 +5,8 @@ export const chatInbox = async () => {
   return data.data;
 };
 
-export const getMessages = async (receiver_id: string) => {
-  const { data } = await api.get(`/message/get?receiver_id=${receiver_id}`);
+export const getMessages = async (conversation_id: string) => {
+  const { data } = await api.get(`/message/get?conversation_id=${conversation_id}`);
   return data.data ?? [];
 };
 

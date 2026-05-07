@@ -45,8 +45,8 @@ export const UserMenu = () => {
       <Image
         src={isBusiness ? data?.logo : data?.profile_image}
         alt="profile"
-        width={24}
-        height={24}
+        width={256}
+        height={256}
         className="rounded-full object-center w-full h-full"
       />
     </div>

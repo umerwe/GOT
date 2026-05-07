@@ -80,6 +80,7 @@ interface Product {
   category_id?: number;
   subcategory_id?: number;
   brand_id?: number;
+  created_at ?: Date
 }
 
 interface ProductFilters {

@@ -15,6 +15,13 @@ interface MessageBubbleProps {
 }
 
 const MessageBubble = ({ message, isOwn, chatInfo }: MessageBubbleProps) => {
+  console.log({ message });
+  const formatTime = (dateString: string) => {
+    return new Date(dateString).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
   return (
     <div className={`flex ${isOwn ? "justify-end" : "justify-start"} w-full`}>
       {!isOwn && (
@@ -42,7 +49,15 @@ const MessageBubble = ({ message, isOwn, chatInfo }: MessageBubbleProps) => {
             }`}
         >
           {message.message ? (
-            <p>{message.message}</p>
+            <>
+              <p>{message.message}</p>
+              <p
+                className={`text-[10px] mt-1 ${isOwn ? "text-right text-gray-600" : "text-left text-gray-600"
+                  }`}
+              >
+                {formatTime(message.created_at)}
+              </p>
+            </>
           ) : message.file?.length ? (
             <div className="space-y-2">
               {message.file.map((file: string, index: number) => (

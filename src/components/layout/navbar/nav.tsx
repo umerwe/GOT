@@ -96,13 +96,12 @@ const Navbar = () => {
 
       {/* Mobile Menu Dropdown */}
       {isMenuOpen && (
-        <div className="sm:hidden bg-white p-4 flex flex-col gap-4 animate-in slide-in-from-top-2">
+        <div className="sm:hidden absolute left-0 right-0 top-full bg-white shadow-md p-4 flex flex-col gap-4 animate-in slide-in-from-top-2 z-[500]">
           <NavLinks
             isMobile
             textColor="text-black"
             onClose={() => setIsMenuOpen(false)}
           />
-
           <div className="border-t pt-4">
             <NavActions
               {...commonProps}

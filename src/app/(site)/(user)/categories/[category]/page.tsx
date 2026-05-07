@@ -291,7 +291,7 @@ export default function CategoryLayout() {
           </div>
         </div>
 
-        {(sellerProducts.length > 0 || sellerLoading) && (
+        {(sellerProducts.length > 0 && sellerPagination.totalPages > 1 || sellerLoading) && (
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
@@ -425,7 +425,7 @@ export default function CategoryLayout() {
                         </Link>
                       </div>
 
-                      {totalProducts > 6 && (
+                      {totalProducts > 6 && business.products?.length > 6 && (
                         <div className="flex items-center gap-2">
                           <Button
                             variant="outline"

@@ -49,7 +49,7 @@ const ChatItem = ({ chat, isActive = false, onClick, userId, unreadCount }: Chat
 
         <span className="flex flex-col">
           <span className="font-medium text-gray-800 text-sm sm:text-base truncate max-w-[120px] sm:max-w-[160px]">
-            {capitalizeWords(chat.receiver_name as string) || "Unknown User"}
+            {capitalizeWords(chat.product?.title as string) || "Unknown User"}
           </span>
           {chat.last_message?.created_at && (
             <span className="text-xs text-gray-500">

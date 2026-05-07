@@ -1,7 +1,7 @@
 "use client"
 
 import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState, useRef } from "react"
 import { useGetChatInbox, useGetMessages } from "@/hooks/useChat"
 import { useAppDispatch, useAppSelector } from "@/store/hooks"
 import ChatList from "@/components/chat/chat-list"
@@ -27,23 +27,39 @@ const ConversationPage = () => {
   const conversationId = searchParams.get("conversation_id")
   const userId = profileData?.id;
   const dispatch = useAppDispatch()
-  const { data: inboxDataRaw = [], isLoading: isInboxLoading } = useGetChatInbox()
-  const { data: messagesDataRaw = [], isLoading: isMessagesLoading } = useGetMessages(id as string)
+  const { data: inboxDataRaw = [], isLoading: isInboxLoading } = useGetChatInbox();
+
+  const { data: messagesDataRaw = [], isLoading: isMessagesLoading } = useGetMessages(conversationId as string)
 
   const chatCount = useAppSelector((state) => state.chatCount.counts)
   const reduxMessages = useAppSelector((state) => state.chatCount.messages)
   const [messages, setMessages] = useState<Message[]>([])
 
+  const prevConversationIdRef = useRef<string | null>(null)
+
   useEffect(() => {
+    const isNewConversation = prevConversationIdRef.current !== conversationId
+    prevConversationIdRef.current = conversationId
+
+    if (isNewConversation) {
+      setMessages([])
+    }
+
     if (!messagesDataRaw || messagesDataRaw.length === 0) return
+
+    const newSorted = [...messagesDataRaw].sort((a, b) => a.id - b.id)
+
     setMessages((prev) => {
-      const newSorted = [...messagesDataRaw].sort((a, b) => a.id - b.id)
-      if (prev.length && prev[prev.length - 1].id === newSorted[newSorted.length - 1].id) {
+      // Only update if last message id differs — avoids infinite loop
+      if (
+        prev.length === newSorted.length &&
+        prev[prev.length - 1]?.id === newSorted[newSorted.length - 1]?.id
+      ) {
         return prev
       }
       return newSorted
     })
-  }, [messagesDataRaw])
+  }, [conversationId, messagesDataRaw])
 
   const mergedMessages = useMemo(() => {
     const isChatRoute = pathname.startsWith("/chat")
@@ -66,11 +82,13 @@ const ConversationPage = () => {
     return messages
   }, [messages, reduxMessages, conversationId, pathname])
 
-  const inboxData = inboxDataRaw.filter((x: Chat) => x.receiver_id !== Number(userId))
-
+  // Match activeChat by conversation_id from the inbox
   const activeChat = useMemo(() => {
-    return inboxData.find((chat: Chat) => chat.receiver_id === Number(id))
-  }, [inboxData, id])
+    if (!conversationId) return null
+    return inboxDataRaw.find((chat: Chat) =>
+      String(chat.id) === String(conversationId)
+    )
+  }, [inboxDataRaw, conversationId])
 
   const chatInfo = useMemo<ChatInfo>(() => {
     if (isInboxLoading) {
@@ -79,10 +97,11 @@ const ConversationPage = () => {
     if (activeChat) {
       return {
         receiver_id: activeChat.receiver_id,
-        receiver_name: activeChat.receiver_name,
-        receiver_image: activeChat.receiver_image || "/diverse-user-avatars.png",
+        receiver_name: activeChat.product?.title,
+        receiver_image: activeChat.product?.product_images?.[0],
       }
     }
+    // Fallback to localStorage for new chats not yet in inbox
     let parsedChatUser: ChatUser | null = null
     if (typeof window !== "undefined") {
       const chatUser = localStorage.getItem("chatUser")
@@ -103,14 +122,15 @@ const ConversationPage = () => {
 
   useEffect(() => {
     const fetchMessagesForActiveChat = async () => {
-      if (!id) return;
+      if (!conversationId) return;
 
-      const activeReceiverId = Number(id);
-      const chat = inboxData.find((c: Chat) => c.receiver_id === activeReceiverId);
+      const chat = inboxDataRaw.find((c: Chat) =>
+        String(c.id) === String(conversationId)
+      );
       if (chat) {
         try {
-          await api.get(`/message/get?receiver_id=${activeReceiverId}`);
-          // reset only if there are unread messages
+          await api.get(`/message/get?conversation_id=${conversationId}`);
+          const activeReceiverId = Number(id);
           if (chatCount[activeReceiverId]) {
             dispatch(resetChatCount(activeReceiverId));
           }
@@ -121,13 +141,12 @@ const ConversationPage = () => {
     };
 
     fetchMessagesForActiveChat();
-  }, [inboxData, id, dispatch, chatCount]);
-
+  }, [inboxDataRaw, conversationId, dispatch, chatCount]);
 
   const handleChatSelect = async (receiverId: number, chatId?: number, productId?: number) => {
     if (chatId) {
       try {
-        await api.get(`/message/get?receiver_id=${receiverId}`)
+        await api.get(`/message/get?conversation_id=${chatId}`)
         dispatch(resetChatCount(receiverId))
       } catch {
         console.error("Error fetching messages on chat select")
@@ -135,7 +154,6 @@ const ConversationPage = () => {
     }
     router.push(`/chat/${receiverId}?conversation_id=${chatId}&product_id=${productId}`)
   }
-
 
   const handleMessageSent = (newMessage: Message) => {
     setMessages((prev) => [...prev, newMessage])
@@ -148,7 +166,7 @@ const ConversationPage = () => {
         <ChatList
           onChatSelect={handleChatSelect}
           activeReceiverId={Number(id)}
-          currentConversationId={conversationId ? Number(conversationId) : null} // pass conversationId
+          currentConversationId={conversationId ? Number(conversationId) : null}
           className={`w-full md:w-1/3 border-r border-gray-200 overflow-y-auto ${id ? "hidden md:flex" : "flex"}`}
           chatCount={chatCount}
           type="chatId"
@@ -156,11 +174,9 @@ const ConversationPage = () => {
           isInboxLoading={isInboxLoading}
         />
 
-
-
         {/* Conversation area */}
         <div className={`flex-1 flex flex-col w-full h-full ${id ? "flex" : "hidden md:flex"}`}>
-          {!productId || !conversationId ? (
+          {!productId && !conversationId ? (
             <div className="flex-1 flex items-center justify-center">
               <p className="text-gray-500 text-center">
                 Product ID and Conversation ID are required

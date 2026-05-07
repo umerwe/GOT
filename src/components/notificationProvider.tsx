@@ -131,12 +131,21 @@ export default function NotificationProvider() {
 
     const sendTokenToServer = async (token: string) => {
         try {
+            const authToken = localStorage.getItem("token");
+            if (!authToken) return; // don't send if not logged in
+
             const response = await fetch(
                 `${process.env.NEXT_PUBLIC_BASE_URL}/update-profile`,
                 {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ fcm_token: token }),
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${authToken}`, // ← was missing
+                    },
+                    body: JSON.stringify({ 
+                        fcm_token: token,
+                        subscribe_to_topic: "notify"
+                    }),
                 }
             );
 

@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "@/components/custom/MyImage"
 import { useRouter } from "next/navigation"
 import { capitalizeWords } from "@/utils/capitalizeWords"
 import { ChatInfo } from "@/types/chat"
@@ -39,29 +38,31 @@ const ConversationHeader = ({ chatInfo, isLoading = false }: ConversationHeaderP
 
       {isLoading ? (
         <>
-          <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse" />
+          <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse flex-shrink-0" />
           <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
         </>
-      ) : chatInfo.receiver_image ? (
-        <div>
-          <MyImage
-            src={chatInfo.receiver_image || "/fallback.png"}
-            alt={chatInfo.receiver_name || "User"}
-            width={256}
-            height={256}
-            className="w-10 h-10 rounded-full flex-shrink-0 object-cover"
-          />
-        </div>
       ) : (
-        <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse" />
-      )}
+        <>
+          {chatInfo.receiver_image ? (
+            <MyImage
+              src={chatInfo.receiver_image || "/fallback.png"}
+              alt={chatInfo.receiver_name || "User"}
+              width={256}
+              height={256}
+              className="w-10 h-10 rounded-full flex-shrink-0 object-cover"
+            />
+          ) : (
+            <div className="w-0 h-0 rounded-full bg-gray-200 flex-shrink-0" />
+          )}
 
-      {isLoading ? null : chatInfo.receiver_name ? (
-        <span className="font-semibold text-gray-800 truncate">
-          {capitalizeWords(chatInfo.receiver_name as string)}
-        </span>
-      ) : (
-        <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
+          {chatInfo.receiver_name ? (
+            <span className="font-semibold text-gray-800 truncate">
+              {capitalizeWords(chatInfo.receiver_name as string)}
+            </span>
+          ) : (
+            <div className="h-4 w-32 bg-gray-200 rounded" />
+          )}
+        </>
       )}
     </div>
   )

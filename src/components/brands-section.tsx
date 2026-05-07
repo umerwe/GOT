@@ -28,8 +28,8 @@ const BrandsSection = () => {
             />
           ))}
         </div>
-      ) : data?.length === 0 ? (
-        <NotFoundWrapper />
+      ) : !data || data.length === 0 ? (
+        <NotFoundWrapper itemName="brands" />
       ) : (
         <div className="overflow-hidden whitespace-nowrap">
           <motion.div

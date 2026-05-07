@@ -20,7 +20,6 @@ interface ChatListProps {
   isInboxLoading?: boolean
 }
 
-
 const ChatList = ({
   onChatSelect,
   activeReceiverId,
@@ -38,16 +37,23 @@ const ChatList = ({
 
   const filteredInboxData: Chat[] = useMemo(() => {
     if (!searchQuery) return inboxData
-    return inboxData.filter((chat: Chat) => chat.receiver_name?.toLowerCase().includes(searchQuery.toLowerCase()))
+    return inboxData.filter((chat: Chat) =>
+      chat.receiver_name?.toLowerCase().includes(searchQuery.toLowerCase())
+    )
   }, [inboxData, searchQuery])
+
   return (
     <div className={`flex flex-col ${className}`}>
       <div className="flex items-center px-4 py-3 border-b border-gray-200">
-        <button onClick={() => router.push(type === "chatId" ? "/chat" : "/")} className="flex items-center text-gray-700 hover:text-[#000000]">
+        <button
+          onClick={() => router.push(type === "chatId" ? "/chat" : "/")}
+          className="flex items-center text-gray-700 hover:text-[#000000]"
+        >
           <ArrowLeft className="w-5 h-5 mr-2" />
           <span className="font-medium">{type === "chatId" ? "Chat" : "Home"}</span>
         </button>
       </div>
+
       {/* Search */}
       <div className="flex items-center rounded-lg px-3 py-2 m-4">
         <Input
@@ -68,17 +74,24 @@ const ChatList = ({
           <p className="text-gray-500 text-center">No chats available</p>
         ) : (
           filteredInboxData.map((chat: Chat, i) => {
+            // Check active state by conversation_id
+            const isActive = String(chat.id) === String(currentConversationId)
+
+            // Unread count: 0 if this is the currently open conversation
+            const unreadCount = isActive
+              ? 0
+              : chatCount[chat.receiver_id] || Number(chat.unread_message_count) || 0
+
             return (
               <ChatItem
-                key={i}
+                key={chat.id ?? i}
                 chat={chat}
-                isActive={activeReceiverId === chat.receiver_id}
-                onClick={(receiverId, chatId, productId) => onChatSelect?.(receiverId, chatId, productId)}
-                userId={Number(userId)}
-                unreadCount={
-                  chat.id === currentConversationId ? 0 :
-                    chatCount[chat.receiver_id] || Number(chat.unread_message_count) || 0
+                isActive={isActive}
+                onClick={(receiverId, chatId, productId) =>
+                  onChatSelect?.(receiverId, chatId, productId)
                 }
+                userId={Number(userId)}
+                unreadCount={unreadCount}
               />
             )
           })

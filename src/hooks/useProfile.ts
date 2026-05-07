@@ -9,6 +9,7 @@ export const useGetProfile = () => {
     queryFn: getProfile,
     enabled: typeof window !== "undefined" && !!localStorage.getItem("token"),
     staleTime: 5 * 60 * 1000,
+    retry: false, // ← add this
   });
 };
 

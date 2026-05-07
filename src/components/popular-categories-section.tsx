@@ -16,8 +16,6 @@ const CategoriesSection = () => {
     const itemsPerPage = 6;
     const totalPages = Math.ceil((data?.length || 0) / itemsPerPage);
     
-    // On mobile, we usually want to show all items so they can scroll.
-    // On desktop, we slice for pagination.
     const visibleCategories = data?.slice(
         page * itemsPerPage,
         (page + 1) * itemsPerPage
@@ -35,7 +33,7 @@ const CategoriesSection = () => {
                 <h2>Popular Categories</h2>
 
                 {/* Hide pagination buttons on small screens since we will use native scroll */}
-                {!isLoading && data.length > 0 && (
+                {!isLoading && data.length > 0 && totalPages > 1 && (
                     <div className="flex items-center gap-2">
                         <Button
                             variant="outline"
@@ -62,7 +60,7 @@ const CategoriesSection = () => {
             {isLoading ? (
                 <SkeletonLoader type="categories" count={6} />
             ) : isEmpty ? (
-                <NotFoundWrapper />
+                <NotFoundWrapper itemName="categories" />
             ) : (
                 <div className="flex overflow-x-auto pb-4 gap-4 sm:grid sm:grid-cols-3 lg:grid-cols-6 sm:gap-[10px] sm:overflow-visible sm:pb-0 scrollbar-hide">
 

@@ -10,11 +10,11 @@ export const useGetChatInbox = () =>
     staleTime: 0,
   });
 
-export const useGetMessages = (receiver_id: string) =>
+export const useGetMessages = (conversation_id: string) =>
   useQuery({
-    queryKey: ["messages", receiver_id],
-    queryFn: () => getMessages(receiver_id),
-    enabled: !!receiver_id,
+    queryKey: ["messages", conversation_id],
+    queryFn: () => getMessages(conversation_id),
+    enabled: !!conversation_id,
     staleTime: 0,
   })
 

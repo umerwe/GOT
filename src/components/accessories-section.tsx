@@ -3,7 +3,7 @@
 import { useGetBusinessProducts, useGetSellerProducts } from '@/hooks/useProduct'
 import React, { useState } from 'react'
 import GridCard from './cards/grid-card';
-import { Loader, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from '@/components/custom/MyImage';
 import Link from 'next/link';
 import { Business } from '@/types/business';
@@ -40,7 +40,6 @@ const AccessoriesSection = () => {
         }));
     };
 
-    // Only show a global empty state if NOT loading and both are empty
     if (!businessLoading && !sellerLoading && businessData?.length === 0 && sellerProducts.length === 0) {
         return (
             <div>
@@ -56,12 +55,11 @@ const AccessoriesSection = () => {
 
             <div className='bg-[#F5F5F5]'>
 
-                {/* --- 1. BUSINESS SECTION --- */}
                 {businessLoading ? (
                     Array.from({ length: 2 }).map((_, i) => (
                         <div key={i} className="pt-[19px] px-[14px] pb-[30px] animate-pulse">
                             <div className="flex items-center gap-3 mb-[23px]">
-                                <div className="w-14 h-14 rounded-full bg-gray-200 border-2 border-white" />
+                                <div className="w-14 h-14 rounded-full bg-gray-200" />
                                 <div className="space-y-2">
                                     <div className="h-5 w-32 bg-gray-200 rounded" />
                                     <div className="h-3 w-48 bg-gray-200 rounded" />
@@ -84,7 +82,8 @@ const AccessoriesSection = () => {
                                             <Image
                                                 src={business.logo || "/default-avatar.png"}
                                                 alt={business.name}
-                                                width={256} height={256}
+                                                width={256}
+                                                height={256}
                                                 className="rounded-full w-14 h-14 object-cover bg-white"
                                             />
                                             <div className="absolute bottom-1 right-0 bg-[#E9A426] rounded-full p-0.5 border-2 border-white">
@@ -101,19 +100,28 @@ const AccessoriesSection = () => {
 
                                     {totalProducts > 6 && (
                                         <div className="flex items-center gap-2">
-                                            <Button variant="outline" size="icon" className="rounded-full h-8 w-8 bg-white"
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                className="rounded-full h-8 w-8 bg-white"
                                                 onClick={() => handleBusinessPaginate(business.id, -1)}
-                                                disabled={currentIndex === 0}>
+                                                disabled={currentIndex === 0}
+                                            >
                                                 <ChevronLeft className="h-4 w-4" />
                                             </Button>
-                                            <Button variant="outline" size="icon" className="rounded-full h-8 w-8 bg-white"
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                className="rounded-full h-8 w-8 bg-white"
                                                 onClick={() => handleBusinessPaginate(business.id, 1)}
-                                                disabled={currentIndex + 6 >= totalProducts}>
+                                                disabled={currentIndex + 6 >= totalProducts}
+                                            >
                                                 <ChevronRight className="h-4 w-4" />
                                             </Button>
                                         </div>
                                     )}
                                 </div>
+
                                 <GridCard products={visibleProducts as Product[]} isLoading={false} />
                             </div>
                         );
@@ -124,32 +132,37 @@ const AccessoriesSection = () => {
                 <div className="pt-[19px] px-[14px] pb-[30px]">
                     <div className="flex items-center justify-between mb-[23px]">
                         <div className="flex items-center gap-3">
-                            <div className="relative">
-                                <Image
-                                    src="/hero-img.png"
-                                    alt="Private Sellers"
-                                    width={256} height={256}
-                                    className="rounded-full w-14 h-14 object-cover bg-white border border-gray-200"
-                                />
-                            </div>
+                            <Image
+                                src="/hero-img.png"
+                                alt="Private Sellers"
+                                width={256}
+                                height={256}
+                                className="rounded-full w-14 h-14 object-cover bg-white border border-gray-200"
+                            />
                             <div>
-                                <div className="flex items-center gap-2">
-                                    <h1 className="text-lg font-bold text-black">Private Sellers</h1>
-                                </div>
+                                <h1 className="text-lg font-bold text-black">Private Sellers</h1>
                                 <p className="text-[#636E7E] text-sm">Individual listings from across the community</p>
                             </div>
                         </div>
 
-                        {(sellerProducts.length > 0 || sellerLoading) && (
+                        {!sellerLoading && sellerProducts.length > 0 && sellerPagination && sellerPagination.totalPages > 1 && (
                             <div className="flex items-center gap-2">
-                                <Button variant="outline" size="icon" className="rounded-full h-8 w-8 bg-white"
+                                <Button
+                                    variant="outline"
+                                    size="icon"
+                                    className="rounded-full h-8 w-8 bg-white"
                                     onClick={() => handleSellerPaginate(-1)}
-                                    disabled={sellerPage <= 1 || sellerLoading}>
+                                    disabled={sellerPage <= 1}
+                                >
                                     <ChevronLeft className="h-4 w-4" />
                                 </Button>
-                                <Button variant="outline" size="icon" className="rounded-full h-8 w-8 bg-white"
+                                <Button
+                                    variant="outline"
+                                    size="icon"
+                                    className="rounded-full h-8 w-8 bg-white"
                                     onClick={() => handleSellerPaginate(1)}
-                                    disabled={!sellerPagination || sellerPage >= sellerPagination.totalPages || sellerLoading}>
+                                    disabled={sellerPage >= sellerPagination.totalPages}
+                                >
                                     <ChevronRight className="h-4 w-4" />
                                 </Button>
                             </div>
@@ -163,6 +176,7 @@ const AccessoriesSection = () => {
                         isPrivate={true}
                     />
                 </div>
+
             </div>
         </div>
     )

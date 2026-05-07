@@ -29,7 +29,7 @@ const FeauredAdsSection = () => {
     <div className="scroll-smooth border-b-3 border-[#EBEBEB] pb-[45px]">
       <div className="flex items-center justify-between mb-[10px]">
         <h2>Featured Ads</h2>
-        {!isLoading && products.length > 0 && (
+        {!isLoading && products.length > 0 && pagination?.totalPages > 1 && (
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
