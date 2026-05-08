@@ -16,6 +16,7 @@ export const useRegisterBusiness = () => {
     mutationFn: registerBusiness,
     onSuccess: (data) => {
       dispatch(setUserData(data));
+      
       localStorage.setItem("token", data.auth_token);
       localStorage.setItem("user_type", data.user_type);
       queryClient.invalidateQueries({ queryKey: ["profile"] })

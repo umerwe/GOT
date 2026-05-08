@@ -54,7 +54,7 @@ export function VerificationForm({ documents }: VerificationFormProps) {
 
     const formData = new FormData();
     formData.append("document_id", String(documentId));
-    formData.append("document", file);
+    formData.append("user_document", file);
 
     saveDocument(formData, {
       onSuccess: () => {

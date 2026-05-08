@@ -74,6 +74,9 @@ export default function DocumentCard({
   const existingDoc = document.user_document;
   const isVerified = existingDoc?.is_verified === 1;
 
+  const isPdf = (url: string) => url.toLowerCase().endsWith(".pdf");
+
+
   return (
     <div className="bg-white p-4 border-2 border-dashed border-gray-300">
       {/* Title row */}
@@ -88,11 +91,10 @@ export default function DocumentCard({
         {/* Status badge — only when already submitted */}
         {existingDoc && (
           <span
-            className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
-              isVerified
-                ? "bg-green-100 text-green-700"
-                : "bg-yellow-100 text-yellow-700"
-            }`}
+            className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${isVerified
+              ? "bg-green-100 text-green-700"
+              : "bg-yellow-100 text-yellow-700"
+              }`}
           >
             {isVerified ? "Verified" : "Pending"}
           </span>
@@ -101,20 +103,41 @@ export default function DocumentCard({
 
       {existingDoc && !uploadedFile && (
         <div className="mb-3">
-          <MyImage
-            src={existingDoc.user_document}
-            alt={document.name}
-            width={500}
-            height={500}
-            className="w-full h-32 object-cover border border-gray-200 rounded"
-          />
+          {isPdf(existingDoc.user_document) ? (
+            <a
+              href={existingDoc.user_document}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full h-32 flex flex-col items-center justify-center gap-1 border border-gray-200 rounded bg-red-50 hover:bg-red-100 transition-colors"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-8 h-8 text-red-500"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z" />
+              </svg>
+              <span className="text-[12px] font-semibold text-red-500">View PDF</span>
+            </a>
+          ) : (
+            <MyImage
+              src={existingDoc.user_document}
+              alt={document.name}
+              width={500}
+              height={500}
+              className="w-full h-32 object-cover border border-gray-200 rounded"
+            />
+          )}
+
           {existingDoc.expire_date && (
             <p className="text-[12px] text-gray-400 mt-1">
               Expires: {new Date(existingDoc.expire_date).toLocaleDateString()}
             </p>
           )}
         </div>
-      )}
+      )
+      }
 
       {/* File picker */}
       <label className="cursor-pointer block w-full">
@@ -137,9 +160,11 @@ export default function DocumentCard({
       </label>
 
       {/* Validation error */}
-      {fileError && (
-        <p className="text-red-500 text-[12px] font-medium mt-1">{fileError}</p>
-      )}
+      {
+        fileError && (
+          <p className="text-red-500 text-[12px] font-medium mt-1">{fileError}</p>
+        )
+      }
 
       {/* Allowed formats hint */}
       <p className="text-[11px] text-gray-400 mt-1">
@@ -147,17 +172,19 @@ export default function DocumentCard({
       </p>
 
       {/* Per-document submit — only shown when a new file is staged */}
-      {uploadedFile && (
-        <Button
-          type="button"
-          variant="default"
-          className="w-full mt-3 h-[38px] text-[13px] font-semibold"
-          onClick={onSubmit}
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Saving..." : "Submit document"}
-        </Button>
-      )}
-    </div>
+      {
+        uploadedFile && (
+          <Button
+            type="button"
+            variant="default"
+            className="w-full mt-3 h-[38px] text-[13px] font-semibold"
+            onClick={onSubmit}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Saving..." : "Submit document"}
+          </Button>
+        )
+      }
+    </div >
   );
 }

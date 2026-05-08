@@ -10,7 +10,7 @@ export const useGetWishlist = () => {
   return useQuery({
     queryKey: ["wishlist"],
     queryFn: getWishlist,
-    enabled: typeof window !== "undefined" && !!localStorage.getItem("token"),
+    enabled: typeof window !== "undefined" && !!localStorage.getItem("token") && localStorage.getItem("user_type") !== "business",
     staleTime: 5 * 60 * 1000
   });
 };
