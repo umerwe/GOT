@@ -20,6 +20,7 @@ export default function FilterSidebar({
   const [selectedCategoryType, setSelectedCategoryType] = useState<string | null>(null);
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     category: false,
+    subcategory: false,
     price: false,
   });
 
@@ -63,6 +64,7 @@ export default function FilterSidebar({
       onPriceRangeChange(tempFilters.min_price, tempFilters.max_price)
     }
     onApplyFilters(tempFilters.category)
+    window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   return (
@@ -146,6 +148,75 @@ export default function FilterSidebar({
               </div>
             )
           })}
+
+          {/* Subcategory Section */}
+          {(() => {
+            const selectedCategory = categoriesData?.find(c => String(c.id) === String(tempFilters.category));
+            const subcategories = selectedCategory?.child || [];
+            
+            return subcategories.length > 0 ? (
+              <div>
+                <div
+                  className="flex items-center justify-between cursor-pointer mb-3"
+                  onClick={() => toggleSection('subcategory')}
+                >
+                  <label className="text-sm font-semibold cursor-pointer">Subcategory</label>
+                  {openSections['subcategory'] ? (
+                    <ChevronDown className="h-4 w-4 text-gray-500" />
+                  ) : (
+                    <ChevronUp className="h-4 w-4 text-gray-500" />
+                  )}
+                </div>
+
+                {!openSections['subcategory'] && (
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        id="subcategory-all"
+                        name="subcategory-group"
+                        value="all"
+                        checked={tempFilters.subcategory === "all" || !tempFilters.subcategory}
+                        onChange={() => setTempFilters((prev) => ({ ...prev, subcategory: "all" }))}
+                        className="h-3 w-3 border-gray-300 text-red-500 checked:bg-red-500 checked:border-red-500 focus:ring-red-500 cursor-pointer"
+                      />
+                      <label
+                        htmlFor="subcategory-all"
+                        className="text-[13px] leading-none cursor-pointer"
+                      >
+                        All Subcategories
+                      </label>
+                    </div>
+
+                    {subcategories.map((subcat) => {
+                      const value = String(subcat.id);
+                      const isChecked = tempFilters.subcategory === value;
+
+                      return (
+                        <div key={value} className="flex items-center space-x-2">
+                          <input
+                            type="radio"
+                            id={`subcategory-${value}`}
+                            name="subcategory-group"
+                            value={value}
+                            checked={isChecked}
+                            onChange={() => setTempFilters((prev) => ({ ...prev, subcategory: value }))}
+                            className="h-3 w-3 border-gray-300 text-red-500 checked:bg-red-500 checked:border-red-500 focus:ring-red-500 cursor-pointer"
+                          />
+                          <label
+                            htmlFor={`subcategory-${value}`}
+                            className="text-[13px] leading-none cursor-pointer"
+                          >
+                            {subcat.title}
+                          </label>
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
+              </div>
+            ) : null;
+          })()}
 
           {/* Price Range Section */}
           {
@@ -237,7 +308,11 @@ export default function FilterSidebar({
                   flex items-center justify-center p-4 cursor-pointer bg-white h-20
                   ${isSelected ? 'ring-2 ring-inset ring-solid' : 'hover:bg-gray-50'}
                 `}
-                onClick={() => setTempFilters((prev) => ({ ...prev, brand: value }))}
+                onClick={() => {
+                  setTempFilters((prev) => ({ ...prev, brand: value }));
+                  onFilterChange('brand', value);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
               >
                 {item.image ? (
                   <MyImage

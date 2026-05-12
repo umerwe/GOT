@@ -6,7 +6,7 @@ import Breadcrumb from "@/components/ui/breadcrumb";
 import Container from "@/components/container";
 import OrderSummary from "@/components/pages/cart/order-summary";
 import Footer from "@/components/layout/footer";
-import CartCard from "@/app/(site)/(user)/categories/cart-card";
+import CartCard from "@/components/cards/cart-card";
 import { toast } from "../ui/toast";
 
 export default function Cart() {

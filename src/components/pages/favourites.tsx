@@ -6,7 +6,7 @@ import Breadcrumb from "@/components/ui/breadcrumb";
 import Container from "@/components/container";
 import Footer from "@/components/layout/footer";
 import { toast } from "@/components/ui/toast";
-import CartCard from "@/app/(site)/(user)/categories/cart-card";
+import CartCard from "@/components/cards/cart-card";
 import { useGetWishlist, useToggleWishlist } from "@/hooks/favorites/useWishlist";
 import { Skeleton } from "@/components/ui/skeleton";
 

@@ -7,6 +7,7 @@ export interface FilterOption {
 
 export interface FilterState {
   category: string
+  subcategory: string
   brand: string
   sellerType: string
   min_price: number

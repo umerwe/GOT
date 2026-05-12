@@ -43,6 +43,7 @@ export default function CategoryLayout() {
   const [itemsPerPage, setItemsPerPage] = useState(12)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState("price_low_to_high");
+  const [isFilterChanging, setIsFilterChanging] = useState(false);
 
   // Client-side pagination map for each business's products (6 per page)
   const [paginationMap, setPaginationMap] = useState<Record<number | string, number>>({});
@@ -68,10 +69,12 @@ export default function CategoryLayout() {
   }
 
   const { data: categories } = useGetCategories();
-  const { data: brands } = useGetBrands()
+  
+  const { data: brands } = useGetBrands(1)
 
   const [selectedFilters, setSelectedFilters] = useState<FilterState>({
     category: categoryId,
+    subcategory: "all",
     brand: "all",
     sellerType: "all",
     min_price: 0,
@@ -82,6 +85,7 @@ export default function CategoryLayout() {
     setSelectedFilters((prev) => ({
       ...prev,
       category: categoryId,
+      subcategory: "all",
       brand: brandParam || "all",
     }))
   }, [categoryId, brandParam])
@@ -89,6 +93,7 @@ export default function CategoryLayout() {
   const appliedFilters: ProductFilters = useMemo(() => {
     const f: ProductFilters = {}
     if (selectedFilters.category !== "all") f.category_id = selectedFilters.category
+    if (selectedFilters.subcategory !== "all") f.subcategory_id = selectedFilters.subcategory
     if (selectedFilters.brand !== "all") f.brand_id = selectedFilters.brand
     if (selectedFilters.sellerType !== "all") f.seller_type = selectedFilters.sellerType
     if (selectedFilters.min_price >= 0) f.min_price = selectedFilters.min_price.toString()
@@ -113,15 +118,9 @@ export default function CategoryLayout() {
 
   // Seller products — shown only on last page, same filters applied
   const { data: sellerResponse, isLoading: sellerLoading } = useGetSellerProducts({
+    ...appliedFilters,
     page: sellerPage,
     per_page: 6,
-    ...(appliedFilters.category_id ? { category_id: appliedFilters.category_id } : {}),
-    ...(appliedFilters.brand_id ? { brand_id: appliedFilters.brand_id } : {}),
-    ...(appliedFilters.min_price ? { min_price: appliedFilters.min_price } : {}),
-    ...(appliedFilters.max_price ? { max_price: appliedFilters.max_price } : {}),
-    ...(appliedFilters.sort ? { sort: appliedFilters.sort } : {}),
-    ...(appliedFilters.state ? { state: appliedFilters.state } : {}),
-    ...(appliedFilters.search ? { search: appliedFilters.search } : {}),
   });
 
   const businesss = useMemo(() => businessResponse?.data ?? [], [businessResponse])
@@ -166,16 +165,28 @@ export default function CategoryLayout() {
     })
   }, [selectedFilters, filterOptions, getFilterLabel])
 
-  const handleFilterChange = (filterType: keyof FilterState, value: string | number) => setSelectedFilters(prev => ({ ...prev, [filterType]: value }));
-  const handlePriceRangeChange = (min: number, max: number) => setSelectedFilters(prev => ({ ...prev, min_price: min, max_price: max }));
+  const handleFilterChange = (filterType: keyof FilterState, value: string | number) => {
+    setIsFilterChanging(true);
+    setSelectedFilters(prev => ({ ...prev, [filterType]: value }));
+    setCurrentPage(1);
+    setSellerPage(1);
+    setTimeout(() => setIsFilterChanging(false), 300);
+  };
+  const handlePriceRangeChange = (min: number, max: number) => {
+    setIsFilterChanging(true);
+    setSelectedFilters(prev => ({ ...prev, min_price: min, max_price: max }));
+    setCurrentPage(1);
+    setSellerPage(1);
+    setTimeout(() => setIsFilterChanging(false), 300);
+  };
 
   const clearAllFilters = () => {
-    setSelectedFilters({ category: "all", brand: "all", sellerType: "all", min_price: 0, max_price: 100000 });
+    setSelectedFilters({ category: "all", subcategory: "all", brand: "all", sellerType: "all", min_price: 0, max_price: 100000 });
     router.replace("/categories/all");
     setIsMobileFilterOpen(false);
   }
 
-  const isNotFound = !isProductsLoading && !sellerLoading && businesss.length === 0 && sellerProducts.length === 0
+  const isNotFound = !isProductsLoading && !sellerLoading && !isFilterChanging && businesss.length === 0 && sellerProducts.length === 0
 
   const RightControls = () => (
     <div className="flex items-center gap-4 text-[13px] text-gray-500">
@@ -239,6 +250,13 @@ export default function CategoryLayout() {
     const activeFilters = [];
 
     if (selectedFilters.category !== "all") activeFilters.push({ id: 'category', label: displayLabels.category });
+    if (selectedFilters.subcategory !== "all") {
+      const selectedCategory = categories?.find((c: Category) => String(c.id) === String(selectedFilters.category));
+      const selectedSubcategory = selectedCategory?.child?.find((child: { id: number; title: string; image?: string }) => String(child.id) === String(selectedFilters.subcategory));
+      if (selectedSubcategory) {
+        activeFilters.push({ id: 'subcategory', label: selectedSubcategory.title });
+      }
+    }
     if (selectedFilters.brand !== "all") activeFilters.push({ id: 'brand', label: displayLabels.brand });
     if (selectedFilters.sellerType !== "all") activeFilters.push({ id: 'sellerType', label: displayLabels.sellerType });
     if (selectedFilters.min_price > 0 || selectedFilters.max_price < 100000) {
@@ -387,7 +405,7 @@ export default function CategoryLayout() {
             <RightControls />
           </div>
 
-          {isProductsLoading ? (
+          {isProductsLoading || isFilterChanging ? (
             <div className="space-y-[30px]">
               {[...Array(2)].map((_, i) => (
                 <div key={i} className="bg-[#F5F5F5] pt-[19px] px-[20px] pb-[30px] animate-pulse">
@@ -481,7 +499,7 @@ export default function CategoryLayout() {
               </button>
             </div>
             <div className="p-6 mb-20">
-              <FilterSidebar filterOptions={filterOptions} selectedFilters={selectedFilters} displayLabels={displayLabels} onFilterChange={handleFilterChange} onPriceRangeChange={handlePriceRangeChange} onClearFilters={clearAllFilters} onApplyFilters={(cat) => { router.push(`/ads/${cat}`); setIsMobileFilterOpen(false); }} categoriesData={categories?.data || []} />
+              <FilterSidebar filterOptions={filterOptions} selectedFilters={selectedFilters} displayLabels={displayLabels} onFilterChange={handleFilterChange} onPriceRangeChange={handlePriceRangeChange} onClearFilters={clearAllFilters} onApplyFilters={(cat) => { router.push(`/categories/${cat}`); setIsMobileFilterOpen(false); }} categoriesData={categories || []} />
             </div>
           </div>
         </div>
